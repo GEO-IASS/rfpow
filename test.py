@@ -1,4 +1,5 @@
 import webapp2
+import lxml
 
 class MainPage(webapp2.RequestHandler):
   def get(self):
