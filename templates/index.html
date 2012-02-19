@@ -10,8 +10,8 @@
         <img src="images/logo.png">
         <h2>Latest 10 RFP's from Merx</h2>
         <ol>
-            {% for title in titles %}
-            <li>{{title}}</li>
+            {% for r in rfps %}
+            <li><a href="{{r.link}}">{{r.title}}</a></li>
             {% endfor %}
         </ol>
     </body>

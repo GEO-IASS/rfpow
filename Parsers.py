@@ -3,14 +3,18 @@ import urllib
 import logging
 from pyquery import PyQuery as pq
 
-class MerxParser:
+class Parser:
+    domain = ""
+
+class MerxParser(Parser):
+    domain = "http://www.merx.com"
 
     @staticmethod
     def get_latest():
         """Return last 10 RFPs"""
 
         # You have to submit the search form to get a list of RFPs from Merx
-        action_uri = "http://www.merx.com/English/SUPPLIER_Menu.asp?WCE=GOTO"+\
+        action_uri = MerxParser.domain + "/English/SUPPLIER_Menu.asp?WCE=GOTO"+\
                 "&GID=REMOTESEARCH&TAB=1&PORTAL=MERX&"+\
                 "hcode=xu%2b3MhJeX2npe2sJVPMRvQ%3d%3d"
 
@@ -34,6 +38,13 @@ class MerxParser:
 
         result = []
         for i in range(0, len(rows)):
-            result.append( rows.eq(i).find('td').eq(5).find('a').text() )
+            link = rows.eq(i).find('td').eq(5).find('a')
+
+            rfp = { 
+                "title": link.text(),
+                "link" : MerxParser.domain + link.attr( "href" )
+            }
+
+            result.append( rfp  )
             
         return result

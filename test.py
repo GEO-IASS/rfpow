@@ -13,7 +13,7 @@ class MainPage(webapp2.RequestHandler):
       self.response.headers['Content-Type'] = 'text/html'
 
       template = jinja_environment.get_template('templates/index.html')
-      template_data = { "titles": MerxParser.get_latest() }
+      template_data = { "rfps": MerxParser.get_latest() }
       self.response.out.write(template.render(template_data))
 
 app = webapp2.WSGIApplication([('/', MainPage)],
