@@ -1,0 +1,18 @@
+<!doctype html>
+<html>
+    <head>
+        <title>RFPow! -- RFP Search Engine</title>
+        <link rel="stylesheet" type="text/css" href="style/main.css">
+        <link rel="icon" type="image/png" href="/favicon.ico">
+    </head>
+
+    <body>
+        <img src="images/logo.png">
+        <h2>Latest 10 RFP's from Merx</h2>
+        <ol>
+            {% for title in titles %}
+            <li>{{title}}</li>
+            {% endfor %}
+        </ol>
+    </body>
+</html>

@@ -32,10 +32,8 @@ class MerxParser:
         rows.pop()
         logging.info( "Got %s rows from Merx" % len(rows) )
 
-        result = u""
-
+        result = []
         for i in range(0, len(rows)):
-            title = rows.eq(i).find('td').eq(5).find('a')
-            result = result + str(i)+". "+title.text() + "\n" 
-
+            result.append( rows.eq(i).find('td').eq(5).find('a').text() )
+            
         return result
