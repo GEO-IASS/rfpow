@@ -60,10 +60,9 @@ class MerxParser(Parser):
             #import pdb; pdb.set_trace()
             logging.debug( 'Loading RFPs from: %s\n POST data: %s' % (uri, data ) )
             req = urllib2.Request(uri, data, self.headers)
-            response = urllib2.urlopen(req)
-            self.request = urllib2.urlopen( req )
+            self.request = urllib2.urlopen(req)
 
-            # stash away the cookies as we'll need them for pagination (yeah..)
+            # stash away the cookies as we'll need them later for pagination (yeah..)
             if self.headers['Cookie'] is "":
                 for h in self.request.info().headers:
                     if 'set-cookie' in h:
@@ -85,7 +84,7 @@ class MerxParser(Parser):
         """Load and parse the next 10 RFPs, if available"""
 
         master_list = []
-        for i in range(10):
+        for i in range(3):
             # load HTML first
 
             self.load()
