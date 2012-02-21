@@ -1,6 +1,7 @@
 import webapp2
 import jinja2
 import os
+import logging
 
 # Set up templating
 jinja_environment = jinja2.Environment(
@@ -9,12 +10,14 @@ jinja_environment = jinja2.Environment(
 from Parsers import MerxParser
 
 class MainPage(webapp2.RequestHandler):
-  def get(self):
-      self.response.headers['Content-Type'] = 'text/html'
+    def get(self):
+        self.response.headers['Content-Type'] = 'text/html'
+        parser = MerxParser()
 
-      template = jinja_environment.get_template('templates/index.html')
-      template_data = { "rfps": MerxParser.get_latest() }
-      self.response.out.write(template.render(template_data))
+        template = jinja_environment.get_template('templates/index.html')
+        template_data = { "rfps": parser.parse_next() }
+        self.response.out.write(template.render(template_data))
 
+logging.getLogger().setLevel(logging.DEBUG)
 app = webapp2.WSGIApplication([('/', MainPage)],
                               debug=True)
