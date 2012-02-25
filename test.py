@@ -15,7 +15,13 @@ class MainPage(webapp2.RequestHandler):
         parser = MerxParser()
 
         template = jinja_environment.get_template('templates/index.html')
+
+        # parse 10 RPFs
         rfps = parser.next()
+        # parse another 10 RFPs appending results together
+        rfps = rfps + parser.next()
+
+        # now stash results into a dict and use it in the index.html template
         template_data = { "rfps": rfps }
         self.response.out.write(template.render(template_data))
 

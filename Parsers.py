@@ -162,7 +162,7 @@ class MerxParser(Parser):
     def parse_rfp(self):
         """Parse individual RFP page
         
-        Assumes self.doc has parsed DOM tree of an RFP page"""
+        Assumes self.doc contains parsed DOM tree of an RFP page"""
         rfp = {}
 
         labels = self.doc('.LabelRequired')

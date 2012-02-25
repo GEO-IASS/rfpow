@@ -6,3 +6,18 @@ body {
 img {
     border: none;
 }
+
+pre.details {
+	display: none;
+	white-space:normal;
+}
+
+a.details_expand:link,
+a.details_expand:active,
+a.details_expand:visited
+{
+	font-size: 8pt;
+	color: green;
+	text-decoration: none;
+}
+

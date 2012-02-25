@@ -4,6 +4,7 @@
         <title>RFPow! -- RFP Search Engine</title>
         <link rel="stylesheet" type="text/css" href="style/main.css">
         <link rel="icon" type="image/ico" href="/favicon.ico">
+		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
     </head>
 
     <body>
@@ -11,8 +12,21 @@
         <h2>Latest {{ rfps|length }} RFP's from Merx</h2>
         <ol>
             {% for r in rfps %}
-			<li><a href="{{r.uri}}">{{r.title}}</a> (ID: {{r.parent_id}})</li>
+			<li>
+				<a href="{{r.uri}}">{{r.title}}</a> <a href="#" class="details_expand">&darr; See all data</a>
+				<pre class="details"><code>{{r}}</code></pre>
+			</li>
             {% endfor %}
         </ol>
     </body>
 </html>
+
+<script type="text/javascript">
+	$( function() {
+		$('.details_expand').click(function(e){
+			e.preventDefault();
+			var pre = $( this ).siblings( 'pre' );
+			pre[ (pre.css( 'display' ) == 'none') ? 'slideDown' : 'slideUp' ]('fast');
+		});
+	});
+</script>
