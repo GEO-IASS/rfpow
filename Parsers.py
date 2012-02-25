@@ -101,7 +101,7 @@ class MerxParser(Parser):
                 # Parse page's data and stash results in a dictionary
                 rfp = self.parse_rfp()
                 rfp['title'] = l['title']
-                rfp['parent_id'] = l['parent_id']
+                rfp['original_id'] = l['original_id']
                 rfp['uri']  = l['uri']
 
                 rfp_list.append( rfp )
@@ -137,7 +137,7 @@ class MerxParser(Parser):
             rfp = { 
                 "title"     : link.text(),
                 "uri"       : uri,
-                "parent_id" : ( id_search is not None ) and id_search.group(1) or ""
+                "original_id" : ( id_search is not None ) and id_search.group(1) or ""
             }
 
             self.parsed_list.append( rfp )
@@ -173,7 +173,7 @@ class MerxParser(Parser):
 
         rfp['org']             = table1.eq(8).text().strip()
         rfp['published_on']    = table2.eq(2).text().strip()
-        rfp['parent_category'] = table3.eq(2).text().strip()
+        rfp['original_category'] = table3.eq(2).text().strip()
         rfp['description']     = table4.eq(1).text().strip()
 
         return rfp
