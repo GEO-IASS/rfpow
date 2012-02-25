@@ -15,7 +15,8 @@ class MainPage(webapp2.RequestHandler):
         parser = MerxParser()
 
         template = jinja_environment.get_template('templates/index.html')
-        template_data = { "rfps": parser.parse_next() }
+        rfps = parser.next()
+        template_data = { "rfps": rfps }
         self.response.out.write(template.render(template_data))
 
 logging.getLogger().setLevel(logging.DEBUG)

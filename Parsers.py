@@ -1,4 +1,5 @@
 import lxml
+import re
 import time
 import urllib
 import urllib2
@@ -7,6 +8,19 @@ from pyquery import PyQuery as pq
 
 class Parser:
     domain = ""
+
+    def has_next(self):
+        """Return if there are more RFPs left to parse"""
+        raise NotImplementedError('Not implemented')
+
+    def next(self, parse_each=True):
+        """Return next (at most 10) parsed RFPs.
+        
+        Return list of dictionaries for each RFP. 
+        If parse_each, then parse dedicated page of each RFP extracting
+        additional metadata. Otherwise, return only parent ID, title, 
+        and permanent URI of the RFP"""
+        raise NotImplementedError('Not implemented')
 
 
 class MerxParser(Parser):
@@ -35,6 +49,7 @@ class MerxParser(Parser):
         "Cookie":""
     }
 
+    id_pattern = re.compile( 'id=(\d*)\&' )
     # Parsed listing of RFPs
     parsed_list = []
 
@@ -42,66 +57,56 @@ class MerxParser(Parser):
     request = None
     page = 1
     
-    def load(self):
-        """Load HTML from remote URI"""
-        # we're parsing the first page of results
-        if self.page is 1:
-            uri  = self.domain + self.list_uri
-            data = urllib.urlencode( self.list_data )
-        else:
-            # handle case of last page of results
-            if self.page is -1:
-                raise IOError( 'No more pages RFPs left to parse' )
-            uri = self.domain + self.pagination_uri
-            data = urllib.urlencode( self.pagination_data )
-
-        # pass the magic form data parameters
-        try: 
-            #import pdb; pdb.set_trace()
-            logging.debug( 'Loading RFPs from: %s\n POST data: %s' % (uri, data ) )
-            req = urllib2.Request(uri, data, self.headers)
-            self.request = urllib2.urlopen(req)
-
-            # stash away the cookies as we'll need them later for pagination (yeah..)
-            if self.headers['Cookie'] is "":
-                for h in self.request.info().headers:
-                    if 'set-cookie' in h:
-                        self.headers['Cookie'] = h[12:].replace(' path=/,', '')[:-7]
-                        break
-
-        except IOError as e:
-            logging.error( 'Could not reach Merx at: %s' % self.list_uri )
-            raise e
-
-        return self
-
         
     def has_next(self):
         """Return True if there is at least 1 more page of RFPs"""
         return self.page is not -1
 
-    def parse_next(self):
-        """Load and parse the next 10 RFPs, if available"""
+    def next(self, parse_each=True):
+        """Return next (at most 10) parsed RFPs.
+        
+        Return list of dictionaries for each RFP. 
+        If parse_each, then parse dedicated page of each RFP extracting
+        additional metadata. Otherwise, return only parent ID, title, 
+        and permanent URI of the RFP"""
 
-        master_list = []
-        for i in range(3):
-            # load HTML first
+        rfp_list = []
 
-            self.load()
+        # load HTML first
+        self.load( self.get_list_uri() )
 
-            if self.request is None:
-                raise IOError( 'Request object not initialized. Try load() first' )
+        if self.request is None:
+            raise IOError( 'Request object not initialized. Run load() first' )
 
+        try:
+            s = self.request.read()
+            self.doc = pq( s )
+        except lxml.etree.XMLSyntaxError as e:
+            logging.error( 'Could not parse URI: %s' % self.list_uri )
+
+        parse_list = self.parse_list()
+
+        # Don't parse individual RFPs if not instructed to
+        if not parse_each: 
+            return parse_list
+
+        for l in parse_list:
             try:
+                self.load( (l['uri'],{}) )
                 s = self.request.read()
                 self.doc = pq( s )
+
+                rfp = self.parse_rfp()
+                rfp['title'] = l['title']
+                rfp['parent_id'] = l['parent_id']
+                rfp['uri']  = l['uri']
+
+                rfp_list.append( rfp )
+
             except lxml.etree.XMLSyntaxError as e:
-                logging.error( 'Could not parse URI: %s' % self.list_uri )
+                logging.error( 'Could not parse RFP: %s' % l.uri )
 
-            master_list = master_list + self.parse_list()
-            time.sleep(2)
-
-        return master_list
+        return rfp_list
 
 
     def parse_list(self):
@@ -123,10 +128,13 @@ class MerxParser(Parser):
         # extract RFP titles and links
         for i in range(0, len(rows)):
             link = rows.eq(i).find('td').eq(5).find('a')
+            uri = MerxParser.domain + link.attr( "href" )
+            id_search = self.id_pattern.search(uri)
 
             rfp = { 
-                "title": link.text(),
-                "link" : MerxParser.domain + link.attr( "href" )
+                "title"     : link.text(),
+                "uri"       : uri,
+                "parent_id" : ( id_search is not None ) and id_search.group(1) or ""
             }
 
             self.parsed_list.append( rfp )
@@ -151,7 +159,56 @@ class MerxParser(Parser):
 
     def parse_rfp(self):
         """Parse individual RFP page"""
-        return None
+        rfp = {}
+
+        labels = self.doc('.LabelRequired')
+        table1 = labels.eq(0).siblings('table').find('tr td')
+        table2 = labels.eq(2).siblings('table').find('tr td')
+        table3 = labels.eq(4).siblings('table').find('tr td')
+        table4 = labels.eq(6).siblings('table').find('tr td')
+
+        rfp['org']             = table1.eq(8).text().strip()
+        rfp['published_on']    = table2.eq(2).text().strip()
+        rfp['parent_category'] = table3.eq(2).text().strip()
+        rfp['description']     = table4.eq(1).text().strip()
+
+        return rfp
+
+    def get_list_uri(self):
+        """Return URI and POST data for list of RFPs"""
+        if self.page is 1:
+            uri  = self.domain + self.list_uri
+            data = urllib.urlencode( self.list_data )
+        else:
+            # handle case of last page of results
+            if self.page is -1:
+                raise IOError( 'No more pages RFPs left to parse' )
+            uri = self.domain + self.pagination_uri
+            data = urllib.urlencode( self.pagination_data )
+
+        return (uri, data)
+
+    def load(self, request_data):
+        """Load HTML from remote URI"""
+        uri  = request_data[0]
+        data = request_data[1]
+        try: 
+            logging.debug( 'Loading RFPs from: %s\n POST data: %s' % (uri, data ) )
+            req = urllib2.Request(uri, data, self.headers)
+            self.request = urllib2.urlopen(req)
+
+            # stash away the cookies as we'll need them later for pagination (yeah..)
+            if self.headers['Cookie'] is "":
+                for h in self.request.info().headers:
+                    if 'set-cookie' in h:
+                        self.headers['Cookie'] = h[12:].replace(' path=/,', '')[:-7]
+                        break
+
+        except IOError as e:
+            logging.error( 'Could not reach Merx at: %s' % self.list_uri )
+            raise e
+
+        return self
 
 
 def test():

@@ -11,7 +11,7 @@
         <h2>Latest {{ rfps|length }} RFP's from Merx</h2>
         <ol>
             {% for r in rfps %}
-            <li><a href="{{r.link}}">{{r.title}}</a></li>
+			<li><a href="{{r.uri}}">{{r.title}}</a> (ID: {{r.parent_id}})</li>
             {% endfor %}
         </ol>
     </body>
