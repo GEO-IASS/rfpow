@@ -72,7 +72,7 @@ class MerxParser(Parser):
 
         rfp_list = []
 
-        # load HTML first
+        # load HTML for page with list of RFPs
         self.load( self.get_list_uri() )
 
         if self.request is None:
@@ -90,12 +90,15 @@ class MerxParser(Parser):
         if not parse_each: 
             return parse_list
 
+        # Load and parse each RFP's dedicated page to grab more detailed
+        # information about each one
         for l in parse_list:
             try:
                 self.load( (l['uri'],{}) )
                 s = self.request.read()
                 self.doc = pq( s )
 
+                # Parse page's data and stash results in a dictionary
                 rfp = self.parse_rfp()
                 rfp['title'] = l['title']
                 rfp['parent_id'] = l['parent_id']
@@ -108,11 +111,11 @@ class MerxParser(Parser):
 
         return rfp_list
 
-
+    # Private methods
     def parse_list(self):
-        """Parse list of RFPs from Merx
+        """Parse page with list of RFPs
 
-        Assumes that self.pq contains parsed list of RFPs
+        Assumes self.doc contains parsed DOM of list of RFPs page
         """
 
         self.parsed_list = []
@@ -155,10 +158,11 @@ class MerxParser(Parser):
             self.pagination_data[ 'search_profile' ] = self.doc( 'input' ).eq(0).val()
 
         return self.parsed_list
-            
 
     def parse_rfp(self):
-        """Parse individual RFP page"""
+        """Parse individual RFP page
+        
+        Assumes self.doc has parsed DOM tree of an RFP page"""
         rfp = {}
 
         labels = self.doc('.LabelRequired')
@@ -174,26 +178,15 @@ class MerxParser(Parser):
 
         return rfp
 
-    def get_list_uri(self):
-        """Return URI and POST data for list of RFPs"""
-        if self.page is 1:
-            uri  = self.domain + self.list_uri
-            data = urllib.urlencode( self.list_data )
-        else:
-            # handle case of last page of results
-            if self.page is -1:
-                raise IOError( 'No more pages RFPs left to parse' )
-            uri = self.domain + self.pagination_uri
-            data = urllib.urlencode( self.pagination_data )
-
-        return (uri, data)
-
     def load(self, request_data):
-        """Load HTML from remote URI"""
+        """Load HTML from remote URI
+        
+        Do heavy lifting of feeding all the right magic data to Merx, 
+        and stashing and reusing cookies"""
         uri  = request_data[0]
         data = request_data[1]
+
         try: 
-            logging.debug( 'Loading RFPs from: %s\n POST data: %s' % (uri, data ) )
             req = urllib2.Request(uri, data, self.headers)
             self.request = urllib2.urlopen(req)
 
@@ -209,6 +202,21 @@ class MerxParser(Parser):
             raise e
 
         return self
+
+    def get_list_uri(self):
+        """Return URI and POST data for the page with the list of RFPs"""
+        if self.page is 1:
+            uri  = self.domain + self.list_uri
+            data = urllib.urlencode( self.list_data )
+        else:
+            # handle case of last page of results
+            if self.page is -1:
+                raise IOError( 'No more pages RFPs left to parse' )
+            uri = self.domain + self.pagination_uri
+            data = urllib.urlencode( self.pagination_data )
+
+        return (uri, data)
+
 
 
 def test():
