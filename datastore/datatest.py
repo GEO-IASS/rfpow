@@ -67,7 +67,7 @@ class QueryPage(webapp.RequestHandler):
         rfps = RFP.query_RFPs(self.request.get('query'))
 
         for rfp in rfps:
-            self.response.out.write('{0}: {1}<br/>{2}<br/>{3}<hr/>'.format(rfp.title, rfp.description, rfp.publish_date, rfp.keywords))
+            self.response.out.write('{0}: {1}<br/>{2}<br/>OrigID: {3}<br/>Org: {4}<br/>URI: {5}<br/>Keyword: {6}<hr/>'.format(rfp.title, rfp.description, rfp.publish_date, rfp.original_id, rfp.organization, rfp.original_uri, rfp.keywords))
 
 
 app = webapp.WSGIApplication([
