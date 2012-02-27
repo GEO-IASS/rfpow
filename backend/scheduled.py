@@ -18,7 +18,7 @@ class ScheduledParse():
         parser = MerxParser()
         parsed_total = 0
 
-        for i in range(5):
+        while parser.has_next():
             rfps = parser.next()
 
             for r in rfps:
@@ -33,7 +33,9 @@ class ScheduledParse():
 
                 logging.info( u'Saving new RFP: %s' % rfp )
                 rfp.put()
-            time.sleep(3)
+
+            # wait a few seconds before trying the next batch
+            time.sleep(5)
             parsed_total = parsed_total + len(rfps)
 
         return parsed_total
