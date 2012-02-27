@@ -16,7 +16,10 @@ handlers:
   upload: images/favicon\.ico
 
 - url: /datastore/.*
-  script: datastore.datatest.app
+  script: datatest.app
+
+- url: /parse
+  script: scheduled_parse.app
 
 - url: /.*
   script: test.app

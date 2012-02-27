@@ -7,7 +7,7 @@ import logging
 jinja_environment = jinja2.Environment(
     loader=jinja2.FileSystemLoader(os.path.dirname(__file__)))
 
-from Parsers import MerxParser
+from backend.parsers import MerxParser
 
 class MainPage(webapp2.RequestHandler):
     def get(self):
