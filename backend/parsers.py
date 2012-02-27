@@ -103,6 +103,7 @@ class MerxParser(Parser):
                 rfp['title'] = l['title']
                 rfp['original_id'] = l['original_id']
                 rfp['uri']  = l['uri']
+                rfp['origin'] = 'merx'
 
                 rfp_list.append( rfp )
 
