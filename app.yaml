@@ -19,7 +19,8 @@ handlers:
   script: datatest.app
 
 - url: /parse
-  script: scheduled_parse.app
+  script: parse.app
+  login: admin
 
 - url: /.*
   script: test.app

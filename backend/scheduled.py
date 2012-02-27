@@ -7,7 +7,7 @@ class ScheduledParse():
     """A class for a task of parsing various websites. Run by cron"""
 
     @staticmethod
-    def parse_merx():
+    def parse_merx(ignore_duplicates):
         """Parse a bunch of RFPs from Merx and stash results in the DB"""
 
         # XXX: Run MerxParser in a loop a fixed number of times (say 50)
@@ -25,7 +25,9 @@ class ScheduledParse():
                 rfp = RFP.from_dict(r)
 
                 # check if we've parsed this RFP before
-                if RFP.by_original_id( r['origin'], r['original_id'] ).count() != 0:
+                if not ignore_duplicates and \
+                   RFP.by_original_id( r['origin'], 
+                           r['original_id'] ).count() != 0:
                     logging.info( 'Reached existing RFP, stopping: %s' % rfp )
                     return parsed_total
 
