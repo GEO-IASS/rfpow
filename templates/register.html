@@ -1,0 +1,40 @@
+<!DOCTYPE hml>
+<html>
+<head>
+    <title>RFPow</title>
+</head>
+<body>
+<form action="{{action}}" method="post">
+    <fieldset>
+        <legend>Register an RFPow Account</legend>
+        <label>Username <input type="text" name="username" placeholder="Your username"/></label><br>
+        <label>Password <input type="password" name="password" placeholder="Your password"/></label><br>
+
+        <label>First Name <input type="text" name="first_name"/></label><br>
+        <label>Last Name <input type="text" name="last_name"/></label><br>
+
+        <!--
+        <label>Street Address <input type="text" name="password" placeholder="Your password"/></label><br>
+        <label>City <input type="text" name="password" placeholder="Your password"/></label><br>
+        <label>State/Province <input type="text" name="password" placeholder="Your password"/></label><br>
+        <label>Postal/Zip <input type="text" name="password" placeholder="Your password"/></label><br>
+        <label>Country <input type="text" name="password" placeholder="Your password"/></label><br>
+        <label>Email <input type="text" name="password" placeholder="Your password"/></label><br>
+        <label>Keywords <input type="text" name="password" placeholder="Your password"/></label><br>
+        -->
+        <br>
+        <div>Visa Payment Info</div>
+        <label>VISA Number <input type="text" name="cc_number"/></label><br>
+        <label>Name on Card <input type="text" name="name_on_cc"/></label><br>
+        <label>Expiry Date (MM/dd/yy) <input type="text" name="expiry_date"/></label><br>
+
+        <br>
+        <div>What type of RFPs are you interested in? List keywords comma delimited</div>
+        <label>Keywords <input type="text" name="keywords"/></label><br>
+
+
+    </fieldset>
+    <button>Create Account</button>
+</form>
+</body>
+</html>

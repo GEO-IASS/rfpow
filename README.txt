@@ -16,3 +16,10 @@ a *nix OS, try using the `dev_appserver.py` script, like so:
 For help with running the app using the frontend, refer to the GAE docs:
 
     http://code.google.com/appengine/docs/python/gettingstarted/helloworld.html
+	
+	
+	
+# Structure
+rootdir - controller to frontend
+backend - non-ui elements like parsing, db accesss, etc
+template - html

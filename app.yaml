@@ -4,6 +4,9 @@ runtime: python27
 api_version: 1
 threadsafe: true
 
+builtins:
+ - appstats: on
+
 handlers:
 - url: /style
   static_dir: style
@@ -22,8 +25,11 @@ handlers:
   script: parse.app
   login: admin
 
-- url: /.*
+- url: /toprfps
   script: test.app
+
+- url: .*
+  script: main.app
 
 
 libraries:

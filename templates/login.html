@@ -1,0 +1,17 @@
+<!DOCTYPE hml>
+<html>
+<head>
+    <title>webapp2 auth example</title>
+</head>
+<body>
+<form action="{{action}}" method="post">
+    <fieldset>
+        <legend>Login form</legend>
+        <label>Username <input type="text" name="username" placeholder="Your username"/></label>
+        <label>Password <input type="password" name="password" placeholder="Your password"/></label>
+        <label>Remember me? <input type="checkbox" name="remember_me" placeholder="Remember me?"/></label>
+    </fieldset>
+    <button>Login</button>
+</form>
+<a href="{{ url }}">{{ url_linktext }}</a>
+</html>

@@ -14,17 +14,17 @@ class MainPage(webapp2.RequestHandler):
         self.response.headers['Content-Type'] = 'text/html'
         parser = MerxParser()
 
-        template = jinja_environment.get_template('templates/index.html')
+        template = jinja_environment.get_template('templates/top_rfps.html')
 
         # parse 10 RPFs
         rfps = parser.next()
         # parse another 10 RFPs appending results together
         rfps = rfps + parser.next()
 
-        # now stash results into a dict and use it in the index.html template
+        # now stash results into a dict and use it in the top_rfps.html template
         template_data = { "rfps": rfps }
         self.response.out.write(template.render(template_data))
 
 logging.getLogger().setLevel(logging.DEBUG)
-app = webapp2.WSGIApplication([('/', MainPage)],
+app = webapp2.WSGIApplication([('/toprfps', MainPage)],
                               debug=True)
