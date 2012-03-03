@@ -78,7 +78,7 @@ class LoginHandler(BaseHandler):
         url = self.request.host_url + '/create-user/'
         url_linktext = 'New User?'
         template_values = {'action': self.request.url, 'url': url, 'url_linktext': url_linktext}
-        path = os.path.join(os.path.dirname(__file__), 'templates\login.html')
+        path = os.path.join(os.path.dirname(__file__), 'templates/login.html')
         self.response.out.write(template.render(path, template_values))
 
 
