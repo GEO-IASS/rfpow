@@ -7,23 +7,21 @@ class ScheduledParse():
     """A class for a task of parsing various websites. Run by cron"""
 
     @staticmethod
-    def parse_merx(ignore_duplicates, start_id=None):
+    def parse_merx(ignore_duplicates, start_id=None, stop_on_dupe=False):
         """Parse a bunch of RFPs from Merx and stash results in the DB"""
 
-        # XXX: Run MerxParser in a loop a fixed number of times (say 50)
-        # and save results to DB. Keep in mind script runtime is limited
-        # to 10 minutes
-
-        # do 50 RFPs to start
         parser = MerxParser()
         parsed_total = 0
+        parsed_new = 0
         page = 0
+
         # skip RFPs until found given start_id. Handy for resuming a parse job
         skip = start_id is not None
 
         while parser.has_next():
             page += 1
             rfps = parser.next()
+            parsed_total = parsed_total + len(rfps)
 
             for r in rfps:
                 rfp = RFP.from_dict(r)
@@ -31,24 +29,31 @@ class ScheduledParse():
                 # skip if given an ID to resume parsing from
                 if skip: 
                     if start_id != r['original_id']:
-                        logging.info( 'Skipping: %s' % rfp )
+                        logging.info( 'Skipping while waiting for %d: %s' % (start_id, rfp) )
                         continue
                     else:
                         skip = False
                         logging.info( 'Resuming parsing from ID: %s' % r['original_id'] )
 
                 # check if we've parsed this RFP before
-                if not ignore_duplicates and \
-                   RFP.by_original_id( r['origin'], 
-                           r['original_id'] ).count() != 0:
-                   logging.info( 'Skipping existing RFP: %s. Results: %s' % (rfp, str( RFP.by_original_id( r['origin'], 
-                           r['original_id'] )) ) )
-                   continue
+                if not ignore_duplicates:
+                   db_match = RFP.by_original_id( r['origin'], r['original_id'] )
+                   
+                   # either skip if this RFP is already parsed, or stop parsing
+                   if db_match.count() != 0:
+                       if stop_on_dupe:
+                           logging.info( 'Stopping early on RFP: %s' % rfp )
+                           return (parsed_total, parsed_new)
+                       else:
+                           logging.info( 'Skipping existing RFP: %s.' % rfp )
+                           continue
+
+                   else:
+                       parsed_new += 1
 
                 logging.info( u'Saving new RFP: %s' % rfp )
                 rfp.put()
             logging.info( 'Parsed page %d of Merx results' % page )
             time.sleep(3)
-            parsed_total = parsed_total + len(rfps)
 
-        return parsed_total
+        return (parsed_total, parsed_new)
