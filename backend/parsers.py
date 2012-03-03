@@ -49,10 +49,12 @@ class MerxParser(Parser):
         "Cookie":""
     }
 
+    # regex to extract ID of RFP from its URI
     id_pattern = re.compile( 'id=(\d*)\&' )
     # Parsed listing of RFPs
     parsed_list = []
 
+    # pyquery object
     pq = None
     request = None
     page = 1
