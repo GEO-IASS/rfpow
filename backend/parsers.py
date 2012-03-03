@@ -50,7 +50,7 @@ class MerxParser(Parser):
     }
 
     # regex to extract ID of RFP from its URI
-    id_pattern = re.compile( 'id=(\d*)\&' )
+    id_pattern = re.compile( 'id=([^&]*)\&' )
     # Parsed listing of RFPs
     parsed_list = []
 

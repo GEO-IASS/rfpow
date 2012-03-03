@@ -41,8 +41,9 @@ class ScheduledParse():
                 if not ignore_duplicates and \
                    RFP.by_original_id( r['origin'], 
                            r['original_id'] ).count() != 0:
-                    logging.info( 'Skipping existing RFP: %s' % rfp )
-                    continue
+                   logging.info( 'Skipping existing RFP: %s. Results: %s' % (rfp, str( RFP.by_original_id( r['origin'], 
+                           r['original_id'] )) ) )
+                   continue
 
                 logging.info( u'Saving new RFP: %s' % rfp )
                 rfp.put()

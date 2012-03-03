@@ -15,6 +15,6 @@ class MainPage(webapp2.RequestHandler):
         self.response.headers['Content-Type'] = 'text/plain'
         self.response.out.write('%d RFPs parsed. See admin console for more meaningful output.' % rfps)
 
-logging.getLogger().setLevel(logging.DEBUG)
+#logging.getLogger().setLevel(logging.DEBUG)
 app = webapp2.WSGIApplication([('/parse', MainPage)],
                               debug=True)
