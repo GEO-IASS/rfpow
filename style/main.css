@@ -21,3 +21,10 @@ a.details_expand:visited
 	text-decoration: none;
 }
 
+div.error {
+    color: #d22;
+    border: 2px solid red;
+    background-color: #ffeeee;
+    padding: 9px;
+}
+

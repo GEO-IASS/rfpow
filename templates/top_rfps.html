@@ -8,7 +8,13 @@
     </head>
 
     <body>
-        <img src="../images/logo.png">
+        <img src="images/logo.png">
+        {% if error %}
+        <div class="error">
+            <strong>Uh oh, an error</strong>: {{ error }} 
+        </div>
+
+        {% else %}
         <h2>Latest {{ rfps|length }} RFP's from Merx</h2>
         <ol>
             {% for r in rfps %}
@@ -18,6 +24,7 @@
 			</li>
             {% endfor %}
         </ol>
+        {% endif %}
     </body>
 </html>
 
