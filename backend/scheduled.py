@@ -7,7 +7,8 @@ class ScheduledParse():
     """A class for a task of parsing various websites. Run by cron"""
 
     @staticmethod
-    def parse_merx(ignore_duplicates, start_id=None, stop_on_dupe=False):
+    def parse_merx(ignore_duplicates, start_id=None, stop_on_dupe=False,
+            limit=None):
         """Parse a bunch of RFPs from Merx and stash results in the DB"""
 
         parser = MerxParser()
@@ -50,6 +51,12 @@ class ScheduledParse():
 
                    else:
                        parsed_new += 1
+
+                       # stop early if there's a limit on number of RFPs parsed
+                       if limit is not None and limit <= parsed_new:
+                           logging.info( 'Stopping early due to limit: %s' % rfp )
+                           return (parsed_total, parsed_new)
+
 
                 logging.info( u'Saving new RFP: %s' % rfp )
                 rfp.put()
