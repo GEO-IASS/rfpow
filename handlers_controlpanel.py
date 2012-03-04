@@ -1,13 +1,12 @@
-import webapp2
 import jinja2
 import os
-from handlers_user import BaseHandler
-from handlers_user import user_required
+from handlers_base import user_required
 import datetime
 import logging
-from google.appengine.ext import webapp
 import backend.datastore as datastore
 from backend.datastore import RFP
+from handlers_base import BaseHandler
+from google.appengine.ext.webapp import template
 
 # Set up templating
 
@@ -105,3 +104,26 @@ class QueryResultsHandler(BaseHandler):
 
 
 
+class HomePageHandler(BaseHandler):
+    """
+         Only accessible to users that are logged in, just delays a list of things for what a
+         logged on user can do. In the future, it will be the dashbooard!
+     """
+
+    @user_required
+    def get(self, **kwargs):
+        user_session = self.auth.get_user_by_session()
+        user = self.auth.store.user_model.get_by_auth_token(user_session['user_id'], user_session['token'])
+        user[0].username = 'a'
+        user[0].put()
+
+        try:
+            template_values = {'username':user[0].first_name,
+                               'url_logout': self.auth_config['logout_url'],
+                               'url_top_rfps': '/top-rfps/',
+                               'url_create_query_rfps': self.request.host_url + '/create-rfp/'
+            }
+            path = os.path.join(os.path.dirname(__file__), 'templates/home.html')
+            self.response.out.write(template.render(path, template_values))
+        except (AttributeError, KeyError), e:
+            return "Secure zone"

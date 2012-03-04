@@ -1,76 +1,15 @@
 # -*- coding: utf-8 -*-
 
 """
-	A real simple app for using webapp2 with auth and session.
-
-	It just covers the basics. Creating a user, login, logout and a decorator for protecting certain handlers.
-
-    Routes are setup in routes.py and added in main.py
-
+	All user controls are located here (login, create and logout)
 """
 
-import webapp2
-from webapp2_extras import auth
-from webapp2_extras import sessions
 from webapp2_extras.auth import InvalidAuthIdError
 from webapp2_extras.auth import InvalidPasswordError
 import os
 from google.appengine.ext.webapp import template
+from handlers_base import BaseHandler
 
-def user_required(handler):
-    """
-         Decorator for checking if there's a user associated with the current session.
-         Will also fail if there's no session present.
-     """
-
-    def check_login(self, *args, **kwargs):
-        auth = self.auth
-        if not auth.get_user_by_session():
-            # If handler has no login_url specified invoke a 403 error
-            try:
-                self.redirect(self.auth_config['login_url'], abort=True)
-            except (AttributeError, KeyError), e:
-                self.abort(403)
-        else:
-            return handler(self, *args, **kwargs)
-
-    return check_login
-
-
-class BaseHandler(webapp2.RequestHandler):
-    """
-         BaseHandler for all requests
-
-         Holds the auth and session properties so they are reachable for all requests
-     """
-
-    def dispatch(self):
-        """
-              Save the sessions for preservation across requests
-          """
-        try:
-            response = super(BaseHandler, self).dispatch()
-            #self.response.write(response)
-        finally:
-            self.session_store.save_sessions(self.response)
-
-    @webapp2.cached_property
-    def auth(self):
-        return auth.get_auth()
-
-    @webapp2.cached_property
-    def session_store(self):
-        return sessions.get_store(request=self.request)
-
-    @webapp2.cached_property
-    def auth_config(self):
-        """
-              Dict to hold urls for login/logout
-          """
-        return {
-            'login_url': self.uri_for('login'),
-            'logout_url': self.uri_for('logout')
-        }
 
 
 class LoginHandler(BaseHandler):
@@ -84,8 +23,7 @@ class LoginHandler(BaseHandler):
 
     def post(self):
         """
-            username: Get the username from POST dict
-            password: Get the password from POST dict
+             Get what the user and pass posted in the form
         """
         username = self.request.POST.get('username')
         password = self.request.POST.get('password')
@@ -100,7 +38,8 @@ class LoginHandler(BaseHandler):
             # Returns error message to self.response.write in the BaseHandler.dispatcher
             # Currently no message is attached to the exceptions
             # return e
-            return "Login error. Try again: <a href='%s'>Login</a>" % (self.auth_config['login_url'])
+            self.redirect('/login')
+            # return "Login error. Try again: <a href='%s'>Login</a>" % (self.auth_config['login_url'])
 
 
 class CreateUserHandler(BaseHandler):
@@ -114,8 +53,7 @@ class CreateUserHandler(BaseHandler):
 
     def post(self):
         """
-              username: Get the username from POST dict
-              password: Get the password from POST dict
+              Get what the user posted in the form
           """
         str_username = self.request.POST.get('username')
         str_password = self.request.POST.get('password')
@@ -168,25 +106,4 @@ class LogoutHandler(BaseHandler):
             return "User is logged out"
 
 
-class SecureRequestHandler(BaseHandler):
-    """
-         Only accessible to users that are logged in
-     """
 
-    @user_required
-    def get(self, **kwargs):
-        user_session = self.auth.get_user_by_session()
-        user = self.auth.store.user_model.get_by_auth_token(user_session['user_id'], user_session['token'])
-        user[0].username = 'a'
-        user[0].put()
-
-        try:
-            template_values = {'username':user[0].first_name,
-                               'url_logout': self.auth_config['logout_url'],
-                               'url_top_rfps': '/top-rfps/',
-                               'url_create_query_rfps': self.request.host_url + '/create-rfp/'
-                               }
-            path = os.path.join(os.path.dirname(__file__), 'templates/home.html')
-            self.response.out.write(template.render(path, template_values))
-        except (AttributeError, KeyError), e:
-            return "Secure zone"
