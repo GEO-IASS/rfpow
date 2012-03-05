@@ -39,7 +39,7 @@ class TopRFPSHandler(BaseHandler):
 class CreateAndQueryRFPHandler(BaseHandler):
     @user_required
     def get(self):
-        self.response.headers['Content-Type'] = 'text/html'
+        self.response.headers['Content-Type'] = 'text/html; charset=utf-8'
         jinja_environment = jinja2.Environment(
             loader=jinja2.FileSystemLoader(os.path.dirname(__file__)))
         template = jinja_environment.get_template('templates/cc_rfp.html')
@@ -61,22 +61,22 @@ class CreateAndQueryRFPHandler(BaseHandler):
 class KeywordResultsHandler(BaseHandler):
 
     def post(self):
-        self.response.headers['Content-Type'] = 'text/html'
+        self.response.headers['Content-Type'] = 'text/html; charset=utf-8'
         self.response.out.write('<html><body>RFPS<hr/>')
         rfps = datastore.query_RFPs_by_keyword(self.request.get('keyword'))
 
         for rfp in rfps:
-            self.response.out.write('{0}: {1}<br/>{2}<br/>OrigID: {3}<br/>Org: {4}<br/>URI: {5}<br/>Keyword: {6}<hr/>'.format(rfp.title, rfp.description, rfp.publish_date, rfp.original_id, rfp.organization, rfp.original_uri, rfp.keywords))
+            self.response.out.write(u'{0}: {1}<br/>{2}<br/>OrigID: {3}<br/>Org: {4}<br/>URI: {5}<br/>Keyword: {6}<hr/>'.format(rfp.title, rfp.description, rfp.publish_date, rfp.original_id, rfp.organization, rfp.original_uri, rfp.keywords))
 
 class QueryResultsHandler(BaseHandler):
 
     def post(self):
-        self.response.headers['Content-Type'] = 'text/html'
+        self.response.headers['Content-Type'] = 'text/html; charset=utf-8'
         self.response.out.write('<html><body>RFPS<hr/>')
         rfps = datastore.query_RFPs(self.request.get('query'))
 
         for rfp in rfps:
-            self.response.out.write('{0}: {1}<br/>{2}<br/>OrigID: {3}<br/>Org: {4}<br/>URI: {5}<br/>Keyword: {6}<hr/>'.format(rfp.title, rfp.description, rfp.publish_date, rfp.original_id, rfp.organization, rfp.original_uri, rfp.keywords))
+            self.response.out.write(u'{0}: {1}<br/>{2}<br/>OrigID: {3}<br/>Org: {4}<br/>URI: {5}<br/>Keyword: {6}<hr/>'.format(rfp.title, rfp.description, rfp.publish_date, rfp.original_id, rfp.organization, rfp.original_uri, rfp.keywords))
 
 
 
