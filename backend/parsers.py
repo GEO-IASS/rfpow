@@ -105,7 +105,7 @@ class MerxParser(Parser):
         # Load and parse each RFP's dedicated page to grab more detailed
         # information about each one
         for l in parse_list:
-            rfp_list.append( self.parse_one(l) )
+            rfp_list.append( self.parse_details(l) )
 
         return rfp_list
 
