@@ -20,6 +20,16 @@ For help with running the app using the frontend, refer to the GAE docs:
 	
 	
 # Structure
-rootdir - controller to frontend
-backend - non-ui elements like parsing, db accesss, etc
-template - html
+- /{root_dir}: controller to frontend (handlers, get, post)
+- /backend: non-ui elements like parsing, db accesss, etc
+- /template: html files
+- /style: css related files
+- /js: client side javascript code
+- /routes.py: routing information given here, though some routing exist in the app.yaml
+
+# Source Code Credits
+- Getting user management to work properly was helped by the using code found
+here https://github.com/fredrikbonander/Webapp2-Sample-Applications .
+
+# NOTES:
+- NDB folder is included in application due to a import statement in webapp2_extras/appengine/auth/models.py
