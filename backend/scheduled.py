@@ -60,6 +60,5 @@ class ScheduledParse():
 
                 logging.info( u'Saving new RFP: %s' % rfp )
             logging.info( 'Parsed page %d of Merx results' % page )
-            time.sleep(2)
 
         return (parsed_total, parsed_new)
