@@ -7,6 +7,7 @@ import backend.datastore as datastore
 from backend.datastore import RFP
 from handlers_base import BaseHandler
 from google.appengine.ext.webapp import template
+import google.appengine.ext.db as db
 
 # Set up templating
 
@@ -30,7 +31,8 @@ class TopRFPSHandler(BaseHandler):
         rfps = rfps + parser.next()
 
         # now stash results into a dict and use it in the top_rfps.html template
-        template_data = {"rfps": rfps}
+        template_data = {"rfps": rfps,
+                         "title": "Latest {0} RFP's from merx".format(len(rfps))}
         self.response.out.write(template.render(template_data))
 
 
@@ -62,23 +64,46 @@ class KeywordResultsHandler(BaseHandler):
 
     def post(self):
         self.response.headers['Content-Type'] = 'text/html; charset=utf-8'
-        self.response.out.write('<html><body>RFPS<hr/>')
-        rfps = datastore.query_RFPs_by_keyword(self.request.get('keyword'))
+        jinja_environment = jinja2.Environment(
+            loader=jinja2.FileSystemLoader(os.path.dirname(__file__)))
+        template = jinja_environment.get_template('templates/top_rfps.html')
+        query = datastore.query_RFPs_by_keyword(self.request.get('keyword'))
 
-        for rfp in rfps:
-            self.response.out.write(u'{0}: {1}<br/>{2}<br/>OrigID: {3}<br/>Org: {4}<br/>URI: {5}<br/>Keyword: {6}<hr/>'.format(rfp.title, rfp.description, rfp.publish_date, rfp.original_id, rfp.organization, rfp.original_uri, rfp.keywords))
+        rfps  = []
+
+        for r in query:
+            rfps.append(db.to_dict(r))
+            # Hack since the page calls for a uri variable
+            rfps[-1]['uri'] = rfps[-1]['original_uri']
+            rfps[-1].pop('original_uri')
+
+        template_data = {'rfps' : rfps,
+                         'title': "Your query returned {0} RFP's".format(len(rfps))}
+
+        self.response.out.write(template.render(template_data))
+
 
 class QueryResultsHandler(BaseHandler):
 
     def post(self):
         self.response.headers['Content-Type'] = 'text/html; charset=utf-8'
-        self.response.out.write('<html><body>RFPS<hr/>')
-        rfps = datastore.query_RFPs(self.request.get('query'))
+        jinja_environment = jinja2.Environment(
+            loader=jinja2.FileSystemLoader(os.path.dirname(__file__)))
+        template = jinja_environment.get_template('templates/top_rfps.html')
+        query = datastore.query_RFPs(self.request.get('query'))
 
-        for rfp in rfps:
-            self.response.out.write(u'{0}: {1}<br/>{2}<br/>OrigID: {3}<br/>Org: {4}<br/>URI: {5}<br/>Keyword: {6}<hr/>'.format(rfp.title, rfp.description, rfp.publish_date, rfp.original_id, rfp.organization, rfp.original_uri, rfp.keywords))
+        rfps  = []
 
+        for r in query:
+            rfps.append(db.to_dict(r))
+            # Hack since the page calls for a uri variable
+            rfps[-1]['uri'] = rfps[-1]['original_uri']
+            rfps[-1].pop('original_uri')
 
+        template_data = {'rfps' : rfps,
+                         'title': "Your query returned {0} RFP's".format(len(rfps))}
+
+        self.response.out.write(template.render(template_data))
 
 class HomePageHandler(BaseHandler):
     """
