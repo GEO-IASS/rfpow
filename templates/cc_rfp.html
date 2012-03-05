@@ -1,31 +1,29 @@
 <!doctype html>
 <html>
-	<body>
-              <form action="/create-rfp/" method="post">
-                  Title: <input type="text" name="title" />
-                  <br/>
-                  Description: <input type="text" name="description" />
-                  <br/>
-                  Organization: <input type="text" name="organization" />
-                  <br/>
-                  Original URI: <input type="text" name="original_uri" />
-                  <br/>
-                  Original ID: <input type="text" name="original_id" />
-                  <br/>
-                  Keywords(comma delimited): <input type="text" name="keywords" />
-                  <br/>
-                  <input type="submit" value="Create RFP"/>
-              </form>
+<head>
+    <link rel="stylesheet" type="text/css" href="/style/main.css">
 
-              <form action="/view-kw-results/" method="post">
-                  Keyword: <input type="text" name="keyword" />
-                  <br/>
-                  <input type="submit" value="Query"/>
-              </form>
-              <form action="/view-query-results/" method="post">
-                  Query: <input type="text" name="query" />
-                  <br/>
-                  <input type="submit" value="Query"/>
-              </form>
-	</body>
+</head>
+<body>
+<form action="/create-rfp/" method="post" class="fieldset_submit">
+    <label>Title: <input type="text" name="title"/></label>
+    <label>Description: <input type="text" name="description"/></label>
+    <label>Organization: <input type="text" name="organization"/></label>
+    Original URI: <input type="text" name="original_uri"/>
+    Original ID: <input type="text" name="original_id"/>
+    Keywords(comma delimited): <input type="text" name="keywords"/>
+    <input type="submit" value="Create RFP" class="submit"/>
+</form>
+
+<form action="/view-kw-results/" method="post" class="fieldset_submit">
+    Keyword: <input type="text" name="keyword"/>
+    <input type="submit" value="Query" class="submit"/>
+</form>
+
+<form action="/view-query-results/" method="post" class="fieldset_submit">
+    Query: <input type="text" name="query"/>
+    <input type="submit" value="Query" class="submit"/>
+</form>
+
+</body>
 </html>

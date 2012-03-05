@@ -2,15 +2,30 @@
 <html>
 <head>
     <title>RFPow! - Home Page</title>
+    <link rel="stylesheet" type="text/css" href="/style/admin.css">
+    <link rel="stylesheet" type="text/css" href="/style/main.css">
+
 </head>
 <body>
-Howdy, {{ username }}!
+<div style="position: relative;">
+    <div class="logout"><a href="{{ url_logout }}">Logout</a></div>
+</div>
+<h3>Howdy, {{ username }}!</h3>
 <br>
-Here are some of the things you can do so far
-<ul>
-    <li><a href="{{ url_top_rfps }}">Top  RFPs</a></li>
-    <li><a href="{{ url_create_query_rfps }}">Create and Query RFPs</a></li>
-</ul>
-<a href="{{ url_logout }}">Logout</a>
+
+
+
+
+    Here are some of the things you can do so far
+
+    <ul>
+
+        <li><a href="{{ url_top_rfps }}">Top RFPs</a></li>
+        <li><a href="{{ url_create_query_rfps }}">Create and Query RFPs</a></li>
+    </ul>
+
+
+
+
 </body>
 </html>

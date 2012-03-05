@@ -1,6 +1,7 @@
 body {
     font-family: Helvetica, Arial, sans-serif;
     font-size: 11pt;
+    padding: 10px;
 }
 
 img {
@@ -8,17 +9,16 @@ img {
 }
 
 pre.details {
-	display: none;
-	white-space:normal;
+    display: none;
+    white-space: normal;
 }
 
 a.details_expand:link,
 a.details_expand:active,
-a.details_expand:visited
-{
-	font-size: 8pt;
-	color: green;
-	text-decoration: none;
+a.details_expand:visited {
+    font-size: 8pt;
+    color: green;
+    text-decoration: none;
 }
 
 div.error {
@@ -28,7 +28,11 @@ div.error {
     padding: 9px;
 }
 
-* { margin: 0; padding: 0; }
+* {
+    margin: 0;
+    padding: 0;
+}
+
 .fieldset_submit {
     display: block;
     width: 500px;
@@ -37,7 +41,6 @@ div.error {
     text-align: center;
     padding: 40px;
 }
-
 
 input, select {
     display: block;
@@ -51,9 +54,14 @@ input, select {
     margin: 5px auto 20px auto;
 }
 
-select {height: 35px;}
+select {
+    height: 35px;
+}
 
-label {display: block; margin-bottom: 10px;}
+label {
+    display: block;
+    margin-bottom: 7px;
+}
 
 fieldset.fieldset_centre textarea {
     border: 2px solid #ccc;
@@ -64,9 +72,8 @@ fieldset.fieldset_centre textarea {
     margin: 0 auto;
 }
 
-
 .submit {
-    width: 100px;
+    width: 120px;
     border: none;
     height: 30px;
     text-align: center;
@@ -78,11 +85,18 @@ fieldset.fieldset_centre textarea {
     border-radius: 10px;
 }
 
-.submit:hover {cursor: pointer;}
+.submit:hover {
+    cursor: pointer;
+}
 
 .submit:active {
-    position:relative;
-    top:2px
+    position: relative;
+    top: 2px
 }
+
+.logout {
+    position: absolute; top: 1em; right: 1em;
+}
+
 ​
 
