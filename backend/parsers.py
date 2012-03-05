@@ -24,6 +24,14 @@ class Parser:
         and permanent URI of the RFP"""
         raise NotImplementedError('Not implemented')
 
+    def parse_details(self, rpf):
+        """Parse individual page of an RFP.
+
+        rfp -- a dictionary containing metadata such as URI of the RFP page.
+        """
+        raise NotImplementedError('Not implemented')
+
+
 
 class MerxParser(Parser):
     """A parser for merx.com"""
