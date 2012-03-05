@@ -5,7 +5,7 @@ import urllib
 import urllib2
 import logging
 from pyquery import PyQuery as pq
-from datetime import datetime
+import datetime
 
 class Parser:
     """All parsers should derive from this for a uniform API"""
@@ -191,13 +191,26 @@ class MerxParser(Parser):
         table4 = labels.eq(6).siblings('table').find('tr td')
 
         rfp['org']             = table1.eq(8).text().strip()
+        rfp['parsed_on'] = datetime.date.today()
 
-        # date and time formats vary wildly on Merx. Use only date
-        rfp['published_on']    = datetime.strptime(
-                table2.eq(2).text().strip()[0:10], '%Y-%m-%d').date()
-        rfp['parsed_on'] = datetime.now().date()
-        rfp['ends_on'] = datetime.strptime(
-                table2.eq(8).text().strip()[0:10], '%Y-%m-%d').date()
+        # date and time formats vary wildly on Merx. Use only date, and skip
+        # problematic cases like empty dates
+        try:
+            rfp['published_on']    = datetime.datetime.strptime(
+                    table2.eq(2).text().strip()[0:10], '%Y-%m-%d').date()
+        # failed to parse publish date
+        except ValueError as e:
+            rfp['published_on'] = datetime.date.today()
+            logging.error( "Couldn't parse publish date: %s" % rfp )
+
+        try:
+            rfp['ends_on'] = datetime.datetime.strptime(
+                    table2.eq(8).text().strip()[0:10], '%Y-%m-%d').date()
+
+        # failed to parse close date (more common that we'd like)
+        except ValueError as e:
+            rfp['ends_on'] = datetime.date.today() + datetime.timedelta(60)
+            logging.error( "Couldn't parse close date: %s" % rfp )
 
         rfp['original_category'] = table3.eq(2).text().strip()
         rfp['description']     = table4.eq(1).text().strip()
