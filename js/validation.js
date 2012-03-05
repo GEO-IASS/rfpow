@@ -1,4 +1,4 @@
-debug_ignore_validation = true
+debug_ignore_validation = false
 
 function validateNumber(field, msg, min, max) {
     if (!min) {

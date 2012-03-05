@@ -4,12 +4,16 @@
     <title>RFPow! - Login</title>
     <link rel="stylesheet" type="text/css" href="/style/main.css">
     <link rel="stylesheet" type="text/css" href="/style/user.css">
+    <script type="text/javascript" src="../js/validation.js">
+    </script>
 </head>
 <body>
 
 <img src="../images/logo.png" class="displayed">
 
-<form action="{{action}}" method="post">
+<form action="{{action}}" method="post" onsubmit="return validateString(this.username,
+ 'Please fill all required fields', 1, 255)
+&& validateString(this.password, 'Please fill all required fields', 1, 255);">
     <fieldset class="fieldset_submit">
 
         {% if err_msg != "" %}
