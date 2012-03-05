@@ -31,8 +31,9 @@ class AdminParser(webapp2.RequestHandler):
                 stop_on_dupe is not '',
                 (limit is not "") and int(limit.strip()) or None )
 
-        self.get( '%d RFPs parsed, %d new. See logs for more information.' % (parsed, new) )
-        
+        self.get( '%d RFPs parsed, %d new ones stored in the datastore. See logs.' % (parsed, new) )
+
+
 app = webapp2.WSGIApplication(
         [('/admin', AdminParser)],
         debug=True,

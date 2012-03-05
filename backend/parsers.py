@@ -5,6 +5,7 @@ import urllib
 import urllib2
 import logging
 from pyquery import PyQuery as pq
+from datetime import datetime
 
 class Parser:
     domain = ""
@@ -175,7 +176,14 @@ class MerxParser(Parser):
         table4 = labels.eq(6).siblings('table').find('tr td')
 
         rfp['org']             = table1.eq(8).text().strip()
-        rfp['published_on']    = table2.eq(2).text().strip()
+
+        # date and time formats vary wildly on Merx. Use only date
+        rfp['published_on']    = datetime.strptime(
+                table2.eq(2).text().strip()[0:10], '%Y-%m-%d').date()
+        rfp['parsed_on'] = datetime.now().date()
+        rfp['ends_on'] = datetime.strptime(
+                table2.eq(8).text().strip()[0:10], '%Y-%m-%d').date()
+
         rfp['original_category'] = table3.eq(2).text().strip()
         rfp['description']     = table4.eq(1).text().strip()
 

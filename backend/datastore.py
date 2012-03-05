@@ -26,10 +26,9 @@ class RFP(db.Model):
         rfp.original_uri = dict['uri']
         rfp.original_id = dict['original_id']
         rfp.origin = dict['origin']
-        # XXX: parse dates properly
-        rfp.publish_date = datetime.strptime(dict['published_on'], '%Y-%m-%d')
-        rfp.parse_date = datetime.now()
-        #rfp.close_date = close_date
+        rfp.publish_date = dict['published_on']
+        rfp.parse_date = dict['parsed_on']
+        rfp.close_date = dict['ends_on']
 
         return rfp
 
