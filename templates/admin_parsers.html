@@ -5,12 +5,13 @@
         <link rel="stylesheet" type="text/css" href="/style/admin.css">
     </head>
     <body>
+        {% if status %}
         <div class="status">
             {{ status }}
         </div>
-        <h3>Parser settings</h3>
-        {% if status %}
         {% endif %}
+
+        <h3>Parser settings</h3>
         <div class="parser section">
             <h4>Merx parser</h4>
             <div class="parser_controls">
