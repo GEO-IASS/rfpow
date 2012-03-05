@@ -61,8 +61,7 @@ class CreateAndQueryRFPHandler(BaseHandler):
         self.redirect('/create-rfp/')
 
 class KeywordResultsHandler(BaseHandler):
-
-    def post(self):
+    def get(self):
         self.response.headers['Content-Type'] = 'text/html; charset=utf-8'
         jinja_environment = jinja2.Environment(
             loader=jinja2.FileSystemLoader(os.path.dirname(__file__)))
