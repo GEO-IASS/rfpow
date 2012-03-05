@@ -1,0 +1,31 @@
+<!doctype html>
+<html>
+	<body>
+              <form action="/create-rfp/" method="post">
+                  Title: <input type="text" name="title" />
+                  <br/>
+                  Description: <input type="text" name="description" />
+                  <br/>
+                  Organization: <input type="text" name="organization" />
+                  <br/>
+                  Original URI: <input type="text" name="original_uri" />
+                  <br/>
+                  Original ID: <input type="text" name="original_id" />
+                  <br/>
+                  Keywords(comma delimited): <input type="text" name="keywords" />
+                  <br/>
+                  <input type="submit" value="Create RFP"/>
+              </form>
+
+              <form action="/view-kw-results/" method="post">
+                  Keyword: <input type="text" name="keyword" />
+                  <br/>
+                  <input type="submit" value="Query"/>
+              </form>
+              <form action="/view-query-results/" method="post">
+                  Query: <input type="text" name="query" />
+                  <br/>
+                  <input type="submit" value="Query"/>
+              </form>
+	</body>
+</html>

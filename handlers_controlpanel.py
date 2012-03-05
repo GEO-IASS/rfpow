@@ -40,35 +40,11 @@ class CreateAndQueryRFPHandler(BaseHandler):
     @user_required
     def get(self):
         self.response.headers['Content-Type'] = 'text/html'
-        self.response.out.write('<html><body>')
-        self.response.out.write('''
-              <form action="/create-rfp/" method="post">
-                  Title: <input type="text" name="title" />
-                  <br/>
-                  Description: <input type="text" name="description" />
-                  <br/>
-                  Organization: <input type="text" name="organization" />
-                  <br/>
-                  Original URI: <input type="text" name="original_uri" />
-                  <br/>
-                  Original ID: <input type="text" name="original_id" />
-                  <br/>
-                  Keywords(comma delimited): <input type="text" name="keywords" />
-                  <br/>
-                  <input type="submit" value="Create RFP"/>
-              </form>
-
-              <form action="/view-kw-results/" method="post">
-                  Keyword: <input type="text" name="keyword" />
-                  <br/>
-                  <input type="submit" value="Query"/>
-              </form>
-              <form action="/view-query-results/" method="post">
-                  Query: <input type="text" name="query" />
-                  <br/>
-                  <input type="submit" value="Query"/>
-              </form>
-              ''')
+        jinja_environment = jinja2.Environment(
+            loader=jinja2.FileSystemLoader(os.path.dirname(__file__)))
+        template = jinja_environment.get_template('templates/cc_rfp.html')
+	template_values = {}
+	self.response.out.write(template.render(template_values))
 
     def post(self):
         datastore.create_RFP(self.request.get('title'),
