@@ -29,7 +29,9 @@ For help with running the app using the frontend, refer to the GAE docs:
 
 # Source Code Credits
 - Getting user management to work properly was helped by the using code found
-here https://github.com/fredrikbonander/Webapp2-Sample-Applications .
+here https://github.com/fredrikbonander/Webapp2-Sample-Applications
+- Field forms used some CSS code from
+http://stackoverflow.com/questions/7213787/unable-to-center-contents-of-a-fieldset
 
 # NOTES:
 - NDB folder is included in application due to a import statement in

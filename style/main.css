@@ -28,3 +28,61 @@ div.error {
     padding: 9px;
 }
 
+* { margin: 0; padding: 0; }
+.fieldset_submit {
+    display: block;
+    width: 500px;
+    margin: 0 auto;
+    border: none;
+    text-align: center;
+    padding: 40px;
+}
+
+
+input, select {
+    display: block;
+    margin: 5px 0 20px 0;
+    width: 300px;
+    height: 25px;
+    font-size: 16px;
+    color: gray;
+    padding: 5px;
+    border: 2px solid #ccc;
+    margin: 5px auto 20px auto;
+}
+
+select {height: 35px;}
+
+label {display: block; margin-bottom: 10px;}
+
+fieldset.fieldset_centre textarea {
+    border: 2px solid #ccc;
+    color: gray;
+    padding: 10px;
+    font-size: 16px;
+    width: 800px;
+    margin: 0 auto;
+}
+
+
+.submit {
+    width: 100px;
+    border: none;
+    height: 30px;
+    text-align: center;
+    text-transform: uppercase;
+    background-color: #ef5d21;
+    color: white;
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
+}
+
+.submit:hover {cursor: pointer;}
+
+.submit:active {
+    position:relative;
+    top:2px
+}
+​
+

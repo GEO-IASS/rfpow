@@ -3,20 +3,27 @@
 <head>
     <title>RFPow! - Login</title>
     <link rel="stylesheet" type="text/css" href="/style/main.css">
+    <link rel="stylesheet" type="text/css" href="/style/user.css">
 </head>
 <body>
+
+<img src="../images/logo.png" class="displayed">
+
 <form action="{{action}}" method="post">
-    <fieldset>
-        <legend>Login form</legend>
+    <fieldset class="fieldset_submit">
+
         {% if err_msg != "" %}
             <div class="error"> {{ err_msg }} </div>
         {% endif %}
         <label>Username <input type="text" name="username" placeholder="Your username"/></label>
         <label>Password <input type="password" name="password" placeholder="Your password"/></label>
         <label>Remember me? <input type="checkbox" name="remember_me" placeholder="Remember me?"/></label>
+        <button class="submit">Login</button>
+
+
     </fieldset>
-    <button>Login</button>
+    <center><a href="/create-user/">New User</a>?</center>
+
 </form>
-<a href="/create-user/">New User?</a>
 </body>
 </html>
