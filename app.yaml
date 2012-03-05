@@ -25,6 +25,10 @@ handlers:
   script: handlers_admin.app
   login: admin
 
+- url: /cron.*
+  script: handlers_cron.app
+  login: admin
+
 - url: /toprfps
   script: test_parser.app
 

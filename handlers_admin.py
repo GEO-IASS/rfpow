@@ -5,6 +5,7 @@ import logging
 from backend.scheduled import ScheduledParse
 
 class AdminParser(webapp2.RequestHandler):
+    """Controller for the parser section of the admin panel"""
 
     def get(self, status=None):
         self.response.headers['Content-Type'] = 'text/html'
@@ -20,6 +21,7 @@ class AdminParser(webapp2.RequestHandler):
         self.response.out.write(template.render(template_data))
 
     def post(self):
+        """Used to set parser settings and trigger parsers"""
         ignore_duplicates = self.request.get('ignore_duplicates')
         start_id = self.request.get('start_id')
         stop_on_dupe = self.request.get('stop_on_dupe')
@@ -31,7 +33,7 @@ class AdminParser(webapp2.RequestHandler):
                 stop_on_dupe is not '',
                 (limit is not "") and int(limit.strip()) or None )
 
-        self.get( '%d RFPs parsed, %d new ones stored in the datastore. See logs.' % (parsed, new) )
+        self.get( '%d RFPs parsed, %d new stored. See logs.' % (parsed, new) )
 
 
 app = webapp2.WSGIApplication(

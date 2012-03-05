@@ -1,0 +1,4 @@
+cron:
+- description: scheduled merx parser job
+  url: /cron/merx
+  schedule: every 3 hours from 7:00 to 23:00
