@@ -17,8 +17,12 @@ class LoginHandler(BaseHandler):
          msg for error_msg, display it the user.
     """
 
-    def show_login(self, err_msg=""):
-        template_values = {'action': self.request.url, 'err_msg': err_msg}
+    def show_login(self, err_msg="", info_msg=None):
+        template_values = {
+                'action': self.request.url, 
+                'err_msg': err_msg,
+                'info_msg': info_msg
+        }
         path = os.path.join(os.path.dirname(__file__), 'templates/login.html')
         self.response.out.write(template.render(path, template_values))
 
@@ -91,9 +95,14 @@ class CreateUserHandler(BaseHandler):
             #return 'Create user error: %s' % str(user) # Error message
             self.show_register("User already exists, try again");
         else:
-            # User is created, let's try redirecting to login page
+            # User is created, let user know they're good to log in
             try:
-                self.redirect(self.auth_config['login_url'], abort=True)
+                h = LoginHandler()
+                h.initialize( self.request, self.response )
+                h.show_login( 
+                    info_msg="Hooray, you're registered! Log in below."
+                )
+                #self.redirect(self.auth_config['login_url'], abort=True)
             except (AttributeError, KeyError), e:
                 self.abort(403)
 

@@ -52,7 +52,7 @@ class MerxParser(Parser):
         'SEARCH_SINCE':'  ALL',
         'ospQuickSearch':'Search...',
         'search_profile':'',
-        'txt_maxPerPage':'10'
+        'txt_maxPerPage':'100'
     }
     headers = {
         "User-Agent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10.7; rv:10.0.2) Gecko/20100101 Firefox/10.0.2",
