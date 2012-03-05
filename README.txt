@@ -32,4 +32,5 @@ For help with running the app using the frontend, refer to the GAE docs:
 here https://github.com/fredrikbonander/Webapp2-Sample-Applications .
 
 # NOTES:
-- NDB folder is included in application due to a import statement in webapp2_extras/appengine/auth/models.py
+- NDB folder is included in application due to a import statement in
+webapp2_extras/appengine/auth/models.py

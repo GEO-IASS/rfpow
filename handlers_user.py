@@ -11,15 +11,19 @@ from google.appengine.ext.webapp import template
 from handlers_base import BaseHandler
 
 
-
 class LoginHandler(BaseHandler):
-    def get(self):
-        url = self.request.host_url + '/create-user/'
-        url_linktext = 'New User?'
-        template_values = {'action': self.request.url, 'url': url, 'url_linktext': url_linktext}
+    """
+         Show a form for the user to login. If the there's an empty string error
+         msg for error_msg, display it the user.
+    """
+
+    def show_login(self, err_msg=""):
+        template_values = {'action': self.request.url, 'err_msg': err_msg}
         path = os.path.join(os.path.dirname(__file__), 'templates/login.html')
         self.response.out.write(template.render(path, template_values))
 
+    def get(self, error_msg=""):
+        self.show_login()
 
     def post(self):
         """
@@ -35,21 +39,21 @@ class LoginHandler(BaseHandler):
             self.auth.get_user_by_password(username, password, remember=remember_me)
             self.redirect('/secure')
         except (InvalidAuthIdError, InvalidPasswordError), e:
-            # Returns error message to self.response.write in the BaseHandler.dispatcher
-            # Currently no message is attached to the exceptions
-            # return e
-            self.redirect('/login')
-            # return "Login error. Try again: <a href='%s'>Login</a>" % (self.auth_config['login_url'])
+            self.show_login("Bad username or password. Try again.")
 
 
 class CreateUserHandler(BaseHandler):
-    def get(self):
-        """
-              Returns a simple HTML form for create a new user
-          """
-        template_values = {'action': self.request.url}
+    """
+        Returns a simple HTML form for creating a new user. Show err_msg if
+        not empty (logic is in html)
+    """
+    def show_register(self, err_msg=""):
+        template_values = {'action': self.request.url, 'err_msg': err_msg}
         path = os.path.join(os.path.dirname(__file__), 'templates/register.html')
         self.response.out.write(template.render(path, template_values))
+
+    def get(self):
+        self.show_register()
 
     def post(self):
         """
@@ -62,10 +66,11 @@ class CreateUserHandler(BaseHandler):
         str_cc_number = self.request.POST.get('cc_number')
         str_name_on_cc = self.request.POST.get('name_on_cc')
         str_expiry_date = self.request.POST.get('expiry_date')
-        str_keywords = self.request.POST.get('keywords')
-        list_keywords = []
-        for x in str_keywords.split(','):
-            list_keywords.append(x.strip())
+        # str_keywords = self.request.POST.get('keywords')
+        str_email = self.request.POST.get('email')
+        #        list_keywords = []
+        #        for x in str_keywords.split(','):
+        #            list_keywords.append(x.strip())
 
 
         # As the UI changes and the need for more user info increases, this list
@@ -75,15 +80,16 @@ class CreateUserHandler(BaseHandler):
             password_raw=str_password,
             first_name=str_first_name,
             last_name=str_last_name,
+            email=str_email,
             cc_number=str_cc_number,
             name_on_cc=str_name_on_cc,
             expiry_date=str_expiry_date,
-            keywords=list_keywords,
             is_admin=False,
             is_active=False
         )
         if not user[0]: #user is a tuple
-            return 'Create user error: %s' % str(user) # Error message
+            #return 'Create user error: %s' % str(user) # Error message
+            self.show_register("User already exists, try again");
         else:
             # User is created, let's try redirecting to login page
             try:

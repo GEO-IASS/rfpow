@@ -1,3 +1,5 @@
+debug_ignore_validation = true
+
 function validateNumber(field, msg, min, max) {
     if (!min) {
         min = 0
