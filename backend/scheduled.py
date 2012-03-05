@@ -21,16 +21,15 @@ class ScheduledParse():
 
         while parser.has_next():
             page += 1
-            rfps = parser.next()
+            rfps = parser.next(parse_each=False)
             parsed_total = parsed_total + len(rfps)
 
             for r in rfps:
-                rfp = RFP.from_dict(r)
-
+                title = r['title']
                 # skip if given an ID to resume parsing from
                 if skip: 
                     if start_id != r['original_id']:
-                        logging.info( 'Skipping while waiting for %d: %s' % (start_id, rfp) )
+                        logging.info( 'Skipping while waiting for %d: %s' % (start_id, title) )
                         continue
                     else:
                         skip = False
@@ -43,23 +42,24 @@ class ScheduledParse():
                    # either skip if this RFP is already parsed, or stop parsing
                    if db_match.count() != 0:
                        if stop_on_dupe:
-                           logging.info( 'Stopping early on RFP: %s' % rfp )
+                           logging.info( 'Stopping early on RFP: %s' % title )
                            return (parsed_total, parsed_new)
                        else:
-                           logging.info( 'Skipping existing RFP: %s.' % rfp )
+                           logging.info( 'Skipping existing RFP: %s.' % title )
                            continue
 
                    else:
                        # stop early if there's a limit on number of RFPs parsed
                        if limit is not None and limit <= parsed_new:
-                           logging.info( 'Stopping early due to limit: %s' % rfp )
+                           logging.info( 'Stopping early due to limit: %s' % title )
                            return (parsed_total, parsed_new)
 
+                       rfp = RFP.from_dict( parser.parse_details(r) )
+                       rfp.put()
                        parsed_new += 1
 
                 logging.info( u'Saving new RFP: %s' % rfp )
-                rfp.put()
             logging.info( 'Parsed page %d of Merx results' % page )
-            time.sleep(3)
+            time.sleep(2)
 
         return (parsed_total, parsed_new)

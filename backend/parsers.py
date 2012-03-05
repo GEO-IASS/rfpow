@@ -8,6 +8,7 @@ from pyquery import PyQuery as pq
 from datetime import datetime
 
 class Parser:
+    """All parsers should derive from this for a uniform API"""
     domain = ""
 
     def has_next(self):
@@ -96,26 +97,31 @@ class MerxParser(Parser):
         # Load and parse each RFP's dedicated page to grab more detailed
         # information about each one
         for l in parse_list:
-            try:
-                self.load( (l['uri'],{}) )
-                s = self.request.read()
-                self.doc = pq( s )
-
-                # Parse page's data and stash results in a dictionary
-                rfp = self.parse_rfp()
-                rfp['title'] = l['title']
-                rfp['original_id'] = l['original_id']
-                rfp['uri']  = l['uri']
-                rfp['origin'] = 'merx'
-
-                rfp_list.append( rfp )
-
-            except lxml.etree.XMLSyntaxError as e:
-                logging.error( 'Could not parse RFP: %s' % l.uri )
+            rfp_list.append( self.parse_one(l) )
 
         return rfp_list
 
-    # Private methods
+
+    def parse_details(self, l):
+        try:
+            self.load( (l['uri'],{}) )
+            s = self.request.read()
+            self.doc = pq( s )
+
+            # Parse page's data and stash results in a dictionary
+            rfp = self.parse_rfp()
+            rfp['title'] = l['title']
+            rfp['original_id'] = l['original_id']
+            rfp['origin'] = l['origin']
+            rfp['uri']  = l['uri']
+
+
+        except lxml.etree.XMLSyntaxError as e:
+            logging.error( 'Could not parse RFP: %s' % l.uri )
+            raise e
+
+        return rfp
+
     def parse_list(self):
         """Parse page with list of RFPs
 
@@ -141,7 +147,8 @@ class MerxParser(Parser):
             rfp = { 
                 "title"     : link.text(),
                 "uri"       : uri,
-                "original_id" : ( id_search is not None ) and id_search.group(1) or ""
+                "original_id" : ( id_search is not None ) and id_search.group(1) or "",
+                'origin' : 'merx'
             }
 
             self.parsed_list.append( rfp )
@@ -228,8 +235,3 @@ class MerxParser(Parser):
 
         return (uri, data)
 
-
-
-def test():
-    p = MerxParser()
-    p.parse_next()
