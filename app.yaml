@@ -21,12 +21,12 @@ handlers:
 - url: /datastore/.*
   script: datatest.app
 
-- url: /parse
-  script: parse.app
+- url: /admin
+  script: handlers_admin.app
   login: admin
 
 - url: /toprfps
-  script: test.app
+  script: test_parser.app
 
 - url: .*
   script: main.app

@@ -1,0 +1,34 @@
+<!doctype html>
+<html>
+    <head>
+        <title>RFPow! Admin Panel</title>
+        <link rel="stylesheet" type="text/css" href="/style/admin.css">
+    </head>
+    <body>
+        <div class="status">
+            {{ status }}
+        </div>
+        <h3>Parser settings</h3>
+        {% if status %}
+        {% endif %}
+        <div class="parser section">
+            <h4>Merx parser</h4>
+            <div class="parser_controls">
+                <form name="merx_parser" method="post">
+                    Parse 
+                    <input type="text" name="parse_limit" value="10" size="2">
+                    jobs right now.
+                    <input type="submit" value="Go!">
+
+                    <div class="subsection">
+                        <label title="Stop parsing job as soon as a duplicate is found">
+                            <input type="checkbox" name="stop_on_dupe">
+                            Stop parsing on a duplicate
+                        </label>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+    </body>
+</html>
