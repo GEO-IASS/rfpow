@@ -1,4 +1,5 @@
 import logging
+from datetime import datetime
 from google.appengine.ext import db
 
 class RFP(db.Model):
@@ -26,8 +27,8 @@ class RFP(db.Model):
         rfp.original_id = dict['original_id']
         rfp.origin = dict['origin']
         # XXX: parse dates properly
-        #rfp.publish_date = dict['published_on']
-        #rfp.parse_date = automatically set to now
+        rfp.publish_date = datetime.strptime(dict['published_on'], '%Y-%m-%d')
+        rfp.parse_date = datetime.now()
         #rfp.close_date = close_date
 
         return rfp

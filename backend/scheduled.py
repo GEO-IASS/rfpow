@@ -50,13 +50,12 @@ class ScheduledParse():
                            continue
 
                    else:
-                       parsed_new += 1
-
                        # stop early if there's a limit on number of RFPs parsed
                        if limit is not None and limit <= parsed_new:
                            logging.info( 'Stopping early due to limit: %s' % rfp )
                            return (parsed_total, parsed_new)
 
+                       parsed_new += 1
 
                 logging.info( u'Saving new RFP: %s' % rfp )
                 rfp.put()
