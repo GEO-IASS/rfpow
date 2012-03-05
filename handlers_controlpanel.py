@@ -73,7 +73,7 @@ class QueryResultsHandler(BaseHandler):
     def post(self):
         self.response.headers['Content-Type'] = 'text/html'
         self.response.out.write('<html><body>RFPS<hr/>')
-        rfps = RFP.query_RFPs(self.request.get('query'))
+        rfps = datastore.query_RFPs(self.request.get('query'))
 
         for rfp in rfps:
             self.response.out.write('{0}: {1}<br/>{2}<br/>OrigID: {3}<br/>Org: {4}<br/>URI: {5}<br/>Keyword: {6}<hr/>'.format(rfp.title, rfp.description, rfp.publish_date, rfp.original_id, rfp.organization, rfp.original_uri, rfp.keywords))
