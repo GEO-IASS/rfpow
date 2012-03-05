@@ -71,7 +71,7 @@ div.info {
 
 .fieldset_submit {
     display: block;
-    width: 550px;
+    width: 600px;
     border: none;
     margin: 0;
     padding: 10px;
@@ -94,9 +94,9 @@ label {
     margin-bottom: 7px;
 }
 
-.login_container {
+.login_container, .center_form_container  {
     text-align: center;
-    width: 550px;
+    width: 600px;
     margin: 0px auto;
 }
 
