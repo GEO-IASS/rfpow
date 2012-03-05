@@ -21,17 +21,6 @@ handlers:
 - url: /datastore/.*
   script: datatest.app
 
-- url: /admin
-  script: handlers_admin.app
-  login: admin
-
-- url: /cron.*
-  script: handlers_cron.app
-  login: admin
-
-- url: /toprfps
-  script: test_parser.app
-
 - url: .*
   script: main.app
 
