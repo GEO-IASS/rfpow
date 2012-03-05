@@ -21,9 +21,6 @@ handlers:
   static_files: images/favicon.ico
   upload: images/favicon\.ico
 
-- url: /datastore/.*
-  script: datatest.app
-
 - url: .*
   script: main.app
 
