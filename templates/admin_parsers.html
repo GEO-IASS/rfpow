@@ -22,7 +22,7 @@
             Parse
             <input type="text" name="parse_limit" value="10" size="2">
             jobs right now.
-            <input type="submit" value="Go!">
+            <input type="submit" class="button" value="Go!">
 
             <div class="subsection">
                 <label title="Stop parsing job as soon as a duplicate is found">
@@ -36,22 +36,20 @@
 <br>
 <div class="parser section">
     <h4>Create and Query RFPs (GQL Syntax)</h4>
-    <div class="center_form_container" style="text-align: left">
-        <form action="/create-rfp/" method="post" class="fieldset_submit">
-            <label>Title: <input type="text" name="title"/></label>
-            <label>Description: <input type="text" name="description"/></label>
-            <label>Organization: <input type="text" name="organization"/></label>
-            Original URI: <input type="text" name="original_uri"/>
-            Original ID: <input type="text" name="original_id"/>
-            Keywords(comma delimited): <input type="text" name="keywords"/>
-            <input type="submit" value="Create RFP" class="button"/>
-        </form>
-        <form action="/view-query-results/" method="post" class="fieldset_submit">
-            Query: <input type="text" name="query"/>
-            <input type="submit" value="Query" class="button"/>
-            <br>Ex: "WHERE keywords = 'Marine'"
-        </form>
-    </div>
+    <form action="/create-rfp/" method="post" class="fieldset_submit">
+        <label>Title: <input type="text" name="title"></label>
+        <label>Description: <input type="text" name="description"></label>
+        <label>Organization: <input type="text" name="organization"></label>
+        <label> Original URI: <input type="text" name="original_uri"> </label>
+        <label> Original ID: <input type="text" name="original_id"> </label>
+        <label> Keywords(comma delimited): <input type="text" name="keywords"> </label>
+        <input type="submit" value="Create RFP" class="button">
+    </form>
+    <form action="/view-query-results/" method="post" class="fieldset_submit">
+        <label> Query: <input type="text" name="query"> </label>
+        <div style="font-style:italic; font-size: 90%">Ex: "WHERE keywords = 'Marine'"</div>
+        <input type="submit" value="Query" class="button"/>
+    </form>
 
 </div>
 

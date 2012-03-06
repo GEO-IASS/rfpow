@@ -3,8 +3,9 @@ import jinja2
 import os
 import logging
 from backend.scheduled import ScheduledParse
+from handlers_base import BaseHandler
 
-class AdminParser(webapp2.RequestHandler):
+class AdminParser(BaseHandler):
     """Controller for the parser section of the admin panel"""
 
     def get(self, status=None):

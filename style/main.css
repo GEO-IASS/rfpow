@@ -115,15 +115,15 @@ fieldset.fieldset_centre textarea {
 
 .button {
     font-size: 11pt;
-    width: 120px;
+    padding: 0 12px !important;
     border: none;
     height: 30px;
     text-transform: uppercase;
     background-color: #ef5d21;
     color: white;
-    -moz-border-radius: 10px;
-    -webkit-border-radius: 10px;
-    border-radius: 10px;
+    -moz-border-radius: 7px;
+    -webkit-border-radius: 7px;
+    border-radius: 7px;
     text-align: center;
 }
 
