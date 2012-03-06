@@ -18,6 +18,7 @@ _routes = [
     RedirectRoute('/view-query-results/', QueryResultsHandler, name='view-query-results', strict_slash=True),
     RedirectRoute('/cron/merx', CronMerx, name='cron-merx', strict_slash=True),
     RedirectRoute('/admin', AdminParser, name='cron-merx', strict_slash=True),
+    RedirectRoute('/list-keywords', ListKeywordsHandler, name='list-keywords', strict_slash=True),
 ]
 
 def get_routes():

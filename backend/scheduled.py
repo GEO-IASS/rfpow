@@ -25,7 +25,7 @@ class ScheduledParse():
             parsed_total = parsed_total + len(rfps)
 
             for r in rfps:
-                title = r['title']
+                title = r['title'].encode('utf-8')
                 # skip if given an ID to resume parsing from
                 if skip: 
                     if start_id != r['original_id']:
@@ -54,7 +54,7 @@ class ScheduledParse():
                            logging.info( 'Stopping early due to limit: %s' % title )
                            return (parsed_total, parsed_new)
 
-                       rfp = RFP.from_dict( parser.parse_details(r) )
+                       rfp = RFP.from_dict( parser.parse_details(r.encode('utf-8')) )
                        rfp.put()
                        parsed_new += 1
 
