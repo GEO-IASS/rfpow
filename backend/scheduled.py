@@ -54,7 +54,7 @@ class ScheduledParse():
                            logging.info( 'Stopping early due to limit: %s' % title )
                            return (parsed_total, parsed_new)
 
-                       rfp = RFP.from_dict( parser.parse_details(r.encode('utf-8')) )
+                       rfp = RFP.from_dict( parser.parse_details(r) )
                        rfp.put()
                        parsed_new += 1
 
