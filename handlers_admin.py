@@ -3,11 +3,12 @@ import jinja2
 import os
 import logging
 from backend.scheduled import ScheduledParse
-from handlers_base import BaseHandler
+from handlers_base import BaseHandler, user_required
 
 class AdminParser(BaseHandler):
     """Controller for the parser section of the admin panel"""
 
+    @user_required
     def get(self, status=None):
         self.response.headers['Content-Type'] = 'text/html'
         jinja_environment = jinja2.Environment(
@@ -21,6 +22,7 @@ class AdminParser(BaseHandler):
             template_data['status'] = status
         self.response.out.write(template.render(template_data))
 
+    @user_required
     def post(self):
         """Used to set parser settings and trigger parsers"""
         ignore_duplicates = self.request.get('ignore_duplicates')
