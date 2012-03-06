@@ -43,10 +43,10 @@ class CreateAndQueryRFPHandler(BaseHandler):
     def get(self):
         self.response.headers['Content-Type'] = 'text/html; charset=utf-8'
         jinja_environment = jinja2.Environment(
-            loader=jinja2.FileSystemLoader(os.path.dirname(__file__)))
+	    loader=jinja2.FileSystemLoader(os.path.dirname(__file__)))
         template = jinja_environment.get_template('templates/cc_rfp.html')
-	template_values = {}
-	self.response.out.write(template.render(template_values))
+        template_values = {}
+        self.response.out.write(template.render(template_values))
 
     def post(self):
         datastore.create_RFP(self.request.get('title'),
