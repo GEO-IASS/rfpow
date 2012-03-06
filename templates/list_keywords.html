@@ -1,0 +1,25 @@
+<!doctype html>
+<html>
+    <head>
+        <title>RFPow! -- RFP Search Engine</title>
+        <link rel="stylesheet" type="text/css" href="../style/main.css">
+        <link rel="icon" type="image/ico" href="../images/favicon.ico">
+    </head>
+    <body>
+        <img src="../images/logo.png">
+        {% if error %}
+        <div class="error">
+            <strong>Uh oh, an error</strong>: {{ error }} 
+        </div>
+
+        {% else %}
+        <ol>
+            {% for r in keywords %}
+			<li>
+				<a href="/view-kw-results/?keyword={{r[0]}}">{{r[0]}}</a> 
+			</li>
+            {% endfor %}
+        </ol>
+        {% endif %}
+    </body>
+</html>

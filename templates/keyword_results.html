@@ -1,0 +1,39 @@
+<!doctype html>
+<html>
+    <head>
+        <title>RFPow! -- RFP Search Engine</title>
+        <link rel="stylesheet" type="text/css" href="../style/main.css">
+        <link rel="icon" type="image/ico" href="../images/favicon.ico">
+		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    </head>
+
+    <body>
+        <img src="../images/logo.png">
+        {% if error %}
+        <div class="error">
+            <strong>Uh oh, an error</strong>: {{ error }} 
+        </div>
+
+        {% else %}
+        <h2>Latest {{ rfps|length }} RFP's from Merx</h2>
+        <ol>
+            {% for r in rfps %}
+			<li>
+				<a href="{{r.uri}}">{{r.title}}</a> <a href="#" class="details_expand">&darr; See all data</a>
+				<pre class="details"><code>{{r}}</code></pre>
+			</li>
+            {% endfor %}
+        </ol>
+        {% endif %}
+    </body>
+</html>
+
+<script type="text/javascript">
+	$( function() {
+		$('.details_expand').click(function(e){
+			e.preventDefault();
+			var pre = $( this ).siblings( 'pre' );
+			pre[ (pre.css( 'display' ) == 'none') ? 'slideDown' : 'slideUp' ]('fast');
+		});
+	});
+</script>
