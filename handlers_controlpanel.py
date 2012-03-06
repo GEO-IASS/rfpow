@@ -15,6 +15,8 @@ import google.appengine.ext.db as db
 from backend.parsers import MerxParser
 
 class TopRFPSHandler(BaseHandler):
+    '''This will query and display the top 10 RFPs stored in the database.'''
+
     @user_required
     def get(self):
         logging.getLogger().setLevel(logging.DEBUG)
@@ -62,6 +64,10 @@ class QueryRFPHandler(BaseHandler):
 
 
 class KeywordResultsHandler(BaseHandler):
+    ''' Once a desired keyword is obtained from the user, a page consisting
+    of every RFPs stored in the database will be displayed with template
+    keyword_results.html'''
+
     def get(self):
         self.response.headers['Content-Type'] = 'text/html; charset=utf-8'
         jinja_environment = jinja2.Environment(
@@ -76,12 +82,6 @@ class KeywordResultsHandler(BaseHandler):
             # Hack since the page calls for a uri variable
             rfps[-1]['uri'] = rfps[-1]['original_uri']
             rfps[-1].pop('original_uri')
-#	    rfps[-1]['detail'] = "<b>Origin: </b>" + rfps[-1]['origin'] + '<br /><br />'\
-#			    + "<b>Organization: </b>" + rfps[-1]['organization'] + \
-#			    '<br /><br />' + "<b>Publish date: </b>" + str(rfps[-1]['publish_date'])\
-#			    + "Close date: " + str(rfps[-1]['close_date']) + '<br /><br />' +\
-#			    "<b>URL: </b>" + rfps[-1]['uri'] + '<br /><br />' + "<b>Description: </b>"\
-#			    + rfps[-1]['description'] + '<br /><br />'
 	rfps = datastore.form_printable(rfps)
         template_data = {'rfps' : rfps,
                 'title': "Your query returned {0} RFP's".format(len(rfps))}
@@ -112,6 +112,8 @@ class QueryResultsHandler(BaseHandler):
         self.response.out.write(template.render(template_data))
 
 class ListKeywordsHandler(BaseHandler):
+    ''' List every keyword stored in database for use to select, once selected, 
+    a result page consisting of every RFP with this keyword will be displayed.'''
 
     def get(self):
         self.response.headers['Content-Type'] = 'text/html; charset=utf-8'
