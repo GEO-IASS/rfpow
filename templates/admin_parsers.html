@@ -1,51 +1,58 @@
 <!doctype html>
 <html>
-    <head>
-        <title>RFPow! Admin Panel</title>
-        <link rel="stylesheet" type="text/css" href="/style/admin.css">
-    </head>
-    <body>
-        {% if status %}
-        <div class="status">
-            {{ status }}
-        </div>
-        {% endif %}
+<head>
+    <title>RFPow! Admin Panel</title>
+    <link rel="stylesheet" type="text/css" href="/style/main.css">
+    <link rel="stylesheet" type="text/css" href="/style/admin.css">
+</head>
+<body>
+{% if status %}
+    <div class="status">
+        {{ status }}
+    </div>
+{% endif %}
 
-        <h3>Parser settings</h3>
-        <div class="parser section">
-            <h4>Merx parser</h4>
-            <div class="parser_controls">
-                <form name="merx_parser" method="post">
-                    Parse 
-                    <input type="text" name="parse_limit" value="10" size="2">
-                    jobs right now.
-                    <input type="submit" value="Go!">
+<h3>Admin Control Panel</h3>
 
-                    <div class="subsection">
-                        <label title="Stop parsing job as soon as a duplicate is found">
-                            <input type="checkbox" name="stop_on_dupe">
-                            Stop parsing on a duplicate
-                        </label>
-                    </div>
-                </form>
+<div class="parser section">
+    <h4>Merx parser</h4>
+
+    <div class="parser_controls">
+        <form name="merx_parser" method="post">
+            Parse
+            <input type="text" name="parse_limit" value="10" size="2">
+            jobs right now.
+            <input type="submit" value="Go!">
+
+            <div class="subsection">
+                <label title="Stop parsing job as soon as a duplicate is found">
+                    <input type="checkbox" name="stop_on_dupe">
+                    Stop parsing on a duplicate
+                </label>
             </div>
-        </div>
+        </form>
+    </div>
+</div>
+<br>
+<div class="parser section">
+    <h4>Create and Query RFPs (GQL Syntax)</h4>
+    <div class="center_form_container" style="text-align: left">
+        <form action="/create-rfp/" method="post" class="fieldset_submit">
+            <label>Title: <input type="text" name="title"/></label>
+            <label>Description: <input type="text" name="description"/></label>
+            <label>Organization: <input type="text" name="organization"/></label>
+            Original URI: <input type="text" name="original_uri"/>
+            Original ID: <input type="text" name="original_id"/>
+            Keywords(comma delimited): <input type="text" name="keywords"/>
+            <input type="submit" value="Create RFP" class="button"/>
+        </form>
+        <form action="/view-query-results/" method="post" class="fieldset_submit">
+            Query: <input type="text" name="query"/>
+            <input type="submit" value="Query" class="button"/>
+        </form>
+    </div>
 
-        <div class="center_form_container" style="text-align: left">
-            <form action="/create-rfp/" method="post" class="fieldset_submit">
-                <label>Title: <input type="text" name="title"/></label>
-                <label>Description: <input type="text" name="description"/></label>
-                <label>Organization: <input type="text" name="organization"/></label>
-                Original URI: <input type="text" name="original_uri"/>
-                Original ID: <input type="text" name="original_id"/>
-                Keywords(comma delimited): <input type="text" name="keywords"/>
-                <input type="submit" value="Create RFP" class="button"/>
-            </form>
-            <form action="/view-query-results/" method="post" class="fieldset_submit">
-                Query: <input type="text" name="query"/>
-                <input type="submit" value="Query" class="button"/>
-            </form>
-        </div>
-        
-    </body>
+</div>
+
+</body>
 </html>
