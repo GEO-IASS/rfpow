@@ -22,7 +22,7 @@ class TopRFPSHandler(BaseHandler):
         self.response.headers['Content-Type'] = 'text/html'
         parser = MerxParser()
         jinja_environment = jinja2.Environment(
-            loader=jinja2.FileSystemLoader(os.path.dirname(__file__)))
+                loader=jinja2.FileSystemLoader(os.path.dirname(__file__)))
         template = jinja_environment.get_template('templates/top_rfps.html')
 
         # parse 10 RPFs
@@ -32,39 +32,36 @@ class TopRFPSHandler(BaseHandler):
 
         # now stash results into a dict and use it in the top_rfps.html template
         template_data = {"rfps": rfps,
-                         "title": "Latest {0} RFP's from merx".format(len(rfps))}
+                "title": "Latest {0} RFP's from merx".format(len(rfps))}
         self.response.out.write(template.render(template_data))
-
-
-
 
 class CreateAndQueryRFPHandler(BaseHandler):
     @user_required
     def get(self):
         self.response.headers['Content-Type'] = 'text/html; charset=utf-8'
         jinja_environment = jinja2.Environment(
-	    loader=jinja2.FileSystemLoader(os.path.dirname(__file__)))
+        loader=jinja2.FileSystemLoader(os.path.dirname(__file__)))
         template = jinja_environment.get_template('templates/cc_rfp.html')
         template_values = {}
         self.response.out.write(template.render(template_values))
 
     def post(self):
         datastore.create_RFP(self.request.get('title'),
-            self.request.get('description'),
-            self.request.get('keywords').split(','),
-            self.request.get('organization'),
-            self.request.get('original_uri'),
-            self.request.get('original_id'),
-            datetime.datetime.now().date(),
-            datetime.datetime.now().date(),
-            datetime.datetime.now().date())
+                self.request.get('description'),
+                self.request.get('keywords').split(','),
+                self.request.get('organization'),
+                self.request.get('original_uri'),
+                self.request.get('original_id'),
+                datetime.datetime.now().date(),
+                datetime.datetime.now().date(),
+                datetime.datetime.now().date())
         self.redirect('/create-rfp/')
 
 class KeywordResultsHandler(BaseHandler):
     def get(self):
         self.response.headers['Content-Type'] = 'text/html; charset=utf-8'
         jinja_environment = jinja2.Environment(
-            loader=jinja2.FileSystemLoader(os.path.dirname(__file__)))
+                loader=jinja2.FileSystemLoader(os.path.dirname(__file__)))
         template = jinja_environment.get_template('templates/keyword_results.html')
         query = datastore.query_RFPs_by_keyword(self.request.get('keyword'))
 
@@ -77,7 +74,7 @@ class KeywordResultsHandler(BaseHandler):
             rfps[-1].pop('original_uri')
 
         template_data = {'rfps' : rfps,
-                         'title': "Your query returned {0} RFP's".format(len(rfps))}
+                'title': "Your query returned {0} RFP's".format(len(rfps))}
 
         self.response.out.write(template.render(template_data))
 
@@ -87,7 +84,7 @@ class QueryResultsHandler(BaseHandler):
     def post(self):
         self.response.headers['Content-Type'] = 'text/html; charset=utf-8'
         jinja_environment = jinja2.Environment(
-            loader=jinja2.FileSystemLoader(os.path.dirname(__file__)))
+        loader=jinja2.FileSystemLoader(os.path.dirname(__file__)))
         template = jinja_environment.get_template('templates/top_rfps.html')
         query = datastore.query_RFPs(self.request.get('query'))
 
@@ -100,7 +97,7 @@ class QueryResultsHandler(BaseHandler):
             rfps[-1].pop('original_uri')
 
         template_data = {'rfps' : rfps,
-                         'title': "Your query returned {0} RFP's".format(len(rfps))}
+                'title': "Your query returned {0} RFP's".format(len(rfps))}
 
         self.response.out.write(template.render(template_data))
 
@@ -109,9 +106,9 @@ class ListKeywordsHandler(BaseHandler):
     def get(self):
         self.response.headers['Content-Type'] = 'text/html; charset=utf-8'
         jinja_environment = jinja2.Environment(
-            loader=jinja2.FileSystemLoader(os.path.dirname(__file__)))
+        loader=jinja2.FileSystemLoader(os.path.dirname(__file__)))
         template = jinja_environment.get_template('templates/list_keywords.html')
-	keywords = datastore.query_Keywords(self.request.get('keyword'))
+        keywords = datastore.query_Keywords(self.request.get('keyword'))
         template_data = {'keywords' : keywords }
 
         self.response.out.write(template.render(template_data))
@@ -131,10 +128,10 @@ class HomePageHandler(BaseHandler):
 
         try:
             template_values = {'username':user[0].first_name,
-                               'url_logout': self.auth_config['logout_url'],
-                               'url_top_rfps': '/top-rfps/',
-                               'url_create_query_rfps': self.request.host_url + '/create-rfp/'
-            }
+                    'url_logout': self.auth_config['logout_url'],
+                    'url_top_rfps': '/top-rfps/',
+                    'url_create_query_rfps': self.request.host_url + '/create-rfp/'
+                    }
             path = os.path.join(os.path.dirname(__file__), 'templates/home.html')
             self.response.out.write(template.render(path, template_values))
         except (AttributeError, KeyError), e:
