@@ -111,13 +111,7 @@ class ListKeywordsHandler(BaseHandler):
         jinja_environment = jinja2.Environment(
             loader=jinja2.FileSystemLoader(os.path.dirname(__file__)))
         template = jinja_environment.get_template('templates/list_keywords.html')
-	c = db.GqlQuery('SELECT * FROM RFP')
-	keywords = []
-	for entity in c:
-	    if entity.keywords not in keywords and entity.keywords[0] != "":
-		keywords.append(entity.keywords)
-    
-	keywords.sort()
+	keywords = datastore.query_Keywords(self.request.get('keyword')
         template_data = {'keywords' : keywords}
 
         self.response.out.write(template.render(template_data))

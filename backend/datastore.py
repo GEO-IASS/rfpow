@@ -61,4 +61,13 @@ def query_RFPs_by_keyword(keyword):
 def query_RFPs(query):
     return RFP.gql(query)
 
-
+def query_Keywords(keyword):
+    c = db.GqlQuery('SELECT * FROM RFP')
+    keywords = []
+    for entity in c:
+	if entity.keywords not in keywords and entity.keywords[0] != "":
+	    keywords.append(entity.keywords)
+	
+    keywords.sort()
+    
+    return keywords
