@@ -71,3 +71,23 @@ def query_Keywords(keyword):
     keywords.sort()
     
     return keywords
+
+def form_printable(rfps):
+    for r in rfps:
+        r['detail'] = "<b>Origin: </b>" + r['origin'] + '<br /><br />'\
+			+ "<b>Organization: </b>" + r['organization'] + \
+			'<br /><br />' + "<b>Publish date: </b>" + str(r['publish_date'])\
+			+ "Close date: " + str(r['close_date']) + '<br /><br />' +\
+			"<b>URL: </b>" + r['uri'] + '<br /><br />' + "<b>Description: </b>"\
+			+ r['description'] + '<br /><br />'
+    return rfps
+
+def form_top_printable(rfps):
+    for r in rfps:
+        r['detail'] = "<b>Origin: </b>" + r['origin'] + '<br /><br />'\
+			+ "<b>Organization: </b>" + r['org'] + \
+			'<br /><br />' + "<b>Publish date: </b>" + str(r['published_on'])\
+			+ "Close date: " + str(r['ends_on']) + '<br /><br />' +\
+			"<b>URL: </b>" + r['uri'] + '<br /><br />' + "<b>Description: </b>"\
+			+ r['description'] + '<br /><br />'
+    return rfps

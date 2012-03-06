@@ -23,12 +23,13 @@ class TopRFPSHandler(BaseHandler):
         parser = MerxParser()
         jinja_environment = jinja2.Environment(
                 loader=jinja2.FileSystemLoader(os.path.dirname(__file__)))
-        template = jinja_environment.get_template('templates/top_rfps.html')
+        template = jinja_environment.get_template('templates/keyword_results.html')
 
         # parse 10 RPFs
         rfps = parser.next()
         # parse another 10 RFPs appending results together
         rfps = rfps + parser.next()
+	rfps = datastore.form_top_printable(rfps)
 
         # now stash results into a dict and use it in the top_rfps.html template
         template_data = {"rfps": rfps,
@@ -75,7 +76,13 @@ class KeywordResultsHandler(BaseHandler):
             # Hack since the page calls for a uri variable
             rfps[-1]['uri'] = rfps[-1]['original_uri']
             rfps[-1].pop('original_uri')
-
+#	    rfps[-1]['detail'] = "<b>Origin: </b>" + rfps[-1]['origin'] + '<br /><br />'\
+#			    + "<b>Organization: </b>" + rfps[-1]['organization'] + \
+#			    '<br /><br />' + "<b>Publish date: </b>" + str(rfps[-1]['publish_date'])\
+#			    + "Close date: " + str(rfps[-1]['close_date']) + '<br /><br />' +\
+#			    "<b>URL: </b>" + rfps[-1]['uri'] + '<br /><br />' + "<b>Description: </b>"\
+#			    + rfps[-1]['description'] + '<br /><br />'
+	rfps = datastore.form_printable(rfps)
         template_data = {'rfps' : rfps,
                 'title': "Your query returned {0} RFP's".format(len(rfps))}
 
