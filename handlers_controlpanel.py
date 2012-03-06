@@ -35,16 +35,7 @@ class TopRFPSHandler(BaseHandler):
                 "title": "Latest {0} RFP's from merx".format(len(rfps))}
         self.response.out.write(template.render(template_data))
 
-class CreateAndQueryRFPHandler(BaseHandler):
-    @user_required
-    def get(self):
-        self.response.headers['Content-Type'] = 'text/html; charset=utf-8'
-        jinja_environment = jinja2.Environment(
-        loader=jinja2.FileSystemLoader(os.path.dirname(__file__)))
-        template = jinja_environment.get_template('templates/cc_rfp.html')
-        template_values = {}
-        self.response.out.write(template.render(template_values))
-
+class CreateRFPHandler(BaseHandler):
     def post(self):
         datastore.create_RFP(self.request.get('title'),
                 self.request.get('description'),
@@ -55,7 +46,19 @@ class CreateAndQueryRFPHandler(BaseHandler):
                 datetime.datetime.now().date(),
                 datetime.datetime.now().date(),
                 datetime.datetime.now().date())
-        self.redirect('/create-rfp/')
+        self.redirect('/admin/')
+
+
+class QueryRFPHandler(BaseHandler):
+    @user_required
+    def get(self):
+        self.response.headers['Content-Type'] = 'text/html; charset=utf-8'
+        jinja_environment = jinja2.Environment(
+        loader=jinja2.FileSystemLoader(os.path.dirname(__file__)))
+        template = jinja_environment.get_template('templates/cc_rfp.html')
+        template_values = {}
+        self.response.out.write(template.render(template_values))
+
 
 class KeywordResultsHandler(BaseHandler):
     def get(self):
@@ -130,7 +133,7 @@ class HomePageHandler(BaseHandler):
             template_values = {'username':user[0].first_name,
                     'url_logout': self.auth_config['logout_url'],
                     'url_top_rfps': '/top-rfps/',
-                    'url_create_query_rfps': self.request.host_url + '/create-rfp/'
+                    'url_query_rfps': self.request.host_url + '/query/'
                     }
             path = os.path.join(os.path.dirname(__file__), 'templates/home.html')
             self.response.out.write(template.render(path, template_values))
