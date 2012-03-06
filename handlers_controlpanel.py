@@ -95,7 +95,7 @@ class QueryResultsHandler(BaseHandler):
         self.response.headers['Content-Type'] = 'text/html; charset=utf-8'
         jinja_environment = jinja2.Environment(
         loader=jinja2.FileSystemLoader(os.path.dirname(__file__)))
-        template = jinja_environment.get_template('templates/top_rfps.html')
+        template = jinja_environment.get_template('templates/keyword_results.html')
         query = datastore.query_RFPs(self.request.get('query'))
 
         rfps  = []
