@@ -78,9 +78,7 @@ class KeywordResultsHandler(BaseHandler):
 
         for r in query:
             rfps.append(db.to_dict(r))
-            # Hack since the page calls for a uri variable
-            rfps[-1]['uri'] = rfps[-1]['original_uri']
-            rfps[-1].pop('original_uri')
+
         template_data = {'rfps' : rfps,
                 'title': "Your query returned {0} RFP's".format(len(rfps))}
 
@@ -100,9 +98,6 @@ class QueryResultsHandler(BaseHandler):
 
         for r in query:
             rfps.append(db.to_dict(r))
-            # Hack since the page calls for a uri variable
-            rfps[-1]['uri'] = rfps[-1]['original_uri']
-            rfps[-1].pop('original_uri')
 
         template_data = {'rfps' : rfps,
                 'title': "Your query returned {0} RFP's".format(len(rfps))}
