@@ -24,7 +24,7 @@
                 <b>Organization: </b>{{r.organization}}<br /><br />
                 <b>Publish date: </b>{{r['publish_date']}}<br /><br />
                 <b>Close date: </b>{{r['close_date']}}<br /><br />
-                <b>URL: </b>{{r.original_uri}}<br /><br />
+                <b>URL: </b><a href="{{r.original_uri}}">{{r.original_uri}}</a><br /><br />
                 <b>Description: </b>{{r.description}}<br /><br /></code></pre>
 			</li>
             {% endfor %}
