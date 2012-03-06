@@ -65,7 +65,7 @@ class KeywordResultsHandler(BaseHandler):
         self.response.headers['Content-Type'] = 'text/html; charset=utf-8'
         jinja_environment = jinja2.Environment(
             loader=jinja2.FileSystemLoader(os.path.dirname(__file__)))
-        template = jinja_environment.get_template('templates/top_rfps.html')
+        template = jinja_environment.get_template('templates/keyword_results.html')
         query = datastore.query_RFPs_by_keyword(self.request.get('keyword'))
 
         rfps  = []
@@ -114,9 +114,10 @@ class ListKeywordsHandler(BaseHandler):
 	c = db.GqlQuery('SELECT * FROM RFP')
 	keywords = []
 	for entity in c:
-	    if entity.keywords not in keywords:
+	    if entity.keywords not in keywords and entity.keywords[0] != "":
 		keywords.append(entity.keywords)
-
+    
+	keywords.sort()
         template_data = {'keywords' : keywords}
 
         self.response.out.write(template.render(template_data))
