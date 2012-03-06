@@ -27,10 +27,8 @@ class TopRFPSHandler(BaseHandler):
                 loader=jinja2.FileSystemLoader(os.path.dirname(__file__)))
         template = jinja_environment.get_template('templates/keyword_results.html')
 
-        # parse 10 RPFs
-        rfps = parser.next()
-        # parse another 10 RFPs appending results together
-        rfps = rfps + parser.next()
+        rfps = datastore.RFP.all().fetch(limit=20)
+
 
         # now stash results into a dict and use it in the top_rfps.html template
         template_data = {"rfps": rfps,
@@ -114,6 +112,7 @@ class ListKeywordsHandler(BaseHandler):
         loader=jinja2.FileSystemLoader(os.path.dirname(__file__)))
         template = jinja_environment.get_template('templates/list_keywords.html')
         keywords = datastore.query_Keywords(self.request.get('keyword'))
+
         template_data = {'keywords' : keywords }
 
         self.response.out.write(template.render(template_data))
