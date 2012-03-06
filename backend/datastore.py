@@ -73,27 +73,19 @@ def query_Keywords(keyword):
     return keywords
 
 def form_printable(rfps):
-    ''' This is a helper function that parse RFP data into a html friendly
+    ''' This is a helper function that parse RFP date data into a html friendly
     version and store in rfp for list-keywords.'''
 
     for r in rfps:
-        r['detail'] = "<b>Origin: </b>" + r['origin'] + '<br /><br />'\
-			+ "<b>Organization: </b>" + r['organization'] + \
-			'<br /><br />' + "<b>Publish date: </b>" + str(r['publish_date'])\
-			+ "Close date: " + str(r['close_date']) + '<br /><br />' +\
-			"<b>URL: </b>" + r['uri'] + '<br /><br />' + "<b>Description: </b>"\
-			+ r['description'] + '<br /><br />'
+        r['published_date'] = str(r['publish_date'])
+	r['closed_date'] = str(r['close_date'])
     return rfps
 
 def form_top_printable(rfps):
-    ''' This is a helper function that parse RFP data into a html friendly
+    ''' This is a helper function that parse RFP date data into a html friendly
     version and store in rfp for top-rfps.'''
 
     for r in rfps:
-        r['detail'] = "<b>Origin: </b>" + r['origin'] + '<br /><br />'\
-			+ "<b>Organization: </b>" + r['org'] + \
-			'<br /><br />' + "<b>Publish date: </b>" + str(r['published_on'])\
-			+ "Close date: " + str(r['ends_on']) + '<br /><br />' +\
-			"<b>URL: </b>" + r['uri'] + '<br /><br />' + "<b>Description: </b>"\
-			+ r['description'] + '<br /><br />'
+        r['published_date'] = str(r['published_on'])
+	r['closed_date'] = str(r['ends_on'])
     return rfps

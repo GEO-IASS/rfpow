@@ -19,7 +19,7 @@
             {% for r in rfps %}
 			<li>
 				<a href="{{r.uri}}">{{r.title}}</a> <a href="#" class="details_expand">&darr; See all data</a>
-				<pre class="details"><code>{{r.detail}}</code></pre>
+				<pre class="details"><code><b>Origin: </b>{{r.origin}}<br /><br /><b>Organization: </b>{{r.organization}}<br /><br /><b>Publish date: </b>{{r['published_date']}}<br /><br /><b>Close date: </b>{{r['closed_date']}}<br /><br /><b>URL: </b>{{r.uri}}<br /><br /><b>Description: </b>{{r.description}}<br /><br /></code></pre>
 			</li>
             {% endfor %}
         </ol>
