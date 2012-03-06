@@ -71,21 +71,3 @@ def query_Keywords(keyword):
     keywords.sort()
     
     return keywords
-
-def form_printable(rfps):
-    ''' This is a helper function that parse RFP date data into a html friendly
-    version and store in rfp for list-keywords.'''
-
-    for r in rfps:
-        r['published_date'] = str(r['publish_date'])
-	r['closed_date'] = str(r['close_date'])
-    return rfps
-
-def form_top_printable(rfps):
-    ''' This is a helper function that parse RFP date data into a html friendly
-    version and store in rfp for top-rfps.'''
-
-    for r in rfps:
-        r['published_date'] = str(r['published_on'])
-	r['closed_date'] = str(r['ends_on'])
-    return rfps
