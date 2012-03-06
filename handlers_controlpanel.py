@@ -22,13 +22,11 @@ class TopRFPSHandler(BaseHandler):
         logging.getLogger().setLevel(logging.DEBUG)
 
         self.response.headers['Content-Type'] = 'text/html'
-        parser = MerxParser()
         jinja_environment = jinja2.Environment(
                 loader=jinja2.FileSystemLoader(os.path.dirname(__file__)))
         template = jinja_environment.get_template('templates/keyword_results.html')
 
         rfps = datastore.RFP.all().fetch(limit=20)
-
 
         # now stash results into a dict and use it in the top_rfps.html template
         template_data = {"rfps": rfps,
