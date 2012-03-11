@@ -69,7 +69,9 @@ class CreateUserHandler(BaseHandler):
         str_last_name = self.request.POST.get('last_name')
         str_cc_number = self.request.POST.get('cc_number')
         str_name_on_cc = self.request.POST.get('name_on_cc')
-        str_expiry_date = self.request.POST.get('expiry_date')
+        str_expiry_date_month = self.request.POST.get('expiry_date_month')
+        str_expiry_date_year = self.request.POST.get('expiry_date_year')
+        str_expiry_date = str_expiry_date_month + "," + str_expiry_date_year
         # str_keywords = self.request.POST.get('keywords')
         str_email = self.request.POST.get('email')
         #        list_keywords = []
