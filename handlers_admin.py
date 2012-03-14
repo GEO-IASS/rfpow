@@ -2,6 +2,7 @@ import webapp2
 import jinja2
 import os
 import logging
+import backend.parsers as parsers
 from backend.scheduled import ScheduledParse
 from handlers_base import BaseHandler, user_required
 
@@ -30,7 +31,9 @@ class AdminParser(BaseHandler):
         stop_on_dupe = self.request.get('stop_on_dupe')
         limit = self.request.get('parse_limit')
 
-        (parsed, new) = ScheduledParse.parse_merx( 
+        parser = parsers.MerxParser()
+        (parsed, new) = ScheduledParse.parse( 
+                parser,
                 ignore_duplicates is not '',
                 (start_id is not "") and start_id or None,
                 stop_on_dupe is not '',

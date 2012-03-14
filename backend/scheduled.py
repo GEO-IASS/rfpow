@@ -7,11 +7,17 @@ class ScheduledParse():
     """A class for a task of parsing various websites. Run by cron"""
 
     @staticmethod
-    def parse_merx(ignore_duplicates=False, start_id=None, stop_on_dupe=False, 
-                   limit=None):
-        """Parse a bunch of RFPs from Merx and stash results in the DB"""
+    def parse(parser, ignore_duplicates=False, start_id=None, 
+            stop_on_dupe=False, limit=None):
+        """Parse a bunch of RFPs from Merx and stash results in the DB
+        
+        parser -- instance of a Parser class with which to parse
+        ignore_duplicates -- save RFP even if already in the DB
+        start_id -- begin parsing at original_id == start_id
+        stop_on_dupe -- halt parse job if we hit a duplicate
+        limit -- parse at most `limit` jobs
+        """
 
-        parser = MerxParser()
         parsed_total = 0
         parsed_new = 0
         page = 0
