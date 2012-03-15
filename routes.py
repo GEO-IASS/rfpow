@@ -12,6 +12,7 @@ _routes = [
     RedirectRoute('/', HomePageHandler, name='secure', strict_slash=True),
     RedirectRoute('/secure', HomePageHandler, name='secure', strict_slash=True),
     RedirectRoute('/create-user/', CreateUserHandler, name='create-user', strict_slash=True),
+    RedirectRoute('/edit-user/', EditUserHandler, name='edit-user', strict_slash=True),
     RedirectRoute('/top-rfps/', TopRFPSHandler, name='top-rfps', strict_slash=True),
     RedirectRoute('/query/', QueryRFPHandler, name='query', strict_slash=True),
     RedirectRoute('/create-rfp/', CreateRFPHandler, name='create-rfp', strict_slash=True),
