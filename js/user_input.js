@@ -18,6 +18,11 @@ function validateNumber(field, msg, min, max) {
 }
 
 function validateString(field, msg, min, max) {
+    if (field == null) {
+        return true
+    }
+
+
     if (!min) {
         min = 1
     }

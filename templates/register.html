@@ -1,38 +1,43 @@
 <!DOCTYPE hml>
 <html>
 <head>
-    <title>RFPow! - Register</title>
+    <title>RFPow!</title>
     <script type="text/javascript" src="../js/user_input.js">
     </script>
     <link rel="stylesheet" type="text/css" href="/style/main.css">
     <link rel="stylesheet" type="text/css" href="/style/user.css">
 </head>
 <body>
-<form action="{{action}}" method="post" onsubmit=" return debug_ignore_validation || validateString(this.username, 'Please fill all required ' +
- 'fields', 1, 255)
+<form action="{{action}}" method="post" onsubmit="return debug_ignore_validation ||
+ validateString(this.username, 'Please fill all required fields', 1, 255)
 && validateString(this.first_name, 'Please fill all required fields', 1, 255)
 && validateString(this.last_name, 'Please fill all required fields', 1, 255)
 && validateEmail(this.email, 'Email not valid')
 && validateNumber(this.cc_number, 'Credit card number is 16 digits', 16, 16)
 && validateString(this.name_on_cc, 'Please fill all required fields', 1, 255)
-&& validateCCDate(this.expiry_date, 'Credit card format must be in MM/dd/yy format')
 ;">
     <br>
 
-    <h2>Register an RFPow Account</h2>
+    {% if username %}
+        <h2>Edit RFPow Account</h2>
+    {% else %}
+        <h2>Register RFPow Account</h2>
+    {% endif %}
+
     <fieldset class="fieldset_submit">
 
         {% if err_msg != "" %}
-
             <div class="error">  {{ err_msg }}</div>
-
         {% endif %}
-        <label>*Username <input type="text" name="username" placeholder="Your username"/></label>
-        <label>*Password <input type="password" name="password" placeholder="Your password"/></label>
 
-        <label>*First Name <input type="text" name="first_name"/></label>
-        <label>*Last Name <input type="text" name="last_name"/></label>
-        <label>*Email<input type="text" name="email"/></label>
+        {% if not username %}
+            <label>*Username <input type="text" name="username" placeholder="Your username"/></label>
+            <label>*Password <input type="password" name="password" placeholder="Your password"/></label>
+        {% endif %}
+
+        <label>*First Name <input type="text" name="first_name"  value="{{ user.first_name }}"/></label>
+        <label>*Last Name <input type="text" name="last_name"  value="{{ user.last_name }}" /></label>
+        <label>*Email<input type="text" name="email" value="{{ user.email }}"/></label>
 
 
         <!--
@@ -47,12 +52,12 @@
         <br>
 
         <div>Visa Payment Info</div>
-        <label>*VISA Number <input type="text" name="cc_number"/></label>
-        <label>*Name on Card <input type="text" name="name_on_cc"/></label>
+        <label>*VISA Number <input type="text" name="cc_number" value="{{ user.cc_number }}"/></label>
+        <label>*Name on Card <input type="text" name="name_on_cc" value="{{ user.name_on_cc }}"/></label>
         <label>*Expiry Date
-        <select id="monthdropdown" name="expiry_date_month">
+        <select id="monthdropdown" name="expiry_date_month" value="{{ user.expiry_date_month }}">
         </select>
-        <select id="yeardropdown"  name="expiry_date_year">
+        <select id="yeardropdown"  name="expiry_date_year" value="{{ user.expiry_date_year }}">
         </select></label>
 
         <br>

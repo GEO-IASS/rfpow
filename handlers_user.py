@@ -53,6 +53,7 @@ class CreateUserHandler(BaseHandler):
         not empty (logic is in html)
     """
 
+    # TODO: refactor
     def show_register(self, err_msg=""):
         template_values = {'action': self.request.url, 'err_msg': err_msg}
         path = os.path.join(os.path.dirname(__file__), 'templates/register.html')
@@ -66,21 +67,6 @@ class CreateUserHandler(BaseHandler):
         """
               Get what the user posted in the form
           """
-#        str_username = self.request.POST.get('username')
-#        str_password = self.request.POST.get('password')
-#        str_first_name = self.request.POST.get('first_name')
-#        str_last_name = self.request.POST.get('last_name')
-#        str_cc_number = self.request.POST.get('cc_number')
-#        str_name_on_cc = self.request.POST.get('name_on_cc')
-#        str_expiry_date_month = self.request.POST.get('expiry_date_month')
-#        str_expiry_date_year = self.request.POST.get('expiry_date_year')
-#        str_expiry_date = str_expiry_date_month + "," + str_expiry_date_year
-#        str_email = self.request.POST.get('email')
-        # str_keywords = self.request.POST.get('keywords')
-        #        list_keywords = []
-        #        for x in str_keywords.split(','):
-        #            list_keywords.append(x.strip())
-
         rfpow_user = RFPowUser(self.request.POST)
 
         # As the UI changes and the need for more user info increases, this list
@@ -93,7 +79,8 @@ class CreateUserHandler(BaseHandler):
             email=rfpow_user.email,
             cc_number=rfpow_user.cc_number,
             name_on_cc=rfpow_user.name_on_cc,
-            expiry_date=rfpow_user.expiry_date,
+            expiry_date_month=rfpow_user.expiry_date_month,
+            expiry_date_year=rfpow_user.expiry_date_year,
             is_admin=False,
             is_active=False
         )
@@ -112,30 +99,29 @@ class CreateUserHandler(BaseHandler):
 
 
 class EditUserHandler(BaseHandler):
-    def show_register(self, err_msg=""):
-        template_values = {'action': self.request.url, 'err_msg': err_msg}
+    def show_register(self, err_msg="", info_msg=""):
+        user = self.curr_user()[0]
+        template_values = {'action': self.request.url, 'err_msg': err_msg, "user" : user, \
+                           "username" : user.auth_ids[0]}
         path = os.path.join(os.path.dirname(__file__), 'templates/register.html')
         self.response.out.write(template.render(path, template_values))
 
     def get(self):
-        self.show_register("COW")
+        self.show_register()
 
     def post(self):
         """
               Get what the user posted in the form
           """
         rfpow_user = RFPowUser(self.request.POST)
-        user_session = self.auth.get_user_by_session()
-        db_user = self.auth.store.user_model.get_by_auth_token(user_session['user_id'], user_session['token'])
+        user = self.curr_user()[0]
 
-
-        if not db_user[0]:
-            #return 'Create user error: %s' % str(user) # Error message
+        if not user:
             self.show_register("Error with username");
         else:
-            rfpow_user.update(db_user)
+            rfpow_user.update(user)
             try:
-                self.show_register("Success changing account info!")
+                self.show_register(info_msg="Your account info has been updated.")
             except (AttributeError, KeyError), e:
                 self.abort(403)
 

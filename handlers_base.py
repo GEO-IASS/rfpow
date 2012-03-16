@@ -42,6 +42,11 @@ class BaseHandler(webapp2.RequestHandler):
         finally:
             self.session_store.save_sessions(self.response)
 
+    def curr_user(self):
+        user_session = self.auth.get_user_by_session()
+        db_user = self.auth.store.user_model.get_by_auth_token(user_session['user_id'], user_session['token'])
+        return db_user
+
     @webapp2.cached_property
     def auth(self):
         return auth.get_auth()
