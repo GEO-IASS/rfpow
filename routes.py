@@ -1,6 +1,6 @@
 from webapp2_extras.routes import RedirectRoute
 from handlers_user import *
-from handlers_controlpanel import *
+from handlers_secured_main import *
 from handlers_admin import *
 from handlers_cron import *
 

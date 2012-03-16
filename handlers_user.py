@@ -47,11 +47,12 @@ class LoginHandler(BaseHandler):
         except (InvalidAuthIdError, InvalidPasswordError), e:
             self.show_login("Bad username or password. Try again.")
 
-class UserFormBaseHandler(BaseHandler):
 
+class UserFormBaseHandler(BaseHandler):
     """
         Returns a simple HTML form for creating/editing a user.
     """
+
     def show_register(self, err_msg="", info_msg=""):
         if (self.curr_user() is not None):
             user = self.curr_user()[0]
@@ -60,16 +61,13 @@ class UserFormBaseHandler(BaseHandler):
             user = None
             username = None
 
-        template_values = {'action': self.request.url, 'err_msg': err_msg, "user" : user,\
-                           "username" : username, 'info_msg': info_msg,}
+        template_values = {'action': self.request.url, 'err_msg': err_msg, "user": user,\
+                           "username": username, 'info_msg': info_msg, }
         path = os.path.join(os.path.dirname(__file__), 'templates/user_info_form.html')
         self.response.out.write(template.render(path, template_values))
 
 
 class CreateUserHandler(UserFormBaseHandler):
-
-
-
     def get(self):
         self.show_register()
 
@@ -117,6 +115,11 @@ class CreateUserHandler(UserFormBaseHandler):
 
 
 class EditUserHandler(UserFormBaseHandler):
+    """
+        Made sense to keep this handler in the handlers_user even though
+        it's secured and part of the main UI.
+    """
+
     @user_required
     def get(self):
         self.show_register()
@@ -125,7 +128,7 @@ class EditUserHandler(UserFormBaseHandler):
     def post(self):
         """
               Get what the user posted in the form
-          """
+        """
         rfpow_user = RFPowUser(self.request.POST)
         user = self.curr_user()[0]
 

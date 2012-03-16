@@ -9,7 +9,8 @@
 </head>
 <body>
 <form action="{{action}}" method="post" onsubmit="return debug_ignore_validation ||
- validateString(this.username, 'Please fill all required fields', 1, 255)
+validateString(this.username, 'Please fill all required fields', 1, 255)
+&& validateString(this.password, 'Please fill all required fields', 1, 255)
 && validateString(this.first_name, 'Please fill all required fields', 1, 255)
 && validateString(this.last_name, 'Please fill all required fields', 1, 255)
 && validateEmail(this.email, 'Email not valid')
@@ -55,9 +56,11 @@
         <label>*VISA Number <input type="text" name="cc_number" value="{{ user.cc_number }}"/></label>
         <label>*Name on Card <input type="text" name="name_on_cc" value="{{ user.name_on_cc }}"/></label>
         <label>*Expiry Date
-        <select id="monthdropdown" name="expiry_date_month" value="{{ user.expiry_date_month }}">
+        <select id="monthdropdown" name="expiry_date_month" >
+            <option value="{{ user.expiry_date_month }}" id="expiry_date_month">{{ user.expiry_date_month }}</option>
         </select>
         <select id="yeardropdown"  name="expiry_date_year" value="{{ user.expiry_date_year }}">
+            <option value="{{ user.expiry_date_year }}" id="expiry_date_year">{{ user.expiry_date_year }}</option>
         </select></label>
 
         <br>

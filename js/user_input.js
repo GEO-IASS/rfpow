@@ -75,24 +75,46 @@ function validateCCDate(date, msg) {
 
 var monthtext = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'];
 
-function populatedropdown(monthfield, yearfield) {
+function populatedropdown(monthfield, yearfield, selectedmonth, selectedyear) {
     var today = new Date()
     var monthfield = document.getElementById(monthfield)
     var yearfield = document.getElementById(yearfield)
+    var month = document.getElementById(selectedmonth)
+    var year = document.getElementById(selectedyear)
 
-    for (var m = 0; m < 12; m++)
+
+    var selected_month_index = -1
+    var selected_year_index = -1
+
+    for (var m = 0; m < 12; m++) {
         monthfield.options[m] = new Option(monthtext[m], monthtext[m])
-    monthfield.options[today.getMonth()] = new Option(monthtext[today.getMonth()], monthtext[today.getMonth()], true, true) //select today's month
+        if (month.value == monthfield.options[m].value)
+            selected_month_index = m
+    }
+
+    if (selected_month_index > -1)
+        monthfield.options[selected_month_index] = new Option(month.value, month.value, true, true)
+    else
+        monthfield.options[today.getMonth()] = new Option(monthtext[today.getMonth()], monthtext[today.getMonth()], true, true)
+
 
     var thisyear = today.getFullYear()
     for (var y = 0; y < 20; y++) {
         yearfield.options[y] = new Option(thisyear, thisyear)
         thisyear += 1
+        if (year.value == yearfield.options[y].value)
+            selected_year_index = y
     }
-    yearfield.options[0] = new Option(today.getFullYear(), today.getFullYear(), true, true) //select today's year
+
+    if (selected_year_index > -1)
+        yearfield.options[selected_year_index] = new Option(year.value, year.value, true, true)
+    else
+        yearfield.options[0] = new Option(today.getFullYear(), today.getFullYear(), true, true) //select today's year
+
+
 }
 
 //populatedropdown(id_of_day_select, id_of_month_select, id_of_year_select)
 window.onload = function () {
-    populatedropdown("monthdropdown", "yeardropdown")
+    populatedropdown("monthdropdown", "yeardropdown", "expiry_date_month", "expiry_date_year")
 }
