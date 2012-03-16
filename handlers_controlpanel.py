@@ -8,11 +8,9 @@ from backend.datastore import RFP
 from handlers_base import BaseHandler
 from google.appengine.ext.webapp import template
 import google.appengine.ext.db as db
-
-# Set up templating
-
-
 from backend.parsers import MerxParser
+
+
 
 class TopRFPSHandler(BaseHandler):
     '''This will query and display the top 10 RFPs stored in the database.'''
@@ -34,6 +32,8 @@ class TopRFPSHandler(BaseHandler):
         self.response.out.write(template.render(template_data))
 
 class CreateRFPHandler(BaseHandler):
+
+    @user_required
     def post(self):
         datastore.create_RFP(self.request.get('title'),
                 self.request.get('description'),
@@ -63,6 +63,7 @@ class KeywordResultsHandler(BaseHandler):
     of every RFPs stored in the database will be displayed with template
     keyword_results.html'''
 
+    @user_required
     def get(self):
         self.response.headers['Content-Type'] = 'text/html; charset=utf-8'
         jinja_environment = jinja2.Environment(
@@ -83,6 +84,7 @@ class KeywordResultsHandler(BaseHandler):
 
 class QueryResultsHandler(BaseHandler):
 
+    @user_required
     def post(self):
         self.response.headers['Content-Type'] = 'text/html; charset=utf-8'
         jinja_environment = jinja2.Environment(
@@ -104,6 +106,7 @@ class ListKeywordsHandler(BaseHandler):
     ''' List every keyword stored in database for use to select, once selected, 
     a result page consisting of every RFP with this keyword will be displayed.'''
 
+    @user_required
     def get(self):
         self.response.headers['Content-Type'] = 'text/html; charset=utf-8'
         jinja_environment = jinja2.Environment(

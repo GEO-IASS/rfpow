@@ -9,6 +9,7 @@ from webapp2_extras.auth import InvalidPasswordError
 import os
 from google.appengine.ext.webapp import template
 from handlers_base import BaseHandler
+from handlers_base import user_required
 from backend.RFPowUser import RFPowUser
 
 
@@ -46,31 +47,38 @@ class LoginHandler(BaseHandler):
         except (InvalidAuthIdError, InvalidPasswordError), e:
             self.show_login("Bad username or password. Try again.")
 
+class UserFormBaseHandler(BaseHandler):
 
-class CreateUserHandler(BaseHandler):
     """
-        Returns a simple HTML form for creating a new user. Show err_msg if
-        not empty (logic is in html)
+        Returns a simple HTML form for creating/editing a user.
     """
+    def show_register(self, err_msg="", info_msg=""):
+        if (self.curr_user() is not None):
+            user = self.curr_user()[0]
+            username = user.auth_ids[0]
+        else:
+            user = None
+            username = None
 
-    # TODO: refactor
-    def show_register(self, err_msg=""):
-        template_values = {'action': self.request.url, 'err_msg': err_msg}
-        path = os.path.join(os.path.dirname(__file__), 'templates/register.html')
+        template_values = {'action': self.request.url, 'err_msg': err_msg, "user" : user,\
+                           "username" : username, 'info_msg': info_msg,}
+        path = os.path.join(os.path.dirname(__file__), 'templates/user_info_form.html')
         self.response.out.write(template.render(path, template_values))
+
+
+class CreateUserHandler(UserFormBaseHandler):
+
+
 
     def get(self):
         self.show_register()
 
+    def create_insert_user(self, rfpow_user):
+        """ Creates and inserts a new user, returns a the user object.
 
-    def post(self):
+        As the UI changes and the need for more user info increases, this list
+        will grow
         """
-              Get what the user posted in the form
-          """
-        rfpow_user = RFPowUser(self.request.POST)
-
-        # As the UI changes and the need for more user info increases, this list
-        # will grow
         user = self.auth.store.user_model.create_user(
             rfpow_user.username,
             password_raw=rfpow_user.password,
@@ -84,6 +92,16 @@ class CreateUserHandler(BaseHandler):
             is_admin=False,
             is_active=False
         )
+        return user
+
+    def post(self):
+        """
+              Get what the user posted in the form
+        """
+        rfpow_user = RFPowUser(self.request.POST)
+
+        user = self.create_insert_user(rfpow_user)
+
         if not user[0]:
             self.show_register("User already exists, try again");
         else:
@@ -98,17 +116,12 @@ class CreateUserHandler(BaseHandler):
                 self.abort(403)
 
 
-class EditUserHandler(BaseHandler):
-    def show_register(self, err_msg="", info_msg=""):
-        user = self.curr_user()[0]
-        template_values = {'action': self.request.url, 'err_msg': err_msg, "user" : user, \
-                           "username" : user.auth_ids[0]}
-        path = os.path.join(os.path.dirname(__file__), 'templates/register.html')
-        self.response.out.write(template.render(path, template_values))
-
+class EditUserHandler(UserFormBaseHandler):
+    @user_required
     def get(self):
         self.show_register()
 
+    @user_required
     def post(self):
         """
               Get what the user posted in the form
@@ -117,7 +130,7 @@ class EditUserHandler(BaseHandler):
         user = self.curr_user()[0]
 
         if not user:
-            self.show_register("Error with username");
+            self.show_register(err_msg="Error with username");
         else:
             rfpow_user.update(user)
             try:

@@ -43,9 +43,17 @@ class BaseHandler(webapp2.RequestHandler):
             self.session_store.save_sessions(self.response)
 
     def curr_user(self):
+        """
+            Return the current user if there is one, else
+            return None
+        """
         user_session = self.auth.get_user_by_session()
-        db_user = self.auth.store.user_model.get_by_auth_token(user_session['user_id'], user_session['token'])
-        return db_user
+        if (user_session is None):
+            return None
+        else:
+            db_user = self.auth.store.user_model.get_by_auth_token(user_session['user_id'], user_session['token'])
+            return db_user
+
 
     @webapp2.cached_property
     def auth(self):
