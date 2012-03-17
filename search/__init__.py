@@ -539,7 +539,7 @@ class Searchable(object):
 
 class SearchIndexing(webapp.RequestHandler):
     """Handler for full text indexing task."""
-    def get(self):
+    def post(self):
         key_str = self.request.get('key')
         only_index_str = self.request.get('only_index')
         if key_str:
