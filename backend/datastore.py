@@ -1,8 +1,9 @@
 import logging
 from datetime import datetime
 from google.appengine.ext import db
+import search
 
-class RFP(db.Model):
+class RFP(search.Searchable, db.Model):
     title = db.StringProperty()
     description = db.TextProperty()
     keywords = db.StringListProperty()
@@ -13,6 +14,7 @@ class RFP(db.Model):
     publish_date = db.DateProperty()
     parse_date = db.DateProperty()
     close_date = db.DateProperty()
+    INDEX_ONLY = ['title', 'description', 'keywords', 'organization', 'origin', 'original_id']  
 
     @classmethod
     def from_dict( self, dict ):
@@ -54,9 +56,12 @@ def create_RFP(title, description, keywords, organization, original_uri, origina
     rfp.close_date = close_date
     
     rfp.put()
+    rfp.index()
 
 def query_RFPs_by_keyword(keyword):
-    return RFP.gql("WHERE keywords = '{0}'".format(keyword))
+    #return RFP.gql("WHERE keywords = '{0}'".format(keyword))
+    logging.info(RFP.search(keyword))
+    return RFP.search(keyword)
 
 def query_RFPs(query):
     return RFP.gql(query)

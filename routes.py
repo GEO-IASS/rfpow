@@ -3,6 +3,7 @@ from handlers_user import *
 from handlers_secured_main import *
 from handlers_admin import *
 from handlers_cron import *
+import search
 
 # Set up all controller routing. Doing this here instead of app.yaml lets us
 # both solve the trailing slash problem and duplication of app instance code
@@ -21,6 +22,7 @@ _routes = [
     RedirectRoute('/cron/merx', CronMerx, name='cron-merx', strict_slash=True),
     RedirectRoute('/admin', AdminParser, name='cron-merx', strict_slash=True),
     RedirectRoute('/list-keywords', ListKeywordsHandler, name='list-keywords', strict_slash=True),
+    RedirectRoute('/searchindexing', search.SearchIndexing, name='searchindexing', strict_slash=True),
 ]
 
 def get_routes():

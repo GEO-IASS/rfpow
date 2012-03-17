@@ -62,6 +62,7 @@ class ScheduledParse():
 
                        rfp = RFP.from_dict( parser.parse_details(r) )
                        rfp.put()
+                       rfp.index()
                        parsed_new += 1
 
                 logging.info( u'Saving new RFP: %s' % rfp )
