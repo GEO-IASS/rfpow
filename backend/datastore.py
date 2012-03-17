@@ -15,6 +15,7 @@ class RFP(search.Searchable, db.Model):
     parse_date = db.DateProperty()
     close_date = db.DateProperty()
     INDEX_ONLY = ['title', 'keywords', 'organization']  
+    INDEX_STEMMING = False
 
     @classmethod
     def from_dict( self, dict ):
