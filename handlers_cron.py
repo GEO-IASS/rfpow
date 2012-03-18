@@ -10,4 +10,4 @@ class CronMerx(webapp2.RequestHandler):
     def get(self):
         logging.info( 'Starting scheduled parse for Merx' )
         parser = parsers.MerxParser()
-        (parsed, new) = ScheduledParse.parse_merx(parser, stop_on_dupe=True)
+        (parsed, new) = ScheduledParse.parse(parser, stop_on_dupe=True)
