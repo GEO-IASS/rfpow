@@ -246,7 +246,7 @@ class Searchable(object):
     """
 
     INDEX_ONLY = None           # Can set to list of property names to index.
-    INDEX_STEMMING = False       # Allow stemming to be turned off per subclass.
+    INDEX_STEMMING = True       # Allow stemming to be turned off per subclass.
     INDEX_MULTI_WORD = True     # Add two and three-word phrases to index.
 
     # If TRUE, incurs additional query/delete overhead on indexing but will workaround
@@ -289,21 +289,19 @@ class Searchable(object):
                 for pos in xrange(0, sub_strings):
                     if keyword_not_stop_word[pos] and keyword_not_stop_word[pos+2]:
                         search_phrases.append(' '.join(keywords[pos:pos+3]))
-        else:
-            search_phrases = keywords        
-        query = klass.all(keys_only=True)
-        logging.info(phrases)
-        for phrase in search_phrases:
-            if stemming:
-                phrase = stemmer.stemWord(phrase)
-            query = query.filter('phrases =', phrase)
-        if kind:
-            query = query.filter('parent_kind =', kind)
-        index_keys = query.fetch(limit=limit)
+            query = klass.all(keys_only=True)
+            for phrase in search_phrases:
+                if stemming:
+                    phrase = stemmer.stemWord(phrase)
+                query = query.filter('phrases =', phrase)
+            if kind:
+                query = query.filter('parent_kind =', kind)
+            index_keys = query.fetch(limit=limit)
 
         if len(index_keys) < limit:
             new_limit = limit - len(index_keys)
-            keywords = filter(lambda x: len(x) >= SEARCH_PHRASE_MIN_LENGTH, keywords)
+            if len(keywords) > 1:
+                keywords = filter(lambda x: len(x) >= SEARCH_PHRASE_MIN_LENGTH, keywords)
             if stemming:
                 keywords = stemmer.stemWords(keywords)
             query = klass.all(keys_only=True)
