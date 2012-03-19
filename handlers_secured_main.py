@@ -22,7 +22,7 @@ class TopRFPSHandler(BaseHandler):
         self.response.headers['Content-Type'] = 'text/html'
         jinja_environment = jinja2.Environment(
                 loader=jinja2.FileSystemLoader(os.path.dirname(__file__)))
-        template = jinja_environment.get_template('templates/keyword_results.html')
+        template = jinja_environment.get_template('templates/main.html')
 
         rfps = rfp_entry.RFP.all().fetch(limit=20)
 
@@ -126,18 +126,38 @@ class HomePageHandler(BaseHandler):
 
     @user_required
     def get(self, **kwargs):
-        user_session = self.auth.get_user_by_session()
-        user = self.auth.store.user_model.get_by_auth_token(user_session['user_id'], user_session['token'])
-        user[0].username = 'a'
-        user[0].put()
-
         try:
-            template_values = {'username':user[0].first_name,
-                    'url_logout': self.auth_config['logout_url'],
-                    'url_top_rfps': '/top-rfps/',
-                    'url_query_rfps': self.request.host_url + '/query/'
-                    }
-            path = os.path.join(os.path.dirname(__file__), 'templates/home.html')
-            self.response.out.write(template.render(path, template_values))
+            self.response.headers['Content-Type'] = 'text/html'
+            jinja_environment = jinja2.Environment(
+                    loader=jinja2.FileSystemLoader(os.path.dirname(__file__)))
+            template = jinja_environment.get_template('templates/main.html')
+
+            rfps = rfp_entry.RFP.all().fetch(100)
+
+            # now stash results into a dict and use it in the top_rfps.html template
+            template_data = {"rfps": rfps}
+            self.response.out.write(template.render(template_data))
         except (AttributeError, KeyError), e:
             return "Secure zone"
+
+class RFPDetails(BaseHandler):
+    """Return details for given RFP ID"""
+
+    @user_required
+    def get(self, rfp_id):
+        self.response.headers['Content-Type'] = 'text/html'
+        jinja_environment = jinja2.Environment(
+                loader=jinja2.FileSystemLoader(os.path.dirname(__file__)))
+        template = jinja_environment.get_template('templates/rfp_details.html')
+
+        rfp = rfp_entry.RFP.get_by_id( int(rfp_id) )
+
+        # no such RFP exists
+        if rfp is None:
+            self.response.set_status(400)
+            self.response.out.write( 'No such RFP exists' )
+            return
+
+        # otherwise, return it
+        template_data = { 'rfp': rfp }
+        self.response.out.write(template.render(template_data))
