@@ -22,7 +22,7 @@ class TopRFPSHandler(BaseHandler):
         self.response.headers['Content-Type'] = 'text/html'
         jinja_environment = jinja2.Environment(
                 loader=jinja2.FileSystemLoader(os.path.dirname(__file__)))
-        template = jinja_environment.get_template('templates/main.html')
+        template = jinja_environment.get_template('templates/home.html')
 
         rfps = rfp_entry.RFP.all().fetch(limit=20)
 
@@ -130,7 +130,7 @@ class HomePageHandler(BaseHandler):
             self.response.headers['Content-Type'] = 'text/html'
             jinja_environment = jinja2.Environment(
                     loader=jinja2.FileSystemLoader(os.path.dirname(__file__)))
-            template = jinja_environment.get_template('templates/main.html')
+            template = jinja_environment.get_template('templates/home.html')
 
             rfps = rfp_entry.RFP.all().fetch(100)
 
@@ -160,4 +160,26 @@ class RFPDetails(BaseHandler):
 
         # otherwise, return it
         template_data = { 'rfp': rfp }
+        self.response.out.write(template.render(template_data))
+
+class RFPSearch(BaseHandler):
+    """Return details for given RFP ID"""
+
+    @user_required
+    def get(self, search_query):
+        self.response.headers['Content-Type'] = 'text/html'
+        jinja_environment = jinja2.Environment(
+                loader=jinja2.FileSystemLoader(os.path.dirname(__file__)))
+        template = jinja_environment.get_template('templates/rfp_table.html')
+
+        rfps = rfp_entry.RFP.search( search_query )
+
+        # no such RFP exists
+        if rfps is None:
+            self.response.set_status(400)
+            self.response.out.write( 'No such RFP exists' )
+            return
+
+        # otherwise, return it
+        template_data = { 'rfps': rfps }
         self.response.out.write(template.render(template_data))

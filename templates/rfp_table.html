@@ -1,0 +1,10 @@
+                    {% for r in rfps %}
+                    <tr>
+                        <td>
+                            <a href='/rfp/{{r.key().id()}}' class='rfp_table_link'>{{r.title}}</a> 
+                        </td>
+
+                        <td>{{r.publish_date}}</td>
+                        <td>{{r.close_date}}</td>
+                    </tr>
+                    {% endfor %}
