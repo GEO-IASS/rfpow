@@ -65,7 +65,7 @@ def create_RFP(title, description, keywords, organization, original_uri, origina
 
 def query_RFPs_by_keyword(keyword):
     #return RFP.gql("WHERE keywords = '{0}'".format(keyword))
-    return RFP.search(keyword, stemming = False, multi_word_literal = False)
+    return RFP.search(keyword)
 
 def query_RFPs(query):
     return RFP.gql(query)

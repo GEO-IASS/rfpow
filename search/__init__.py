@@ -246,8 +246,8 @@ class Searchable(object):
     """
 
     INDEX_ONLY = None           # Can set to list of property names to index.
-    INDEX_STEMMING = True       # Allow stemming to be turned off per subclass.
-    INDEX_MULTI_WORD = False     # Add two and three-word phrases to index.
+    INDEX_STEMMING = False       # Allow stemming to be turned off per subclass.
+    INDEX_MULTI_WORD = True     # Add two and three-word phrases to index.
 
     # If TRUE, incurs additional query/delete overhead on indexing but will workaround
     # indexed properties limit (MAX_ENTITY_SEARCH_PHRASES)
@@ -272,7 +272,7 @@ class Searchable(object):
         """
         index_keys = []
         keywords = PUNCTUATION_REGEX.sub(' ', phrase).lower().split()
-        logging.info(keywords)
+        loggin.info(keywords)
         if stemming:
             stemmer = Stemmer.Stemmer('english')
             klass = StemmedIndex
