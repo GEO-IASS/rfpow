@@ -272,7 +272,7 @@ class Searchable(object):
         """
         index_keys = []
         keywords = PUNCTUATION_REGEX.sub(' ', phrase).lower().split()
-        loggin.info(keywords)
+        logging.info(keywords)
         if stemming:
             stemmer = Stemmer.Stemmer('english')
             klass = StemmedIndex
