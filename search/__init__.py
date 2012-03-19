@@ -291,13 +291,15 @@ class Searchable(object):
                         search_phrases.append(' '.join(keywords[pos:pos+3]))
             query = klass.all(keys_only=True)
             logging.info(phrases)
-            for phrase in search_phrases:
-                if stemming:
-                    phrase = stemmer.stemWord(phrase)
-                query = query.filter('phrases =', phrase)
-            if kind:
-                query = query.filter('parent_kind =', kind)
-            index_keys = query.fetch(limit=limit)
+        else:
+            search_phrases = keywords        
+        for phrase in search_phrases:
+            if stemming:
+                phrase = stemmer.stemWord(phrase)
+            query = query.filter('phrases =', phrase)
+        if kind:
+            query = query.filter('parent_kind =', kind)
+        index_keys = query.fetch(limit=limit)
 
         if len(index_keys) < limit:
             new_limit = limit - len(index_keys)
