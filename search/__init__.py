@@ -290,6 +290,7 @@ class Searchable(object):
                     if keyword_not_stop_word[pos] and keyword_not_stop_word[pos+2]:
                         search_phrases.append(' '.join(keywords[pos:pos+3]))
             query = klass.all(keys_only=True)
+            logging.info(search_phrases)
             for phrase in search_phrases:
                 if stemming:
                     phrase = stemmer.stemWord(phrase)
