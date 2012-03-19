@@ -11,3 +11,8 @@ class CronMerx(webapp2.RequestHandler):
         logging.info( 'Starting scheduled parse for Merx' )
         parser = parsers.MerxParser()
         (parsed, new) = ScheduledParse.parse(parser, stop_on_dupe=True)
+
+class CronRFPEmailUpdates(webapp2.RequestHandler):
+    """Handler for scheduled parser for Merx"""
+    def get(self):
+        logging.info( 'Starting RFP email updates...' )

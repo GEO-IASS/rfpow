@@ -23,6 +23,7 @@ _routes = [
     RedirectRoute('/admin', AdminParser, name='cron-merx', strict_slash=True),
     RedirectRoute('/list-keywords', ListKeywordsHandler, name='list-keywords', strict_slash=True),
     RedirectRoute('/searchindexing', search.SearchIndexing, name='searchindexing', strict_slash=True),
+    RedirectRoute('/rfp-email-updates', CronRFPEmailUpdates, name='rfp-email-updates', strict_slash=True)
 ]
 
 def get_routes():

@@ -10,7 +10,7 @@ import os
 from google.appengine.ext.webapp import template
 from handlers_base import BaseHandler
 from handlers_base import user_required
-from backend.RFPowUser import RFPowUser
+from backend.models.rfpow_user import RFPowUser
 
 
 class LoginHandler(BaseHandler):

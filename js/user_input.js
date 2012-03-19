@@ -71,6 +71,8 @@ function validateCCDate(date, msg) {
  * Drop Down Date select script- by JavaScriptKit.com
  * This notice MUST stay intact for use
  * Visit JavaScript Kit at http://www.javascriptkit.com/ for this script and more
+ *
+ * This has been modified to take into account dynamic values loaded from the server.
  ***********************************************/
 
 var monthtext = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'];

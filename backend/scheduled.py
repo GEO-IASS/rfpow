@@ -1,7 +1,7 @@
 import time
 import logging
 from backend.parsers import MerxParser
-from backend.datastore import RFP
+from backend.models.rfp_entry import RFP
 
 class ScheduledParse():
     """A class for a task of parsing various websites. Run by cron"""

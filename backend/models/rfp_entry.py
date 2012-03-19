@@ -14,7 +14,7 @@ class RFP(search.Searchable, db.Model):
     publish_date = db.DateProperty()
     parse_date = db.DateProperty()
     close_date = db.DateProperty()
-    INDEX_ONLY = ['title', 'keywords', 'organization']  
+    INDEX_ONLY = ['title', 'keywords', 'organization']
     INDEX_STEMMING = False
 
     @classmethod
@@ -38,11 +38,15 @@ class RFP(search.Searchable, db.Model):
     @classmethod
     def by_original_id(self, origin, id):
         return RFP.gql("WHERE original_id = :1", id)
-    
+
     def __str__(self):
         return u"<RFP Object: '%s'>" % self.title
 
 
+# Kept some business logic here in this model for sake of easy code reusage.
+# The model is for logic that is independent of the application. i.e. logic that is valid in
+# all possible applications of the domain of knowledge it pertains to. So the authors may want
+# to rethink of the best places to place these.
 def create_RFP(title, description, keywords, organization, original_uri, original_id, publish_date, parse_date, close_date):
     rfp = RFP()
 
@@ -55,7 +59,7 @@ def create_RFP(title, description, keywords, organization, original_uri, origina
     rfp.publish_date = publish_date
     rfp.parse_date = parse_date
     rfp.close_date = close_date
-    
+
     rfp.put()
     rfp.index()
 
@@ -71,9 +75,9 @@ def query_Keywords(keyword):
     c = db.GqlQuery('SELECT * FROM RFP')
     keywords = []
     for entity in c:
-	if entity.keywords not in keywords and entity.keywords[0] != "":
-	    keywords.append(entity.keywords)
-	
+        if entity.keywords not in keywords and entity.keywords[0] != "":
+            keywords.append(entity.keywords)
+
     keywords.sort()
-    
+
     return keywords

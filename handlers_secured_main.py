@@ -3,8 +3,8 @@ import os
 from handlers_base import user_required
 import datetime
 import logging
-import backend.datastore as datastore
-from backend.datastore import RFP
+import backend.models.rfp_entry as rfp_entry
+from backend.models.rfp_entry import RFP
 from handlers_base import BaseHandler
 from google.appengine.ext.webapp import template
 import google.appengine.ext.db as db
@@ -24,7 +24,7 @@ class TopRFPSHandler(BaseHandler):
                 loader=jinja2.FileSystemLoader(os.path.dirname(__file__)))
         template = jinja_environment.get_template('templates/keyword_results.html')
 
-        rfps = datastore.RFP.all().fetch(limit=20)
+        rfps = rfp_entry.RFP.all().fetch(limit=20)
 
         # now stash results into a dict and use it in the top_rfps.html template
         template_data = {"rfps": rfps,
@@ -35,7 +35,7 @@ class CreateRFPHandler(BaseHandler):
 
     @user_required
     def post(self):
-        datastore.create_RFP(self.request.get('title'),
+        rfp_entry.create_RFP(self.request.get('title'),
                 self.request.get('description'),
                 self.request.get('keywords').split(','),
                 self.request.get('organization'),
@@ -69,7 +69,7 @@ class KeywordResultsHandler(BaseHandler):
         jinja_environment = jinja2.Environment(
                 loader=jinja2.FileSystemLoader(os.path.dirname(__file__)))
         template = jinja_environment.get_template('templates/keyword_results.html')
-        query = datastore.query_RFPs_by_keyword(self.request.get('keyword'))
+        query = rfp_entry.query_RFPs_by_keyword(self.request.get('keyword'))
 
         rfps  = []
 
@@ -90,7 +90,7 @@ class QueryResultsHandler(BaseHandler):
         jinja_environment = jinja2.Environment(
         loader=jinja2.FileSystemLoader(os.path.dirname(__file__)))
         template = jinja_environment.get_template('templates/keyword_results.html')
-        query = datastore.query_RFPs(self.request.get('query'))
+        query = rfp_entry.query_RFPs(self.request.get('query'))
 
         rfps  = []
 
@@ -112,7 +112,7 @@ class ListKeywordsHandler(BaseHandler):
         jinja_environment = jinja2.Environment(
         loader=jinja2.FileSystemLoader(os.path.dirname(__file__)))
         template = jinja_environment.get_template('templates/list_keywords.html')
-        keywords = datastore.query_Keywords(self.request.get('keyword'))
+        keywords = rfp_entry.query_Keywords(self.request.get('keyword'))
 
         template_data = {'keywords' : keywords }
 
