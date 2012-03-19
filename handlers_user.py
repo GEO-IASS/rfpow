@@ -7,7 +7,7 @@
 from webapp2_extras.auth import InvalidAuthIdError
 from webapp2_extras.auth import InvalidPasswordError
 import os
-from google.appengine.ext.webapp import template
+import jinja2
 from handlers_base import BaseHandler
 from handlers_base import user_required
 from backend.models.rfpow_user import RFPowUser
@@ -25,8 +25,10 @@ class LoginHandler(BaseHandler):
             'err_msg': err_msg,
             'info_msg': info_msg
         }
-        path = os.path.join(os.path.dirname(__file__), 'templates/login.html')
-        self.response.out.write(template.render(path, template_values))
+        jinja_environment = jinja2.Environment(
+                loader=jinja2.FileSystemLoader(os.path.dirname(__file__)))
+        template = jinja_environment.get_template('templates/login.html')
+        self.response.out.write(template.render(template_values))
 
     def get(self, error_msg=""):
         self.show_login()
@@ -63,8 +65,10 @@ class UserFormBaseHandler(BaseHandler):
 
         template_values = {'action': self.request.url, 'err_msg': err_msg, "user": user,\
                            "username": username, 'info_msg': info_msg, }
-        path = os.path.join(os.path.dirname(__file__), 'templates/user_info_form.html')
-        self.response.out.write(template.render(path, template_values))
+        jinja_environment = jinja2.Environment(
+                loader=jinja2.FileSystemLoader(os.path.dirname(__file__)))
+        template = jinja_environment.get_template('templates/user_info_form.html')
+        self.response.out.write(template.render(template_values))
 
 
 class CreateUserHandler(UserFormBaseHandler):
@@ -137,7 +141,7 @@ class EditUserHandler(UserFormBaseHandler):
         else:
             rfpow_user.update(user)
             try:
-                self.show_register(info_msg="Your account info has been updated.")
+                self.show_register(info_msg="Ok, we updated your account info!")
             except (AttributeError, KeyError), e:
                 self.abort(403)
 

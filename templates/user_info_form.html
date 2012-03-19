@@ -20,7 +20,8 @@
             && validateString(this.name_on_cc, 'Please fill all required fields', 1, 255)
             ;">
 
-            <img src="/images/logo.png" alt="RFPow's logo">
+            <!-- Logo -->
+            <a href="/" alt="Back to the home page"><img src="/images/logo.png" alt="RFPow's logo"></a>
 
             {% if username %}
             <h2>Edit your account</h2>
@@ -33,7 +34,9 @@
 
             <fieldset class="fieldset_submit">
                 {% if err_msg != "" %}
-                <div class="status error">  {{ err_msg }}</div>
+                <div class="status error">{{ err_msg }}</div>
+                {% elif info_msg %}
+                <div class="status info">{{ info_msg }}</div>
                 {% endif %}
 
                 {% if not username %}
@@ -41,8 +44,8 @@
                 <label class="clearfix">Password <input type="password" name="password" placeholder="Your password"></label>
                 {% endif %}
 
-                <label class="clearfix">First Name <input type="text" name="first_name"  value="{{ user.first_name }}"></label>
-                <label class="clearfix">Last Name <input type="text" name="last_name"  value="{{ user.last_name }}" ></label>
+                <label class="clearfix">First name <input type="text" name="first_name"  value="{{ user.first_name }}"></label>
+                <label class="clearfix">Last name <input type="text" name="last_name"  value="{{ user.last_name }}" ></label>
                 <label class="clearfix">Email<input type="text" name="email" value="{{ user.email }}"></label>
 
 
@@ -57,9 +60,9 @@
                 -->
 
                 <h3>Credit card information</h3>
-                <label class="clearfix">VISA Number <input type="text" name="cc_number" value="{{ user.cc_number }}"></label>
-                <label class="clearfix">Name on Card <input type="text" name="name_on_cc" value="{{ user.name_on_cc }}"></label>
-                <label class="clearfix">Expiry Date
+                <label class="clearfix">Card number <input type="text" name="cc_number" value="{{ user.cc_number }}"></label>
+                <label class="clearfix">Name on card <input type="text" name="name_on_cc" value="{{ user.name_on_cc }}"></label>
+                <label class="clearfix">Expiry date
                     <select id="monthdropdown" name="expiry_date_month" >
                         <option value="{{ user.expiry_date_month }}" id="expiry_date_month">{{ user.expiry_date_month }}</option>
                     </select>
