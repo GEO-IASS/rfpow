@@ -27,16 +27,16 @@
             <div class="status info"> {{ info_msg }} </div>
             {% endif %}
 
-            <div>
-                <label>Username <input type="text" name="username" placeholder="Your username"></label>
-                <label>Password <input type="password" name="password" placeholder="Your password"></label>
-                <label><input type="checkbox" name="remember_me" >Remember me</label>
+            <div class="fieldset">
+                <label class="clearfix">Username <input type="text" name="username" placeholder="Your username"></label>
+                <label class="clearfix">Password <input type="password" name="password" placeholder="Hope it's not '123'!"></label>
+                <label class="clearfix"><input type="checkbox" name="remember_me" >Remember me</label>
             </div>
             <div>
                 <input class="button button_login" type="submit" value="">
             </div>
 
-            <div>
+            <div style="margin: 10px 0 0">
                 <a href="/create-user/">Don't have an account?</a>
             </div>
 
