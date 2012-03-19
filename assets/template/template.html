@@ -26,16 +26,21 @@
                 <form action="/rfp/search">
                     <input type="text" class="search_text" name="search_text" 
                            placeholder="Enter keywords">
-                    <input type="submit" value="" class="button button_search" href="#">
+                   <input type="submit" value="" class="button button_search" 
+                       title="Search RFPs based on entered keywords"
+                       alt="Search RFPs based on entered keywords">
                 </form> 
 
                 <form action="/rfp/subscribe" method="post">
                     <!-- keywords get filled out by search script -->
                     <input name="keywords" type="hidden" value="">
-                    <input type="submit" value="" class="button button_subscribe"  href="#">
+                    <input type="submit" value="" class="button button_subscribe" 
+                        title="Subscribe to email updates for this search query"
+                        alt="Subscribe to email updates for this search query" >
                 </form>
 
-                <a class="button button_settings"  href="#"></a>
+                <a class="button button_settings"  href="#" title="Your account settings"
+                   alt="Your account settings"></a>
                 <a href="#" id="log_out">Log out</a>
                 </span>
             </div>
