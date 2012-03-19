@@ -109,39 +109,48 @@ a:hover {
 
 .button_search {
     width: 33px;
-    background: url(../images/buttons_header.png);
+    background: url(../images/buttons_map.png);
 
     &:hover {
-        background: url(../images/buttons_header.png)  0 30px;
+        background: url(../images/buttons_map.png)  0 30px;
     }
 }
 
 .button_subscribe {
     width: 106px;
     margin: 0 10px 0 0;
-    background: url(../images/buttons_header.png) -33px 0;
+    background: url(../images/buttons_map.png) -33px 0;
 
     &:hover {
-        background: url(../images/buttons_header.png) -33px 30px;
+        background: url(../images/buttons_map.png) -33px 30px;
     }
 }
 
 .button_subscribed {
     width: 106px;
     margin: 0 10px 0 0;
-    background: url(../images/buttons_header.png) -141px 0;
+    background: url(../images/buttons_map.png) -141px 0;
 
     &:hover {
-        background: url(../images/buttons_header.png) -141px 30px;
+        background: url(../images/buttons_map.png) -141px 30px;
     }
 }
 
 .button_settings {
-    width: 94px;
-    background: url(../images/buttons_header.png) top right;
+    width: 95px;
+    background: url(../images/buttons_map.png) -247px 0;
 
     &:hover {
-        background: url(../images/buttons_header.png) bottom right;
+        background: url(../images/buttons_map.png) -247px 30px;
+    }
+}
+
+.button_details {
+    width: 95px;
+    background: url(../images/buttons_map.png) -342px 0;
+
+    &:hover {
+        background: url(../images/buttons_map.png) -342px 30px;
     }
 }
 
@@ -207,6 +216,67 @@ a:hover {
     }
 }
 
+.rfp_details, #cboxLoadedContent {
+    padding: 14px;
+    width: 640px;
+
+    .title {
+        border-bottom: 1px solid #ccc;
+        margin: 0 0 10px;    
+        padding: 0;
+    }
+
+    .description {
+        color: #777;
+        height: 300px;
+        overflow-y: scroll;
+        overflow-x: hidden;
+    }
+    
+    .dates {
+        margin: 0 0 20px;
+
+        .date {
+            margin: 0 10px 0 0;
+        }
+
+        .date_title {
+            font-weight: bold;
+
+            &.published {
+                color: #8AC776;
+            }
+
+            &.expires {
+                color: #E5A67E;
+            }
+        }
+    }
+
+    .footer {
+        margin: 10px 0 0 0;
+        padding: 14px 0 0;
+        border-top: 1px solid #ccc;
+
+        * {
+            float: left;
+        }
+
+        .buttons {
+            float: right;
+        }
+    }
+
+    .source {
+        width: 50px;
+        height: 30px;
+        &.merx {
+            background: url(../images/logo_source_merx.png) no-repeat;
+        }
+    }
+}
+
+/* Clearfix */
 .clearfix:after {
 	content: ".";
 	display: block;
