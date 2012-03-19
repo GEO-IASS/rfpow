@@ -20,11 +20,11 @@
             && validateString(this.password, 'Please fill all required fields', 1, 255);">
 
             {% if err_msg %}
-            <div class="error"> {{ err_msg }} </div>
+            <div class="status error"> {{ err_msg }} </div>
             {% endif %}
 
             {% if info_msg %}
-            <div class="info"> {{ info_msg }} </div>
+            <div class="status info"> {{ info_msg }} </div>
             {% endif %}
 
             <div>
