@@ -247,7 +247,7 @@ class Searchable(object):
 
     INDEX_ONLY = None           # Can set to list of property names to index.
     INDEX_STEMMING = True       # Allow stemming to be turned off per subclass.
-    INDEX_MULTI_WORD = True     # Add two and three-word phrases to index.
+    INDEX_MULTI_WORD = False     # Add two and three-word phrases to index.
 
     # If TRUE, incurs additional query/delete overhead on indexing but will workaround
     # indexed properties limit (MAX_ENTITY_SEARCH_PHRASES)
