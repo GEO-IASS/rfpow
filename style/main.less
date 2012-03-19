@@ -154,6 +154,27 @@ a:hover {
     }
 }
 
+.button_login {
+    width: 95px;
+    background: url(../images/buttons_map.png) -437px 0;
+
+    &:hover {
+        background: url(../images/buttons_map.png) -437px 30px;
+    }
+}
+
+input[type=text], input[type=password] {
+    padding: 4px 10px;
+    border: 1px solid #bbb;
+    border-radius: 4px;
+
+    &:focus { 
+        outline:none;
+        border-color:#9ecaed;
+        box-shadow:0 0 5px #9ecaed;
+    }
+}
+
 .rfp_table {
     padding: 0;
     margin: 0;
@@ -288,6 +309,18 @@ a:hover {
     text-align: center;
     width: 600px;
     margin: 0px auto;
+
+    input {
+        font-size: 11pt;
+    }
+
+    label, div {
+        display: block;
+        margin: 10px 0;
+    }
+
+    div {
+    }
 }
 
 .login_welcome {
@@ -295,17 +328,16 @@ a:hover {
 }
 
 .footer {
-    border-top: 2px solid #eee;
     padding: 10px;
-    margin: 20px 0 0;
-    font-size: 8pt;
+    margin: 10px 0 0;
+    font-size: 8.5pt;
     text-align: center;
 
     a:link,
     a:visited,
     a:active,
     a:hover {
-        color: #aaa;
+        color: #999;
     }
 }
 

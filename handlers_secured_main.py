@@ -126,19 +126,16 @@ class HomePageHandler(BaseHandler):
 
     @user_required
     def get(self, **kwargs):
-        try:
-            self.response.headers['Content-Type'] = 'text/html'
-            jinja_environment = jinja2.Environment(
-                    loader=jinja2.FileSystemLoader(os.path.dirname(__file__)))
-            template = jinja_environment.get_template('templates/home.html')
+        self.response.headers['Content-Type'] = 'text/html'
+        jinja_environment = jinja2.Environment(
+                loader=jinja2.FileSystemLoader(os.path.dirname(__file__)))
+        template = jinja_environment.get_template('templates/home.html')
 
-            rfps = rfp_entry.RFP.all().fetch(100)
+        rfps = rfp_entry.RFP.all().fetch(100)
 
-            # now stash results into a dict and use it in the top_rfps.html template
-            template_data = {"rfps": rfps}
-            self.response.out.write(template.render(template_data))
-        except (AttributeError, KeyError), e:
-            return "Secure zone"
+        # now stash results into a dict and use it in the top_rfps.html template
+        template_data = {"rfps": rfps}
+        self.response.out.write(template.render(template_data))
 
 class RFPDetails(BaseHandler):
     """Return details for given RFP ID"""
@@ -163,7 +160,10 @@ class RFPDetails(BaseHandler):
         self.response.out.write(template.render(template_data))
 
 class RFPSearch(BaseHandler):
-    """Return details for given RFP ID"""
+    """Return table of search results for given search query. 
+    
+       Used by AJAX handler for modal dialogue.    
+    """
 
     @user_required
     def get(self, search_query):
