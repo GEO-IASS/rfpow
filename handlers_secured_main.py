@@ -128,7 +128,7 @@ class HomePageHandler(BaseHandler):
 
     @user_required
     def get(self, **kwargs):
-        rfps = rfp_entry.RFP.all().fetch(25)
+        rfps = rfp_entry.RFP.all().order( 'publish_date' ).fetch(25)
 
         # now stash results into a dict and use it in the top_rfps.html template
         template_data = {"rfps": rfps}
@@ -150,10 +150,9 @@ class RFPList(BaseHandler):
             start_offset = 0
 
         if sort_by == '':
-            query = rfp_entry.RFP.all()
-        else:
-            query = rfp_entry.RFP.all().order( sort_by )
+            sort_by = 'publish_date'
 
+        query = rfp_entry.RFP.all().order( sort_by )
         rfps = query.fetch( offset=start_offset, limit=25 )
 
         # now stash results into a dict and use it in the top_rfps.html template

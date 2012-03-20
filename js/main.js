@@ -47,10 +47,15 @@ $( function() {
     // Search
     search_form.submit( function(e) {
         e.preventDefault();
-        var search_keywords = search_text.val().trim(),
-            // no keywords? use vanilla paginated RFPList handler. 
-            action = (search_keywords === '' ) ? pagination_uri 
-                      : search_form.attr('action') + '/' + search_keywords;
+        var search_keywords = search_text.val().trim();
+
+        // figure out whether to search, or just get a list of RFPs
+        if ( search_keywords == '' ) {
+            offset = 0;
+            action = pagination_uri;
+        } else {
+            action = search_form.attr('action') + '/' + search_keywords;
+        }
 
         // now get search results via AJAX/comet
         $.get(  action,
