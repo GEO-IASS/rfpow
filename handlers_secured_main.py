@@ -133,26 +133,36 @@ class HomePageHandler(BaseHandler):
                 loader=jinja2.FileSystemLoader(os.path.dirname(__file__)))
         template = jinja_environment.get_template('templates/home.html')
 
-        rfps = rfp_entry.RFP.all().fetch(100)
+        rfps = rfp_entry.RFP.all().fetch(10)
 
         # now stash results into a dict and use it in the top_rfps.html template
         template_data = {"rfps": rfps}
         self.response.out.write(template.render(template_data))
 
-class RFPPaginated(BaseHandler):
-    """Return table of RFPs, sorted by given column and starting at offset.""" 
+class RFPList(BaseHandler):
+    """Return table of RFPs, sorted by given column and starting at given offset.""" 
     @user_required
     def get(self):
-        self.response.headers['Content-Type'] = 'text/html'
-        jinja_environment = jinja2.Environment(
-                loader=jinja2.FileSystemLoader(os.path.dirname(__file__)))
-        template = jinja_environment.get_template('templates/rfp_table.html')
+        sort_by = self.request.get( 'order' ).strip()
+        start_offset = self.request.get( 'offset' ).strip()
 
-        rfps = rfp_entry.RFP.all().fetch(100)
+        if start_offset is not '':
+            try: 
+                start_offset = int( start_offset )
+            except ValueError:
+                start_offset = 0
+        else:
+            start_offset = 0
+
+        if sort_by is '':
+            sort_by = 'publish_date'
+
+        query = rfp_entry.RFP.all().order( sort_by )
+        rfps = query.fetch( offset=start_offset, limit=10 )
 
         # now stash results into a dict and use it in the top_rfps.html template
         template_data = {"rfps": rfps}
-        self.response.out.write(template.render(template_data))
+        self.show_rendered_html( 'templates/rfp_table.html', template_data)
 
 class RFPDetails(BaseHandler):
     """Return details for given RFP ID"""

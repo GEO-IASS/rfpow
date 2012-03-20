@@ -85,4 +85,5 @@ class BaseHandler(webapp2.RequestHandler):
         return template.render(template_args)
 
     def show_rendered_html(self, filename="", template_args=[]):
+        self.response.headers['Content-Type'] = 'text/html'
         self.response.out.write(self.get_rendered_html(filename, template_args))
