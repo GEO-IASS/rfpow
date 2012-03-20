@@ -1,15 +1,17 @@
 $( function() {
-    var rfp_table = $( '.rfp_table' ),
-        table_body = rfp_table.find('tbody'),
-        search_text = $( '#search_text' ),
-        search_form = $( '#search_form' ),
-        searching = false,
-        offset = 10,
-        order = '',
-        pagination_uri = '/rfp/list/';
+    var rfp_table      = $( '.rfp_table' ),
+        table_body     = rfp_table.find('tbody'),
+        search_text    = $( '#search_text' ),
+        search_form    = $( '#search_form' ),
+        searching      = false,
+        offset         = 10,
+        order          = '',
+        pagination_uri = '/rfp/list/',
+        search_uri     = '/rfp/search/',
+        History        = window.History,
 
-    // Create modal dialogue with details of each RFP
-    function map_links( rfp_links ) {
+    // Create modal dialogues for each RFP's details
+    map_links = function( rfp_links ) {
         rfp_links.each( function() {
             var r = $(this);
 
@@ -18,10 +20,10 @@ $( function() {
                 r.colorbox();
             });
         });
-    }
+    },
 
-    // Get next page of RFP results
-    function next_page() {
+    // Get next chunk of RFP results. Used for infinite scroll.
+    next_page = function() {
         var action = pagination_uri;
 
         $.get( pagination_uri, { 'offset': offset, 'order' : order },
@@ -38,17 +40,10 @@ $( function() {
 
                 console.log( 'Grabbed next page of results. New offset: ', offset )
             });
-    }
+    },
 
-
-    // Initialize modal dialogues
-    map_links( rfp_table.find('.rfp_table_link') );
-
-    // Search
-    search_form.submit( function(e) {
-        e.preventDefault();
-        var search_keywords = search_text.val().trim();
-
+    // Search ajax handler
+    search_handler = function( search_keywords ) {
         // figure out whether to search, or just get a list of RFPs
         if ( search_keywords == '' ) {
             offset = 0;
@@ -58,8 +53,7 @@ $( function() {
         }
 
         // now get search results via AJAX/comet
-        $.get(  action,
-           { 'offset': offset, 'order' : order },
+        $.get(  action, { 'offset': offset, 'order' : order },
 
             // Replace results in RFP table with what we searched for
             function(data) {
@@ -67,26 +61,55 @@ $( function() {
                 rfp_table.find('.rfp_table_link').unbind( 'click' );
                 table_body.find('tr').remove();
                 table_body.append( data );
+                
+                // If not searching, set offset for pagination purposes
                 if ( search_keywords == '' ) {
                     offset = table_body.find('tr').length;
                     searching = false;
+
+                    History.pushState( { search_keywords: '' }, 
+                        "RFPow!", pagination_uri );
+                // If searching, just push history state with appropriate title
                 } else {
                     searching = true;
+                    History.pushState( { search_keywords: search_keywords }, 
+                        "RFPow! : Searching for '"+search_keywords + "'", 
+                        search_uri + search_keywords );
                 }
 
                 // now re-map links to modal dialogues for search results
                 map_links( table_body.find('.rfp_table_link') );
             });
-
         return false;
+    };
+
+
+    // Initialize modal dialogues
+    map_links( rfp_table.find('.rfp_table_link') );
+
+    // Map search handler to search form submission
+    search_form.submit( function(e) {
+        e.preventDefault();
+        return search_handler( search_text.val().trim() );
     });
 
-    // Map appending of next 10 results to scroll to bottom event
+
+    // Map appending of next 10 results to scroll event
     $( window ).scroll( function(e) {
         // don't paginate search results
         if ( searching ) return;
 
-        if ( $( window ).scrollTop() == $(document).height() - $(window).height())
+        if ( $( window ).scrollTop() == $(document).height() - $(window).height() )
             next_page();
     })
+
+    
+    // History and the back button handler
+    History.Adapter.bind(window,'statechange',function(){ 
+        var data = History.getState().data; 
+        search_handler( data.search_keywords );
+    });
+
+    // Push default history state to make coming back easier
+    History.pushState( { search_keywords: "" }, document.title, window.location.href );
 });
