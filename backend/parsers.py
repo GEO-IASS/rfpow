@@ -4,7 +4,7 @@ import time
 import urllib
 import urllib2
 import logging
-from pyquery import PyQuery as pq
+from lib.pyquery import PyQuery as pq
 import datetime
 
 class Parser:
