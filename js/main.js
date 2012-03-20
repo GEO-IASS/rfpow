@@ -1,5 +1,6 @@
 $( function() {
     var rfp_table = $( '.rfp_table' ),
+        table_body = rfp_table.find('tbody'),
         search_text = $( '#search_text' ),
         search_form = $( '#search_form' ),
         searching = false,
@@ -22,12 +23,13 @@ $( function() {
     // Get next page of RFP results
     function next_page() {
         var action = pagination_uri;
+
         $.get( pagination_uri, { 'offset': offset, 'order' : order },
 
             // append HTML of RFP results received from backend
             function(data) {
                 var rows = $( data );
-                rfp_table.append( data );
+                table_body.append( data );
                 offset += rows.find( 'tr' ).length
 
                 // map click event to modal popup handlers
@@ -38,24 +40,20 @@ $( function() {
             });
     }
 
-    window.next_page = next_page;
 
-
+    // Initialize modal dialogues
     map_links( rfp_table.find('.rfp_table_link') );
 
-    // Searching RFPs behaviour
+    // Search
     search_form.submit( function(e) {
         e.preventDefault();
-        var table_body = rfp_table.find('tbody'),
-            search_keywords = search_text.val().trim(),
-            
-            // no keywords == vanilla paginated RFPList handler. 
+        var search_keywords = search_text.val().trim(),
+            // no keywords? use vanilla paginated RFPList handler. 
             action = (search_keywords === '' ) ? pagination_uri 
                       : search_form.attr('action') + '/' + search_keywords;
 
         // now get search results via AJAX/comet
         $.get(  action,
-           // GET data
            { 'offset': offset, 'order' : order },
 
             // Replace results in RFP table with what we searched for
@@ -80,6 +78,7 @@ $( function() {
 
     // Map appending of next 10 results to scroll to bottom event
     $( window ).scroll( function(e) {
+        // don't paginate search results
         if ( searching ) return;
 
         if ( $( window ).scrollTop() == $(document).height() - $(window).height())

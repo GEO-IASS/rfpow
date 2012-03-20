@@ -154,7 +154,7 @@ class RFPList(BaseHandler):
         else:
             query = rfp_entry.RFP.all().order( sort_by )
 
-        rfps = query.fetch( offset=start_offset, limit=10 )
+        rfps = query.fetch( offset=start_offset, limit=25 )
 
         # now stash results into a dict and use it in the top_rfps.html template
         template_data = {"rfps": rfps}
