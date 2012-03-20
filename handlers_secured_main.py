@@ -128,16 +128,11 @@ class HomePageHandler(BaseHandler):
 
     @user_required
     def get(self, **kwargs):
-        self.response.headers['Content-Type'] = 'text/html'
-        jinja_environment = jinja2.Environment(
-                loader=jinja2.FileSystemLoader(os.path.dirname(__file__)))
-        template = jinja_environment.get_template('templates/home.html')
-
         rfps = rfp_entry.RFP.all().fetch(25)
 
         # now stash results into a dict and use it in the top_rfps.html template
         template_data = {"rfps": rfps}
-        self.response.out.write(template.render(template_data))
+        self.show_rendered_html( 'templates/home.html', template_data )
 
 class RFPList(BaseHandler):
     """Return table of RFPs, sorted by given column and starting at given offset.""" 
@@ -170,11 +165,6 @@ class RFPDetails(BaseHandler):
 
     @user_required
     def get(self, rfp_id):
-        self.response.headers['Content-Type'] = 'text/html'
-        jinja_environment = jinja2.Environment(
-                loader=jinja2.FileSystemLoader(os.path.dirname(__file__)))
-        template = jinja_environment.get_template('templates/rfp_details.html')
-
         rfp = rfp_entry.RFP.get_by_id( int(rfp_id) )
 
         # no such RFP exists
@@ -185,7 +175,7 @@ class RFPDetails(BaseHandler):
 
         # otherwise, return it
         template_data = { 'rfp': rfp }
-        self.response.out.write(template.render(template_data))
+        self.show_rendered_html( 'templates/rfp_details.html', template_data )
 
 class RFPSearch(BaseHandler):
     """Return table of search results for given search query. 

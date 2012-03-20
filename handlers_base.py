@@ -3,10 +3,12 @@ from webapp2_extras import auth
 from webapp2_extras import sessions
 import os
 import jinja2
+import lib.jinja_filters as jinja_filters
 
 #TODO: Use these variables
 jinja_environment = jinja2.Environment(
     loader=jinja2.FileSystemLoader(os.path.dirname(__file__)))
+jinja_environment.filters['nl2pbr'] = jinja_filters.do_nl2pbr
 
 def user_required(handler):
     """
