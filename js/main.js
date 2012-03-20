@@ -30,6 +30,10 @@ $( function() {
                 rfp_table.append( data );
                 offset += rows.find( 'tr' ).length
 
+                // map click event to modal popup handlers
+                rfp_table.find('.rfp_table_link').unbind( 'click' );
+                map_links( rfp_table.find('.rfp_table_link') );
+
                 console.log( 'Grabbed next page of results. New offset: ', offset )
             });
     }
@@ -79,6 +83,6 @@ $( function() {
         if ( searching ) return;
 
         if ( $( window ).scrollTop() == $(document).height() - $(window).height())
-            next_page()
+            next_page();
     })
 });
