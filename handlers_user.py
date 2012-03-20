@@ -25,10 +25,13 @@ class LoginHandler(BaseHandler):
             'err_msg': err_msg,
             'info_msg': info_msg
         }
-        jinja_environment = jinja2.Environment(
-                loader=jinja2.FileSystemLoader(os.path.dirname(__file__)))
-        template = jinja_environment.get_template('templates/login.html')
-        self.response.out.write(template.render(template_values))
+        self.show_rendered_html('templates/login.html', template_values)
+        #TODO: refactor the rest of the code to do this
+#        jinja_environment = jinja2.Environment(
+#                loader=jinja2.FileSystemLoader(os.path.dirname(__file__)))
+#        template = jinja_environment.get_template('templates/login.html')
+#        html = self.get_rendered_html()
+#        self.response.out.write(template.render(template_values))
 
     def get(self, error_msg=""):
         self.show_login()

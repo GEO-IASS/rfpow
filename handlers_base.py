@@ -1,6 +1,12 @@
 import webapp2
 from webapp2_extras import auth
 from webapp2_extras import sessions
+import os
+import jinja2
+
+#TODO: Use these variables
+jinja_environment = jinja2.Environment(
+loader=jinja2.FileSystemLoader(os.path.dirname(__file__)))
 
 def user_required(handler):
     """
@@ -23,6 +29,7 @@ def user_required(handler):
             return handler(self, *args, **kwargs)
 
     return check_login
+
 
 
 class BaseHandler(webapp2.RequestHandler):
@@ -72,3 +79,10 @@ class BaseHandler(webapp2.RequestHandler):
             'login_url': self.uri_for('login'),
             'logout_url': self.uri_for('logout')
         }
+
+    def get_rendered_html(self, filename="", template_args=[]):
+        template = jinja_environment.get_template(filename)
+        return template.render(template_args)
+
+    def show_rendered_html(self, filename="", template_args=[]):
+        self.response.out.write(self.get_rendered_html(filename, template_args))
