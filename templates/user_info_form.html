@@ -16,8 +16,6 @@
             && validateString(this.first_name, 'Please fill all required fields', 1, 255)
             && validateString(this.last_name, 'Please fill all required fields', 1, 255)
             && validateEmail(this.email, 'Email not valid')
-            && validateNumber(this.cc_number, 'Credit card number is 16 digits', 16, 16)
-            && validateString(this.name_on_cc, 'Please fill all required fields', 1, 255)
             ;">
 
             <!-- Logo -->
@@ -40,13 +38,16 @@
                 {% endif %}
 
                 {% if not username %}
-                <label class="clearfix">Username <input type="text" name="username" placeholder="Your username"></label>
-                <label class="clearfix">Password <input type="password" name="password" placeholder="Your password"></label>
+                <label class="clearfix">Username <input type="text" name="username" placeholder="Be creative"></label>
+                <label class="clearfix">Password <input type="password" name="password" placeholder="Be cryptic."></label>
                 {% endif %}
 
-                <label class="clearfix">First name <input type="text" name="first_name"  value="{{ user.first_name }}"></label>
-                <label class="clearfix">Last name <input type="text" name="last_name"  value="{{ user.last_name }}" ></label>
-                <label class="clearfix">Email<input type="text" name="email" value="{{ user.email }}"></label>
+                <label class="clearfix">First name 
+                    <input type="text" name="first_name"  value="{{ user.first_name }}" placeholder="Ideally, real name."></label>
+                <label class="clearfix">Last name 
+                    <input type="text" name="last_name"  value="{{ user.last_name }}" placeholder="We won't tell anyone."></label>
+                <label class="clearfix">Email
+                    <input type="text" name="email" value="{{ user.email }}" placeholder="No spam, for real!"></label>
 
 
                 <!--
@@ -60,6 +61,9 @@
                 -->
 
                 <h3>Credit card information</h3>
+                <div class="intro">
+                    Optional. Enter if you want to post your own RFPs. 
+                </div>
                 <label class="clearfix">Card number <input type="text" name="cc_number" value="{{ user.cc_number }}"></label>
                 <label class="clearfix">Name on card <input type="text" name="name_on_cc" value="{{ user.name_on_cc }}"></label>
                 <label class="clearfix">Expiry date
