@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import jinja2
 import os
 from handlers_base import user_required
@@ -130,6 +132,21 @@ class HomePageHandler(BaseHandler):
         jinja_environment = jinja2.Environment(
                 loader=jinja2.FileSystemLoader(os.path.dirname(__file__)))
         template = jinja_environment.get_template('templates/home.html')
+
+        rfps = rfp_entry.RFP.all().fetch(100)
+
+        # now stash results into a dict and use it in the top_rfps.html template
+        template_data = {"rfps": rfps}
+        self.response.out.write(template.render(template_data))
+
+class RFPPaginated(BaseHandler):
+    """Return table of RFPs, sorted by given column and starting at offset.""" 
+    @user_required
+    def get(self):
+        self.response.headers['Content-Type'] = 'text/html'
+        jinja_environment = jinja2.Environment(
+                loader=jinja2.FileSystemLoader(os.path.dirname(__file__)))
+        template = jinja_environment.get_template('templates/rfp_table.html')
 
         rfps = rfp_entry.RFP.all().fetch(100)
 
