@@ -133,7 +133,7 @@ class HomePageHandler(BaseHandler):
                 loader=jinja2.FileSystemLoader(os.path.dirname(__file__)))
         template = jinja_environment.get_template('templates/home.html')
 
-        rfps = rfp_entry.RFP.all().fetch(10)
+        rfps = rfp_entry.RFP.all().fetch(25)
 
         # now stash results into a dict and use it in the top_rfps.html template
         template_data = {"rfps": rfps}
@@ -154,10 +154,11 @@ class RFPList(BaseHandler):
         else:
             start_offset = 0
 
-        if sort_by is '':
-            sort_by = 'publish_date'
+        if sort_by == '':
+            query = rfp_entry.RFP.all()
+        else:
+            query = rfp_entry.RFP.all().order( sort_by )
 
-        query = rfp_entry.RFP.all().order( sort_by )
         rfps = query.fetch( offset=start_offset, limit=10 )
 
         # now stash results into a dict and use it in the top_rfps.html template
