@@ -26,7 +26,7 @@ class LoginHandler(BaseHandler):
             'info_msg': info_msg
         }
         self.show_rendered_html('templates/login.html', template_values)
-        #TODO: refactor the rest of the code to do this
+        #TODO: refactor the rest of the code to do this if a handler needs to write the page (client view)
 #        jinja_environment = jinja2.Environment(
 #                loader=jinja2.FileSystemLoader(os.path.dirname(__file__)))
 #        template = jinja_environment.get_template('templates/login.html')
