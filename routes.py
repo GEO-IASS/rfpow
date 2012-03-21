@@ -14,7 +14,7 @@ _routes = [
     RedirectRoute(r'/rfp/search/<search_query:.*>', RFPSearch, name='secure', strict_slash=True),
     RedirectRoute(r'/rfp/list/', RFPList, name='secure', strict_slash=True),
     RedirectRoute(r'/rfp/<rfp_id:\d+>', RFPDetails, name='secure', strict_slash=True),
-    RedirectRoute('/secure', HomePageHandler, name='secure', strict_slash=True),
+    #RedirectRoute('/secure', HomePageHandler, name='secure', strict_slash=True),
     RedirectRoute('/create-user/', CreateUserHandler, name='create-user', strict_slash=True),
     RedirectRoute('/edit-user/', EditUserHandler, name='edit-user', strict_slash=True),
     RedirectRoute('/top-rfps/', TopRFPSHandler, name='top-rfps', strict_slash=True),

@@ -40,7 +40,7 @@ class LoginHandler(BaseHandler):
         # Raises InvalidPasswordError if provided password doesn't match with specified user
         try:
             self.auth.get_user_by_password(username, password, remember=remember_me)
-            self.redirect('/secure')
+            self.redirect('/')
         except (InvalidAuthIdError, InvalidPasswordError), e:
             self.show_login("Bad username or password. Try again.")
 
