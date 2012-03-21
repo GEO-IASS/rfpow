@@ -12,16 +12,12 @@ class AdminParser(BaseHandler):
     @user_required
     def get(self, status=None):
         self.response.headers['Content-Type'] = 'text/html'
-        jinja_environment = jinja2.Environment(
-            loader=jinja2.FileSystemLoader(os.path.dirname(__file__)))
-        template = jinja_environment.get_template('templates/admin_parsers.html')
-
         # now stash results into a dict and use it in the top_rfps.html template
         template_data = {}
         
         if status is not None: 
             template_data['status'] = status
-        self.response.out.write(template.render(template_data))
+        self.show_rendered_html('templates/admin_parsers.html', template_data)
 
     @user_required
     def post(self):

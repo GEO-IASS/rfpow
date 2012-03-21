@@ -22,16 +22,12 @@ class TopRFPSHandler(BaseHandler):
         logging.getLogger().setLevel(logging.DEBUG)
 
         self.response.headers['Content-Type'] = 'text/html'
-        jinja_environment = jinja2.Environment(
-                loader=jinja2.FileSystemLoader(os.path.dirname(__file__)))
-        template = jinja_environment.get_template('templates/home.html')
-
         rfps = rfp_entry.RFP.all().fetch(limit=20)
 
         # now stash results into a dict and use it in the top_rfps.html template
         template_data = {"rfps": rfps,
                 "title": "Latest {0} RFP's from merx".format(len(rfps))}
-        self.response.out.write(template.render(template_data))
+        self.show_rendered_html('templates/home.html', template_data)
 
 class CreateRFPHandler(BaseHandler):
 
@@ -53,11 +49,8 @@ class QueryRFPHandler(BaseHandler):
     @user_required
     def get(self):
         self.response.headers['Content-Type'] = 'text/html; charset=utf-8'
-        jinja_environment = jinja2.Environment(
-        loader=jinja2.FileSystemLoader(os.path.dirname(__file__)))
-        template = jinja_environment.get_template('templates/cc_rfp.html')
-        template_values = {}
-        self.response.out.write(template.render(template_values))
+        self.show_rendered_html('templates/cc_rfp.html', template_values)
+
 
 
 class KeywordResultsHandler(BaseHandler):
@@ -68,9 +61,6 @@ class KeywordResultsHandler(BaseHandler):
     @user_required
     def get(self):
         self.response.headers['Content-Type'] = 'text/html; charset=utf-8'
-        jinja_environment = jinja2.Environment(
-                loader=jinja2.FileSystemLoader(os.path.dirname(__file__)))
-        template = jinja_environment.get_template('templates/keyword_results.html')
         query = rfp_entry.query_RFPs_by_keyword(self.request.get('keyword'))
 
         rfps  = []
@@ -80,8 +70,8 @@ class KeywordResultsHandler(BaseHandler):
 
         template_data = {'rfps' : rfps,
                 'title': "Your query returned {0} RFP's".format(len(rfps))}
+        self.show_rendered_html('templates/keyword_results.html', template_data)
 
-        self.response.out.write(template.render(template_data))
 
 
 class QueryResultsHandler(BaseHandler):
@@ -89,9 +79,6 @@ class QueryResultsHandler(BaseHandler):
     @user_required
     def post(self):
         self.response.headers['Content-Type'] = 'text/html; charset=utf-8'
-        jinja_environment = jinja2.Environment(
-        loader=jinja2.FileSystemLoader(os.path.dirname(__file__)))
-        template = jinja_environment.get_template('templates/keyword_results.html')
         query = rfp_entry.query_RFPs(self.request.get('query'))
 
         rfps  = []
@@ -101,8 +88,7 @@ class QueryResultsHandler(BaseHandler):
 
         template_data = {'rfps' : rfps,
                 'title': "Your query returned {0} RFP's".format(len(rfps))}
-
-        self.response.out.write(template.render(template_data))
+        self.show_rendered_html('templates/keyword_results.html', template_data)
 
 class ListKeywordsHandler(BaseHandler):
     ''' List every keyword stored in database for use to select, once selected, 
@@ -111,14 +97,11 @@ class ListKeywordsHandler(BaseHandler):
     @user_required
     def get(self):
         self.response.headers['Content-Type'] = 'text/html; charset=utf-8'
-        jinja_environment = jinja2.Environment(
-        loader=jinja2.FileSystemLoader(os.path.dirname(__file__)))
-        template = jinja_environment.get_template('templates/list_keywords.html')
         keywords = rfp_entry.query_Keywords(self.request.get('keyword'))
 
         template_data = {'keywords' : keywords }
+        self.show_rendered_html('templates/list_keywords.html', template_data)
 
-        self.response.out.write(template.render(template_data))
 
 class HomePageHandler(BaseHandler):
     """
@@ -185,9 +168,6 @@ class RFPSearch(BaseHandler):
     @user_required
     def get(self, search_query):
         self.response.headers['Content-Type'] = 'text/html'
-        jinja_environment = jinja2.Environment(
-                loader=jinja2.FileSystemLoader(os.path.dirname(__file__)))
-        template = jinja_environment.get_template('templates/rfp_table.html')
 
         rfps = rfp_entry.RFP.search( search_query )
 
@@ -199,4 +179,5 @@ class RFPSearch(BaseHandler):
 
         # otherwise, return it
         template_data = { 'rfps': rfps }
-        self.response.out.write(template.render(template_data))
+        self.show_rendered_html('templates/rfp_table.html', template_data)
+

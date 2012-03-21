@@ -26,12 +26,6 @@ class LoginHandler(BaseHandler):
             'info_msg': info_msg
         }
         self.show_rendered_html('templates/login.html', template_values)
-        #TODO: refactor the rest of the code to do this if a handler needs to write the page (client view)
-#        jinja_environment = jinja2.Environment(
-#                loader=jinja2.FileSystemLoader(os.path.dirname(__file__)))
-#        template = jinja_environment.get_template('templates/login.html')
-#        html = self.get_rendered_html()
-#        self.response.out.write(template.render(template_values))
 
     def get(self, error_msg=""):
         self.show_login()
@@ -68,10 +62,7 @@ class UserFormBaseHandler(BaseHandler):
 
         template_values = {'action': self.request.url, 'err_msg': err_msg, "user": user,\
                            "username": username, 'info_msg': info_msg, }
-        jinja_environment = jinja2.Environment(
-                loader=jinja2.FileSystemLoader(os.path.dirname(__file__)))
-        template = jinja_environment.get_template('templates/user_info_form.html')
-        self.response.out.write(template.render(template_values))
+        self.show_rendered_html('templates/user_info_form.html', template_values)
 
 
 class CreateUserHandler(UserFormBaseHandler):
