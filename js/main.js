@@ -6,8 +6,8 @@ $( function() {
         searching      = false,
         offset         = 10,
         order          = '',
-        pagination_uri = '/rfp/list/',
-        search_uri     = '/rfp/search/',
+        pagination_uri = '/rfp/list/.comet',
+        search_uri     = '/rfp/search/.comet',
         History        = window.History,
 
     // Create modal dialogues for each RFP's details
@@ -112,4 +112,8 @@ $( function() {
 
     // Push default history state to make coming back easier
     History.pushState( { search_keywords: "" }, document.title, window.location.href );
+
+
+    // Focus on search field on load
+    search_text.focus();
 });

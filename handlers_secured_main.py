@@ -110,8 +110,9 @@ class HomePageHandler(BaseHandler):
      """
 
     @user_required
-    def get(self, **kwargs):
-        rfps = rfp_entry.RFP.all().order( 'publish_date' ).fetch(25)
+    def get(self, rfps=None):
+        if rfps is None:
+            rfps = rfp_entry.RFP.all().order( 'publish_date' ).fetch(25)
 
         # if admin, we'll show a button the admin control panel
         is_admin = self.is_user_admin()
@@ -123,7 +124,7 @@ class HomePageHandler(BaseHandler):
 class RFPList(BaseHandler):
     """Return table of RFPs, sorted by given column and starting at given offset.""" 
     @user_required
-    def get(self):
+    def get(self, method):
         sort_by = self.request.get( 'order' ).strip()
         start_offset = self.request.get( 'offset' ).strip()
 
@@ -143,7 +144,14 @@ class RFPList(BaseHandler):
 
         # now stash results into a dict and use it in the top_rfps.html template
         template_data = {"rfps": rfps}
-        self.show_rendered_html( 'templates/rfp_table.html', template_data)
+        
+        # render HTML
+        if method is '':
+            handler = HomePageHandler( request=self.request, response=self.response )
+            return handler.get( rfps )
+        # AJAX-friendly output
+        elif method == '.comet':
+            self.show_rendered_html( 'templates/rfp_table.html', template_data)
 
 class RFPDetails(BaseHandler):
     """Return details for given RFP ID"""
@@ -169,18 +177,20 @@ class RFPSearch(BaseHandler):
     """
 
     @user_required
-    def get(self, search_query):
-        self.response.headers['Content-Type'] = 'text/html'
-
+    def get(self, search_query, method):
         rfps = rfp_entry.RFP.search( search_query )
 
         # no such RFP exists
         if rfps is None:
             self.response.set_status(400)
             self.response.out.write( 'No such RFP exists' )
-            return
 
         # otherwise, return it
         template_data = { 'rfps': rfps }
-        self.show_rendered_html('templates/rfp_table.html', template_data)
 
+        if method is '':
+            handler = HomePageHandler( request=self.request, response=self.response )
+            return handler.get( rfps )
+        # AJAX-friendly output
+        elif method == '.comet':
+            self.show_rendered_html( 'templates/rfp_table.html', template_data)
