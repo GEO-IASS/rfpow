@@ -6,8 +6,10 @@ $( function() {
         searching      = false,
         offset         = 10,
         order          = '',
-        pagination_uri = '/rfp/list/.comet',
-        search_uri     = '/rfp/search/.comet',
+        pagination_comet_uri = '/rfp/list.comet',
+        pagination_html_uri = '/',
+        search_comet_uri     = '/rfp/search.comet/',
+        search_html_uri     = '/rfp/search/',
         History        = window.History,
 
     // Create modal dialogues for each RFP's details
@@ -24,9 +26,9 @@ $( function() {
 
     // Get next chunk of RFP results. Used for infinite scroll.
     next_page = function() {
-        var action = pagination_uri;
+        var action = pagination_comet_uri;
 
-        $.get( pagination_uri, { 'offset': offset, 'order' : order },
+        $.get( pagination_comet_uri, { 'offset': offset, 'order' : order },
 
             // append HTML of RFP results received from backend
             function(data) {
@@ -47,9 +49,9 @@ $( function() {
         // figure out whether to search, or just get a list of RFPs
         if ( search_keywords == '' ) {
             offset = 0;
-            action = pagination_uri;
+            action = pagination_comet_uri;
         } else {
-            action = search_form.attr('action') + '/' + search_keywords;
+            action = search_comet_uri + search_keywords;
         }
 
         // now get search results via AJAX/comet
@@ -68,13 +70,13 @@ $( function() {
                     searching = false;
 
                     History.pushState( { search_keywords: '' }, 
-                        "RFPow!", pagination_uri );
+                        "RFPow!", pagination_html_uri );
                 // If searching, just push history state with appropriate title
                 } else {
                     searching = true;
                     History.pushState( { search_keywords: search_keywords }, 
                         "RFPow! : Searching for '"+search_keywords + "'", 
-                        search_uri + search_keywords );
+                        search_html_uri + search_keywords );
                 }
 
                 // now re-map links to modal dialogues for search results
@@ -105,13 +107,14 @@ $( function() {
 
     
     // History and the back button handler
-    History.Adapter.bind(window,'statechange',function(){ 
+    History.Adapter.bind(window, 'statechange', function(){ 
         var data = History.getState().data; 
         search_handler( data.search_keywords );
     });
 
     // Push default history state to make coming back easier
-    History.pushState( { search_keywords: "" }, document.title, window.location.href );
+    History.pushState( { search_keywords: search_text.val() }, 
+                       document.title, window.location.href );
 
 
     // Focus on search field on load
