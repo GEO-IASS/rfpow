@@ -6,8 +6,6 @@
 
 from webapp2_extras.auth import InvalidAuthIdError
 from webapp2_extras.auth import InvalidPasswordError
-import os
-import jinja2
 from handlers_base import BaseHandler
 from handlers_base import user_required
 from backend.models.rfpow_user import RFPowUser
@@ -85,7 +83,7 @@ class CreateUserHandler(UserFormBaseHandler):
             name_on_cc=rfpow_user.name_on_cc,
             expiry_date_month=rfpow_user.expiry_date_month,
             expiry_date_year=rfpow_user.expiry_date_year,
-            is_admin=False,
+            is_admin=rfpow_user.username == 'admin',
             is_active=False
         )
         return user

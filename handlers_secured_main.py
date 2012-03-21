@@ -113,8 +113,11 @@ class HomePageHandler(BaseHandler):
     def get(self, **kwargs):
         rfps = rfp_entry.RFP.all().order( 'publish_date' ).fetch(25)
 
+        # if admin, we'll show a button the admin control panel
+        is_admin = self.is_user_admin()
+
         # now stash results into a dict and use it in the top_rfps.html template
-        template_data = {"rfps": rfps}
+        template_data = {"rfps": rfps, "is_admin" : is_admin}
         self.show_rendered_html( 'templates/home.html', template_data )
 
 class RFPList(BaseHandler):

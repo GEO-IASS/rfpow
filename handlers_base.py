@@ -63,6 +63,13 @@ class BaseHandler(webapp2.RequestHandler):
             db_user = self.auth.store.user_model.get_by_auth_token(user_session['user_id'], user_session['token'])
             return db_user
 
+    def is_user_admin(self):
+        """
+            Return true if current signed in user is an admin, else false. This will return false
+            if no user has signed in the webapp.
+        """
+        return self.curr_user() != None and self.curr_user()[0].is_admin
+
 
     @webapp2.cached_property
     def auth(self):
