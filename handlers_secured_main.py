@@ -126,7 +126,7 @@ class HomePageHandler(BaseHandler):
 class RFPList(BaseHandler):
     """Return table of RFPs, sorted by given column and starting at given offset.""" 
     @user_required
-    def get(self, method):
+    def get(self, format):
         sort_by = self.request.get( 'order' ).strip()
         start_offset = self.request.get( 'offset' ).strip()
 
@@ -148,11 +148,11 @@ class RFPList(BaseHandler):
         template_data = {"rfps": rfps}
         
         # render HTML
-        if method is '':
+        if format is '':
             handler = HomePageHandler( request=self.request, response=self.response )
             return handler.get( template_data )
         # AJAX-friendly output
-        elif method == '.comet':
+        elif format == '.comet':
             self.show_rendered_html( 'templates/rfp_table.html', template_data)
 
 class RFPDetails(BaseHandler):
@@ -179,7 +179,7 @@ class RFPSearch(BaseHandler):
     """
 
     @user_required
-    def get(self, search_query, method ):
+    def get(self, search_query, format ):
         rfps = rfp_entry.RFP.search( search_query )
         template_data = { 
             'rfps': rfps,
@@ -193,10 +193,10 @@ class RFPSearch(BaseHandler):
             self.response.out.write( 'No such RFP exists' )
 
         # return either just the results table, or the whole page
-        if method is '':
+        if format is '':
             handler = HomePageHandler( request=self.request, response=self.response )
             return handler.get( template_data )
 
         # AJAX-friendly output
-        elif method == '.comet':
+        elif format == '.comet':
             self.show_rendered_html( 'templates/rfp_table.html', template_data)
