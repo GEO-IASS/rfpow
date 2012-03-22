@@ -112,11 +112,6 @@ $( function() {
         search_handler( data.search_keywords );
     });
 
-    // Push default history state to make coming back easier
-    History.pushState( { search_keywords: search_text.val() }, 
-                       document.title, window.location.href );
-
-
     // Focus on search field on load
     search_text.focus();
 });
