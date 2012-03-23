@@ -75,6 +75,7 @@ class CreateUserHandler(UserFormBaseHandler):
         """
         user = self.auth.store.user_model.create_user(
             rfpow_user.username,
+            username=rfpow_user.username,
             password_raw=rfpow_user.password,
             first_name=rfpow_user.first_name,
             last_name=rfpow_user.last_name,

@@ -3,6 +3,7 @@ import logging
 from backend.scheduled import ScheduledParse
 import backend.parsers as parsers
 from backend.email import EmailSender
+
 class CronMerx(webapp2.RequestHandler):
     """Handler for scheduled parser for Merx"""
     def get(self):
@@ -15,6 +16,8 @@ class CronRFPEmailUpdates(webapp2.RequestHandler):
     def get(self):
         logging.info( 'Starting RFP email updates...' )
         emailSender = EmailSender()
-        emailSender.send("john.sintal@gmail.com", "Subject", "john.sintal@gmail.com", [])
+        #emailSender.send("john.sintal@gmail.com", "Subject", "john.sintal@gmail.com", [])
+        emailSender.test()
+
         logging.info( 'Done RFP email updates...' )
 

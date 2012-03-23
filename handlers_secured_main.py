@@ -172,6 +172,23 @@ class RFPDetails(BaseHandler):
         template_data = { 'rfp': rfp }
         self.show_rendered_html( 'templates/rfp_details.html', template_data )
 
+class RFPSubscribeHandler(BaseHandler):
+    """ Governs what happens when the user clicks subscribe on the main page. """
+
+    @user_required
+    def get(self, rfp_id):
+        rfp = rfp_entry.RFP.get_by_id( int(rfp_id) )
+
+        # no such RFP exists
+        if rfp is None:
+            self.response.set_status(400)
+            self.response.out.write( 'No such RFP exists' )
+            return
+
+        # otherwise, return it
+        template_data = { 'rfp': rfp }
+        self.show_rendered_html( 'templates/rfp_details.html', template_data )
+
 class RFPSearch(BaseHandler):
     """Return table of search results for given search query. 
     
