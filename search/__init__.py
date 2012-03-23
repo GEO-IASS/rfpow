@@ -277,6 +277,9 @@ class Searchable(object):
             klass = StemmedIndex
         else:
             klass = LiteralIndex
+        
+        if len(keywords) == 0:
+            return [()]
 
         if len(keywords) > 1 and multi_word_literal:
             # Try to match literal multi-word phrases first
