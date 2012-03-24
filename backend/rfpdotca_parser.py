@@ -70,7 +70,7 @@ class RFPParser(Parser):
                 has_next = True
                 break
 
-        if has_next:
+        if next != None:
             self.search_variables = next.attr('href')
         else:
             self.search_variables = None
@@ -137,7 +137,6 @@ class RFPParser(Parser):
             rfp['title'] = l['title']
             rfp['original_id'] = l['original_id']
             rfp['origin'] = l['origin']
-            rfp['uri']  = l['uri']
 
 
         except lxml.etree.XMLSyntaxError as e:
@@ -159,6 +158,8 @@ class RFPParser(Parser):
         rfp['parsed_on'] = datetime.date.today()
         rfp['description'] = info.clone().children().remove().end().text()
         rfp['original_category'] = list.eq(3).text().split(': ')[1]
+        rfp['uri'] = self.doc('.listingInfo a').text()
+        print rfp['uri']
 
         # date and time formats vary wildly on Merx. Use only date, and skip
         # problematic cases like empty dates
@@ -168,7 +169,7 @@ class RFPParser(Parser):
         # failed to parse publish date
         except ValueError as e:
             rfp['published_on'] = datetime.date.today()
-            logging.error( "Couldn't parse publish date: %s" % rfp )
+            logging.error("Couldn't parse publish date: %s" % rfp)
 
         try:
             rfp['ends_on'] = datetime.datetime.strptime(
@@ -177,12 +178,6 @@ class RFPParser(Parser):
         # failed to parse close date (more common that we'd like)
         except ValueError as e:
             rfp['ends_on'] = datetime.date.today() + datetime.timedelta(60)
-            logging.error( "Couldn't parse close date: %s" % rfp )
+            logging.error("Couldn't parse close date: %s" % rfp)
 
         return rfp
-
-
-
-
-parser = RFPParser()
-print parser.next()

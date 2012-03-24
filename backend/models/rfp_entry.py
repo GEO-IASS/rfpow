@@ -26,6 +26,7 @@ class RFP(search.Searchable, db.Model):
         rfp.description = dict['description']
         rfp.keywords = [dict['original_category']]
         rfp.organization = dict['org']
+        rfp.location = dict['location']
         rfp.original_uri = dict['uri']
         rfp.original_id = dict['original_id']
         rfp.origin = dict['origin']
