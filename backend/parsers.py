@@ -216,7 +216,9 @@ class MerxParser(Parser):
         rfp['original_category'] = table3.eq(2).text().strip()
         rfp['location'] = table3.eq(11).text().strip()
         rfp['description']     = table4.eq(1).text().strip()
-        rfp['contact']     = table5.eq(27).text().strip()
+
+        if table5.eq(27).text() is not None:
+            rfp['contact']     = table5.eq(27).text().strip()
 
         return rfp
 
