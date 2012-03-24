@@ -189,6 +189,7 @@ class MerxParser(Parser):
         table2 = labels.eq(2).siblings('table').find('tr td')
         table3 = labels.eq(4).siblings('table').find('tr td')
         table4 = labels.eq(6).siblings('table').find('tr td')
+        table5 = labels.eq(8).siblings('table').find('tr td')
 
         rfp['org']             = table1.eq(8).text().strip()
         rfp['parsed_on'] = datetime.date.today()
@@ -215,6 +216,7 @@ class MerxParser(Parser):
         rfp['original_category'] = table3.eq(2).text().strip()
         rfp['location'] = table3.eq(11).text().strip()
         rfp['description']     = table4.eq(1).text().strip()
+        rfp['contact']     = table5.eq(27).text().strip()
 
         return rfp
 

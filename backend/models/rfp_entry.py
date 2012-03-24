@@ -6,6 +6,8 @@ import search
 class RFP(search.Searchable, db.Model):
     title = db.StringProperty()
     description = db.TextProperty()
+    # this can be an email Or a website
+    contact = db.StringProperty()
     keywords = db.StringListProperty()
     organization = db.StringProperty()
     original_uri = db.StringProperty()
@@ -33,6 +35,10 @@ class RFP(search.Searchable, db.Model):
         rfp.publish_date = dict['published_on']
         rfp.parse_date = dict['parsed_on']
         rfp.close_date = dict['ends_on']
+
+        # optional parsed values
+        if dict.has_key( 'contact' ):
+            rfp.contact = dict['contact']
 
         return rfp
 
