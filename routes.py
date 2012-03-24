@@ -24,6 +24,7 @@ _routes = [
     RedirectRoute('/view-kw-results/', KeywordResultsHandler, name='view-kw-results', strict_slash=True),
     RedirectRoute('/view-query-results/', QueryResultsHandler, name='view-query-results', strict_slash=True),
     RedirectRoute('/cron/merx', CronMerx, name='cron-merx', strict_slash=True),
+    RedirectRoute('/cron/rfpdotca', CronMerx, name='cron-rfpdotca', strict_slash=True),
     RedirectRoute('/admin', AdminParser, name='cron-merx', strict_slash=True),
     RedirectRoute('/list-keywords', ListKeywordsHandler, name='list-keywords', strict_slash=True),
     RedirectRoute('/searchindexing', search.SearchIndexing, name='searchindexing', strict_slash=True),

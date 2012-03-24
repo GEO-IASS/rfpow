@@ -3,6 +3,9 @@ cron:
   url: /cron/merx
   schedule: every 3 hours from 7:00 to 22:00
 
+- description: scheduled rfp.ca parser job
+  url: /cron/rfpdotca
+  schedule: every 3 hours from 7:00 to 22:00
 
 - description: scheduled emails of RFP updates
   url: /cron/rfp-email-updates
