@@ -3,7 +3,7 @@ import re
 import urllib
 import urllib2
 import datetime
-from pyquery import PyQuery
+from lib.pyquery import PyQuery
 from backend.parsers import Parser
 import logging
 
