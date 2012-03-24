@@ -16,8 +16,8 @@ class CronRFPEmailUpdates(webapp2.RequestHandler):
     def get(self):
         logging.info( 'Starting RFP email updates...' )
         emailSender = EmailSender()
-        #emailSender.send("john.sintal@gmail.com", "Subject", "john.sintal@gmail.com", [])
-        emailSender.test()
+        #emailSender.send(, "Subject", "john.sintal@gmail.com", [])
+        emailSender.send_rfps_to_subscribers()
 
         logging.info( 'Done RFP email updates...' )
 
