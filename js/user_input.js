@@ -116,7 +116,6 @@ function populatedropdown(monthfield, yearfield, selectedmonth, selectedyear) {
 
 }
 
-//populatedropdown(id_of_day_select, id_of_month_select, id_of_year_select)
-window.onload = function () {
+$( function () {
     populatedropdown("monthdropdown", "yeardropdown", "expiry_date_month", "expiry_date_year")
-}
+});
