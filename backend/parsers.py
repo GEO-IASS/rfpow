@@ -213,6 +213,7 @@ class MerxParser(Parser):
             logging.error( "Couldn't parse close date: %s" % rfp )
 
         rfp['original_category'] = table3.eq(2).text().strip()
+        rfp['location'] = table3.eq(11).text().strip()
         rfp['description']     = table4.eq(1).text().strip()
 
         return rfp
