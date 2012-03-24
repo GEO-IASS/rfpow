@@ -34,7 +34,7 @@ $( function() {
             function(data) {
                 var rows = $( data );
                 table_body.append( data );
-                offset += rows.find( 'tr' ).length
+                offset += rows.filter('tr').length;
 
                 // map click event to modal popup handlers
                 rfp_table.find('.rfp_table_link').unbind( 'click' );
