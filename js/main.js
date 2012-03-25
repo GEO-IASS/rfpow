@@ -1,16 +1,21 @@
 $( function() {
+        // DOM elements
     var rfp_table      = $( '.rfp_table' ),
         table_body     = rfp_table.find('tbody'),
         search_text    = $( '#search_text' ),
         search_form    = $( '#search_form' ),
+        loader         = $( '#table_loader' ),
+        // useful variables
         searching      = false,
         offset         = 10,
         order          = '',
+        History        = window.History,
+        timer          = false,
+        // URI
         pagination_comet_uri = '/rfp/list.comet',
         pagination_html_uri = '/',
         search_comet_uri     = '/rfp/search.comet/',
         search_html_uri     = '/rfp/search/',
-        History        = window.History,
 
     // Create modal dialogues for each RFP's details
     map_links = function( rfp_links ) {
@@ -90,9 +95,27 @@ $( function() {
     map_links( rfp_table.find('.rfp_table_link') );
 
     // Map search handler to search form submission
-    search_form.submit( function(e) {
+    search_form .submit( function(e) {
         e.preventDefault();
         return search_handler( search_text.val().trim() );
+    });
+
+    // Get instant results
+    search_text.keydown( function(e) {
+        code = (e.keyCode ? e.keyCode : e.which);
+
+        // show AJAX loader
+        loader.show();
+        // only search after 1 second after user enters a keyword
+        if ( timer != false ) {
+            clearInterval( timer );
+            timer = false;
+        } 
+
+        timer = setTimeout( function(){
+            loader.hide();
+            return search_handler( search_text.val().trim() );
+        }, 1000);
     });
 
 
