@@ -1,17 +1,14 @@
 # -*- coding: utf-8 -*-
-
-import jinja2
-import os
+import webapp2_extras
+from backend.models import subscription
 from handlers_base import user_required
 import datetime
 import logging
 import backend.models.rfp_entry as rfp_entry
-from backend.models.rfp_entry import RFP
 from handlers_base import BaseHandler
-from google.appengine.ext.webapp import template
 import google.appengine.ext.db as db
-from backend.parsers import MerxParser
-
+import backend.models.subscription
+import webapp2_extras.json as json
 
 
 class TopRFPSHandler(BaseHandler):
@@ -115,7 +112,7 @@ class HomePageHandler(BaseHandler):
         # normally, we generate
         if template_data is None:
             rfps = rfp_entry.RFP.all().order( 'publish_date' ).fetch(25)
-            template_data = { 
+            template_data = {
                 'rfps': rfps,
                 'is_admin': self.is_user_admin()
             }
@@ -124,14 +121,14 @@ class HomePageHandler(BaseHandler):
         self.show_rendered_html( 'templates/home.html', template_data )
 
 class RFPList(BaseHandler):
-    """Return table of RFPs, sorted by given column and starting at given offset.""" 
+    """Return table of RFPs, sorted by given column and starting at given offset."""
     @user_required
     def get(self, format):
         sort_by = self.request.get( 'order' ).strip()
         start_offset = self.request.get( 'offset' ).strip()
 
         if start_offset is not '':
-            try: 
+            try:
                 start_offset = int( start_offset )
             except ValueError:
                 start_offset = 0
@@ -146,7 +143,7 @@ class RFPList(BaseHandler):
 
         # now stash results into a dict and use it in the top_rfps.html template
         template_data = {"rfps": rfps}
-        
+
         # render HTML
         if format is '':
             handler = HomePageHandler( request=self.request, response=self.response )
@@ -173,32 +170,45 @@ class RFPDetails(BaseHandler):
         self.show_rendered_html( 'templates/rfp_details.html', template_data )
 
 class RFPSubscribeHandler(BaseHandler):
-    """ Governs what happens when the user clicks subscribe on the main page. """
+    """
+        Governs when there is a request on behalf of the user to subscribe to a certain
+        keyword subsription
+     """
 
     @user_required
-    def get(self, rfp_id):
-        rfp = rfp_entry.RFP.get_by_id( int(rfp_id) )
+    def get(self, keyword):
+        if self.curr_user():
+            username = self.curr_user()[0].username
+            if subscription.create_subscription(username, keyword):
+                # Send json success
+                self.response.out.write("{ status: 'subscribed', keywords: '%s' }" % (keyword))
+            else:
+                # Duplicate sub
+                self.response.out.write("{ status: 'exists', keywords:'%s'}" % (keyword))
+        else:
+            # Error
+            self.response.out.write("{ status: 'error', status_code: 503, message: 'Whoa, error dude.' }")
 
-        # no such RFP exists
-        if rfp is None:
-            self.response.set_status(400)
-            self.response.out.write( 'No such RFP exists' )
-            return
+class RFPUnsubscribeHandler(BaseHandler):
+    """
+        Governs when there is a request on behalf of the user to unsubscribe to a certain
+        keyword subsription
+     """
 
-        # otherwise, return it
-        template_data = { 'rfp': rfp }
-        self.show_rendered_html( 'templates/rfp_details.html', template_data )
+    @user_required
+    def get(self, keyword):
+        huh = keyword
 
 class RFPSearch(BaseHandler):
-    """Return table of search results for given search query. 
-    
-       Used by AJAX handler for modal dialogue.    
+    """Return table of search results for given search query.
+
+       Used by AJAX handler for modal dialogue.
     """
 
     @user_required
     def get(self, search_query, format ):
         rfps = rfp_entry.RFP.search( search_query )
-        template_data = { 
+        template_data = {
             'rfps': rfps,
             'search_text': search_query,
             'is_admin': self.is_user_admin()

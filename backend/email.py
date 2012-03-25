@@ -47,7 +47,7 @@ class EmailSender():
             As the function name implies, all subscribed users will receive an RFP update to their
             email accounts. By comparing an RFP's parse date to a subscription's last update date,
             we ensure dups aren't being sent out.
-            
+
         """
         subscription.create_subscription("john3", "Gaming")
 
@@ -64,7 +64,7 @@ class EmailSender():
 
                 # Query RFPs based on this subscription's keyword
                 # TODO: Add  where {rfp}.parse_date > sub.last_updated
-                rfp_list = RFP.search(sub.keyword)
+                rfp_list = RFP.search(pharse=sub.keyword, limit=10)
 
                 if (rfp_list and len(rfp_list) > 0):
                     logging.info("Found %d RFPs for %s with keyword %s" % (len(rfp_list), sub.username, sub.keyword))
