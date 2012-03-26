@@ -8,7 +8,8 @@ import backend.models.rfp_entry as rfp_entry
 from handlers_base import BaseHandler, HTMLRenderer
 import google.appengine.ext.db as db
 import backend.models.subscription
-import webapp2_extras.json as json
+from handlers_base import JSONWriter
+
 
 
 class TopRFPSHandler(BaseHandler, HTMLRenderer):
@@ -169,30 +170,10 @@ class RFPDetails(BaseHandler, HTMLRenderer):
         template_data = { 'rfp': rfp }
         self.show_rendered_html( 'templates/rfp_details.html', template_data )
 
-class BaseSubscriptionHandler:
-    """
-        Base class for any RFP subscription service, such as subscribing, unsubscribing.
-        Refactoring technique: John
-    """
-    status = ''
-    message = ''
-
-    status_error = "error"
-    status_exists = "exists"
-    status_subscribed = "subscribed"
-    status_unsubscribed = "unsubscribed"
 
 
 
-    def write_json(self, status='', keyword='', message=''):
-        """
-            Sends a json to the client so it can react to what the user had just performed. Ajax callback
-            handler can react accordingly based on what the status of the message is.
-        """
-        self.response.out.write(json.encode({'status' : status, 'keyword' : keyword, 'message' : message}))
-
-
-class RFPSubscribeHandler(BaseHandler, BaseSubscriptionHandler):
+class SubscribeHandler(BaseHandler, JSONWriter):
     """
         Governs when there is a request on behalf of the user to subscribe to a certain
         keyword subsription
@@ -210,11 +191,11 @@ class RFPSubscribeHandler(BaseHandler, BaseSubscriptionHandler):
             self.message = 'Unable to find user with username'
             self.status = self.status_error
 
-        self.write_json(self.status, keyword, self.message)
+        self.write_json_subscription(self.status, keyword, self.message, self.response)
 
 
 
-class RFPUnsubscribeHandler(BaseHandler, BaseSubscriptionHandler):
+class UnsubscribeHandler(BaseHandler, JSONWriter):
     """
         Governs when there is a request on behalf of the user to unsubscribe to a certain
         keyword subsription
@@ -240,7 +221,7 @@ class RFPUnsubscribeHandler(BaseHandler, BaseSubscriptionHandler):
             self.message = 'Unable to find user'
             self.status = self.status_error
 
-        self.write_json(self.status, keyword, self.message)
+        self.write_json_subscription(self.status, keyword, self.message, self.response)
 
 class RFPSearch(BaseHandler, HTMLRenderer):
     """Return table of search results for given search query.

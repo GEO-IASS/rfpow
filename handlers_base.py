@@ -4,6 +4,8 @@ from webapp2_extras import sessions
 import os
 import jinja2
 import lib.jinja_filters as jinja_filters
+import webapp2_extras.json as json
+
 
 jinja_environment = jinja2.Environment(
     loader=jinja2.FileSystemLoader(os.path.dirname(__file__)))
@@ -30,6 +32,8 @@ def user_required(handler):
             return handler(self, *args, **kwargs)
 
     return check_login
+
+
 
 class HTMLRenderer():
     """
@@ -124,3 +128,35 @@ class BaseHandler(webapp2.RequestHandler, HTMLRenderer):
             'logout_url': self.uri_for('logout')
         }
 
+
+class JSONWriter():
+    """
+        Base class for any service that needs write back to the browser in JSON
+    """
+    status = ''
+    message = ''
+    keyword = ''
+    status_error = "error"
+    status_exists = "exists"
+    status_success = "success"
+    status_subscribed = "subscribed"
+    status_unsubscribed = "unsubscribed"
+    response = None
+
+    def write_json(self, value, response):
+        if response:
+            response.out.write(json.encode(value))
+
+
+    def write_json_subscription(self, status='', keyword='', message='', response=None):
+        """
+            Sends a json to the client so it can react to what the user had just performed. Ajax callback
+            handler can react accordingly based on what the status of the message is.
+        """
+        self.write_json({'status' : status, 'keyword' : keyword, 'message' : message}, response)
+
+    def write_json_email(self, status='', message='', response=None):
+        """
+            Write how the email performed
+        """
+        self.write_json({'status' : status, 'message' : message}, response)

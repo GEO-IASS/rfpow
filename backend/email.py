@@ -2,10 +2,10 @@ import logging
 from google.appengine.api import mail
 from backend.models.rfp_entry import RFP
 from backend.models.subscription import Subscription
-from handlers_base import jinja_environment
 from handlers_base import HTMLRenderer
 
 from webapp2_extras.appengine.auth.models import User
+from handlers_base import JSONWriter
 from ndb import query
 from backend.models import subscription
 import datetime
@@ -14,7 +14,7 @@ import datetime
 default_sender = "john.sintal@gmail.com"
 
 
-class EmailSender(HTMLRenderer):
+class EmailSender(HTMLRenderer, JSONWriter):
     """
         EmailSender is responsible for gathering RFP data for each user who has subscribed to
         email updates, then sending that data via email.
@@ -41,14 +41,13 @@ class EmailSender(HTMLRenderer):
         else:
             return None
 
-    def create_template_values(self, rfp_list, first_last_name):
-        return []
-
-    def send_rfps_to_subscribers(self):
+    def send_rfps_to_subscribers(self, response=None):
         """
             As the function name implies, all subscribed users will receive an RFP update to their
             email accounts. By comparing an RFP's parse date to a subscription's last update date,
             we ensure dups aren't being sent out.
+
+            If response is None, then json response is not given back to client.
 
         """
         subscription.create_subscription("john3", "Gaming")
@@ -66,13 +65,10 @@ class EmailSender(HTMLRenderer):
 
                 # Query RFPs based on this subscription's keyword
                 # TODO: Add  where {rfp}.parse_date > sub.last_updated
-                rfp_list = RFP.search(pharse=sub.keyword, limit=10)
+                rfp_list = RFP.search(phrase=sub.keyword, limit=10)
 
                 if (rfp_list and len(rfp_list) > 0):
-                    logging.info("Found %d RFPs for %s with keyword %s" % (len(rfp_list), sub.username, sub.keyword))
-                    #logging.info("Found %d RFPs for %s with keyword %s", (len(rfp_list), sub.username, sub.keyword))
 
-                    #template_values = self.create_template_values(rfp_list, first_last_name)
                     template_values = {"rfps" : rfp_list,
                                        "name" : first_last_name,
                                        'search_text' : sub.keyword,
@@ -85,10 +81,21 @@ class EmailSender(HTMLRenderer):
                     sub.last_updated = datetime.datetime.now().date()
                     sub.put()
 
+                    msg = "Found %d RFPs for %s with keyword %s for email: %s" % (len(rfp_list), sub.username,
+                                                                                 sub.keyword, email)
+                    logging.info(msg)
+                    self.write_json_email(self.status_success, msg, response)
+
                 else:
-                    logging.info('No RFPs found for username: %s and keyword: %s' % (sub.username, sub.keyword))
+                    msg = 'No RFPs found for username: %s and keyword: %s' % (sub.username, sub.keyword)
+
+                    logging.info(msg)
+                    self.write_json_email(self.status_error, msg, response)
             else:
-                logging.info( 'No email found for username: %s  and keyword: %s' % (sub.username, sub.keyword))
+                msg = 'No email found for username: %s  and keyword: %s' % (sub.username, sub.keyword)
+                logging.info(msg)
+                self.write_json_email(self.status_error, msg, response)
+
 
 
 

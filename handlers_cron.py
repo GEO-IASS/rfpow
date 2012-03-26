@@ -21,14 +21,19 @@ class CronRfpdotca(webapp2.RequestHandler):
         parser = parser2.RFPParser()
         (parsed, new) = ScheduledParse.parse(parser, stop_on_dupe=True)
 
-class CronRFPEmailUpdates(webapp2.RequestHandler):
-    """Handler for scheduled parser for Merx"""
+class CronSendEmail(webapp2.RequestHandler):
+    """Handler for scheduled parser for sending emails"""
 
     def get(self):
         logging.info( 'Starting RFP email updates...' )
         emailSender = EmailSender()
-        #emailSender.send(, "Subject", "john.sintal@gmail.com", [])
-        emailSender.send_rfps_to_subscribers()
 
+        # if run by cron, don't pass in response, which down line shows no json response
+        if not 'cron' in self.request.url:
+            response = self.response
+        else:
+            response = None
+
+        emailSender.send_rfps_to_subscribers(response)
         logging.info( 'Done RFP email updates...' )
 
