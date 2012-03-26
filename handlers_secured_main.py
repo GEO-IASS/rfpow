@@ -23,7 +23,7 @@ class TopRFPSHandler(BaseHandler):
 
         # now stash results into a dict and use it in the top_rfps.html template
         template_data = {"rfps": rfps,
-                "title": "Latest {0} RFP's from merx".format(len(rfps))}
+                         "title": "Latest {0} RFP's from merx".format(len(rfps))}
         self.show_rendered_html('templates/home.html', template_data)
 
 class CreateRFPHandler(BaseHandler):
@@ -31,14 +31,14 @@ class CreateRFPHandler(BaseHandler):
     @user_required
     def post(self):
         rfp_entry.create_RFP(self.request.get('title'),
-                self.request.get('description'),
-                self.request.get('keywords').split(','),
-                self.request.get('organization'),
-                self.request.get('original_uri'),
-                self.request.get('original_id'),
-                datetime.datetime.now().date(),
-                datetime.datetime.now().date(),
-                datetime.datetime.now().date())
+            self.request.get('description'),
+            self.request.get('keywords').split(','),
+            self.request.get('organization'),
+            self.request.get('original_uri'),
+            self.request.get('original_id'),
+            datetime.datetime.now().date(),
+            datetime.datetime.now().date(),
+            datetime.datetime.now().date())
         self.redirect('/admin/')
 
 
@@ -66,7 +66,7 @@ class KeywordResultsHandler(BaseHandler):
             rfps.append(db.to_dict(r))
 
         template_data = {'rfps' : rfps,
-                'title': "Your query returned {0} RFP's".format(len(rfps))}
+                         'title': "Your query returned {0} RFP's".format(len(rfps))}
         self.show_rendered_html('templates/keyword_results.html', template_data)
 
 
@@ -84,11 +84,11 @@ class QueryResultsHandler(BaseHandler):
             rfps.append(db.to_dict(r))
 
         template_data = {'rfps' : rfps,
-                'title': "Your query returned {0} RFP's".format(len(rfps))}
+                         'title': "Your query returned {0} RFP's".format(len(rfps))}
         self.show_rendered_html('templates/keyword_results.html', template_data)
 
 class ListKeywordsHandler(BaseHandler):
-    ''' List every keyword stored in database for use to select, once selected, 
+    ''' List every keyword stored in database for use to select, once selected,
     a result page consisting of every RFP with this keyword will be displayed.'''
 
     @user_required
@@ -169,7 +169,30 @@ class RFPDetails(BaseHandler):
         template_data = { 'rfp': rfp }
         self.show_rendered_html( 'templates/rfp_details.html', template_data )
 
-class RFPSubscribeHandler(BaseHandler):
+class BaseSubscriptionHandler:
+    """
+        Base class for any RFP subscription service, such as subscribing, unsubscribing.
+        Refactoring technique: John
+    """
+    status = ''
+    message = ''
+
+    status_error = "error"
+    status_exists = "exists"
+    status_subscribed = "subscribed"
+    status_unsubscribed = "unsubscribed"
+
+
+
+    def write_json(self, status='', keyword='', message=''):
+        """
+            Sends a json to the client so it can react to what the user had just performed. Ajax callback
+            handler can react accordingly based on what the status of the message is.
+        """
+        self.response.out.write(json.encode({'status' : status, 'keyword' : keyword, 'message' : message}))
+
+
+class RFPSubscribeHandler(BaseHandler, BaseSubscriptionHandler):
     """
         Governs when there is a request on behalf of the user to subscribe to a certain
         keyword subsription
@@ -177,19 +200,21 @@ class RFPSubscribeHandler(BaseHandler):
 
     @user_required
     def get(self, keyword):
-        if self.curr_user():
-            username = self.curr_user()[0].username
+        username = self.get_username()
+        if username:
             if subscription.create_subscription(username, keyword):
-                # Send json success
-                self.response.out.write("{ status: 'subscribed', keywords: '%s' }" % (keyword))
+                self.status = self.status_subscribed
             else:
-                # Duplicate sub
-                self.response.out.write("{ status: 'exists', keywords:'%s'}" % (keyword))
+                self.status = self.status_exists
         else:
-            # Error
-            self.response.out.write("{ status: 'error', status_code: 503, message: 'Whoa, error dude.' }")
+            self.message = 'Unable to find user with username'
+            self.status = self.status_error
 
-class RFPUnsubscribeHandler(BaseHandler):
+        self.write_json(self.status, keyword, self.message)
+
+
+
+class RFPUnsubscribeHandler(BaseHandler, BaseSubscriptionHandler):
     """
         Governs when there is a request on behalf of the user to unsubscribe to a certain
         keyword subsription
@@ -197,7 +222,25 @@ class RFPUnsubscribeHandler(BaseHandler):
 
     @user_required
     def get(self, keyword):
-        huh = keyword
+        username = self.get_username()
+        if username:
+
+            num_deleted = subscription.remove_subscription(username, keyword)
+
+            if num_deleted == 1:
+                self.status = self.status_unsubscribed
+            elif num_deleted > 1:
+                self.status = self.status_unsubscribed
+                self.message =  ("Deleted more than one subscriptions for key (%s, %s) " % username, keyword)
+            else:
+                self.status = self.status_error
+                self.message = 'Subscription for user %s and keyword %s does not exist. Nothing to remove' % (username,
+                                                                                                        keyword)
+        else:
+            self.message = 'Unable to find user'
+            self.status = self.status_error
+
+        self.write_json(self.status, keyword, self.message)
 
 class RFPSearch(BaseHandler):
     """Return table of search results for given search query.

@@ -1,4 +1,10 @@
 class RFPowUser():
+    """
+        Mimics some of the traits found in the entity User found in datastore.
+
+        Note: This is not the actual datastore model used for the datastore.
+    """
+
     def __init__(self, post_data):
         self.username = post_data.get('username')
         self.password = post_data.get('password')
@@ -9,11 +15,6 @@ class RFPowUser():
         self.expiry_date_month = post_data.get('expiry_date_month')
         self.expiry_date_year = post_data.get('expiry_date_year')
         self.email = post_data.get('email')
-        # str_keywords =  post_data.POST.get('keywords')
-        #        list_keywords = []
-        #        for x in str_keywords.split(','):
-        #            list_keywords.append(x.strip())
-
 
     def __str__(self):
         return self.username

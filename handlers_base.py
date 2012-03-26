@@ -5,7 +5,6 @@ import os
 import jinja2
 import lib.jinja_filters as jinja_filters
 
-#TODO: Use these variables
 jinja_environment = jinja2.Environment(
     loader=jinja2.FileSystemLoader(os.path.dirname(__file__)))
 jinja_environment.filters['nl2pbr'] = jinja_filters.do_nl2pbr
@@ -44,7 +43,8 @@ class BaseHandler(webapp2.RequestHandler):
     def dispatch(self):
         """
               Save the sessions for preservation across requests
-          """
+        """
+
         try:
             response = super(BaseHandler, self).dispatch()
             #self.response.write(response)
@@ -56,6 +56,7 @@ class BaseHandler(webapp2.RequestHandler):
             Return the current user if there is one, else
             return None
         """
+
         user_session = self.auth.get_user_by_session()
         if (user_session is None):
             return None
@@ -63,11 +64,27 @@ class BaseHandler(webapp2.RequestHandler):
             db_user = self.auth.store.user_model.get_by_auth_token(user_session['user_id'], user_session['token'])
             return db_user
 
+    def get_username(self):
+        """
+            Return the username of the currently logged user. Return None if no user is present
+            in the session.
+        """
+
+        if self.curr_user():
+            username = self.curr_user()[0].username
+            if username and len(username) > 0:
+                return username
+            else:
+                return None
+        else:
+            return None
+
     def is_user_admin(self):
         """
             Return true if current signed in user is an admin, else false. This will return false
             if no user has signed in the webapp.
         """
+
         return self.curr_user() != None and self.curr_user()[0].is_admin
 
 
@@ -84,6 +101,7 @@ class BaseHandler(webapp2.RequestHandler):
         """
               Dict to hold urls for login/logout
           """
+
         return {
             'login_url': self.uri_for('login'),
             'logout_url': self.uri_for('logout')
@@ -94,5 +112,10 @@ class BaseHandler(webapp2.RequestHandler):
         return template.render(template_args)
 
     def show_rendered_html(self, filename="", template_args=[]):
+        """
+            Displays html to the client using the template given by the location
+            in filename, along with the arguments from template_args.
+        """
+
         self.response.headers['Content-Type'] = 'text/html'
         self.response.out.write(self.get_rendered_html(filename, template_args))

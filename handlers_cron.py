@@ -7,6 +7,7 @@ from backend.email import EmailSender
 
 class CronMerx(webapp2.RequestHandler):
     """Handler for scheduled parser for Merx"""
+
     def get(self):
         logging.info( 'Starting scheduled parse for Merx' )
         parser = parsers.MerxParser()
@@ -14,6 +15,7 @@ class CronMerx(webapp2.RequestHandler):
 
 class CronRfpdotca(webapp2.RequestHandler):
     """Handler for scheduled parser for Merx"""
+
     def get(self):
         logging.info( 'Starting scheduled parse for rfp.ca' )
         parser = parser2.RFPParser()
@@ -21,6 +23,7 @@ class CronRfpdotca(webapp2.RequestHandler):
 
 class CronRFPEmailUpdates(webapp2.RequestHandler):
     """Handler for scheduled parser for Merx"""
+
     def get(self):
         logging.info( 'Starting RFP email updates...' )
         emailSender = EmailSender()
