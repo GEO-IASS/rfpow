@@ -3,6 +3,8 @@ from google.appengine.api import mail
 from backend.models.rfp_entry import RFP
 from backend.models.subscription import Subscription
 from handlers_base import jinja_environment
+from handlers_base import HTMLRenderer
+
 from webapp2_extras.appengine.auth.models import User
 from ndb import query
 from backend.models import subscription
@@ -12,7 +14,7 @@ import datetime
 default_sender = "john.sintal@gmail.com"
 
 
-class EmailSender():
+class EmailSender(HTMLRenderer):
     """
         EmailSender is responsible for gathering RFP data for each user who has subscribed to
         email updates, then sending that data via email.
@@ -96,12 +98,7 @@ class EmailSender():
             for Google's API.
         """
 
-        # TODO: Don't repeat this code as it's done in the BaseHandler code.
-        # TODO: I'll need to extract the rendering html method out of the BaseHandler, making
-        # TODO: the parent class less heavy into an interface for this class to implement
-        #template = jinja_environment.get_template('templates/email_rfp_updates.html')
-        template = jinja_environment.get_template('templates/rfp_table.html')
-        html = template.render(template_values)
+        html = self.get_rendered_html('templates/rfp_table.html', template_values)
 
         message = mail.EmailMessage()
         message.sender = default_sender

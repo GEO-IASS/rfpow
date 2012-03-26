@@ -31,9 +31,26 @@ def user_required(handler):
 
     return check_login
 
+class HTMLRenderer():
+    """
+        Handles all the rendering of html to the client along with its template values
+    """
+
+    def get_rendered_html(self, filename="", template_args=[]):
+        template = jinja_environment.get_template(filename)
+        return template.render(template_args)
+
+    def show_rendered_html(self, filename="", template_args=[]):
+        """
+            Displays html to the client using the template given by the location
+            in filename, along with the arguments from template_args.
+        """
+
+        self.response.headers['Content-Type'] = 'text/html'
+        self.response.out.write(self.get_rendered_html(filename, template_args))
 
 
-class BaseHandler(webapp2.RequestHandler):
+class BaseHandler(webapp2.RequestHandler, HTMLRenderer):
     """
          BaseHandler for all requests
 
@@ -107,15 +124,3 @@ class BaseHandler(webapp2.RequestHandler):
             'logout_url': self.uri_for('logout')
         }
 
-    def get_rendered_html(self, filename="", template_args=[]):
-        template = jinja_environment.get_template(filename)
-        return template.render(template_args)
-
-    def show_rendered_html(self, filename="", template_args=[]):
-        """
-            Displays html to the client using the template given by the location
-            in filename, along with the arguments from template_args.
-        """
-
-        self.response.headers['Content-Type'] = 'text/html'
-        self.response.out.write(self.get_rendered_html(filename, template_args))

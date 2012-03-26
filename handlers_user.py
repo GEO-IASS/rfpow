@@ -6,12 +6,12 @@
 
 from webapp2_extras.auth import InvalidAuthIdError
 from webapp2_extras.auth import InvalidPasswordError
-from handlers_base import BaseHandler
+from handlers_base import BaseHandler, HTMLRenderer
 from handlers_base import user_required
 from backend.models.rfpow_user import RFPowUser
 
 
-class LoginHandler(BaseHandler):
+class LoginHandler(BaseHandler, HTMLRenderer):
     """
          Show a form for the user to login. If the there's an empty string error
          msg for error_msg, display it the user.
@@ -45,7 +45,7 @@ class LoginHandler(BaseHandler):
             self.show_login("Bad username or password. Try again.")
 
 
-class UserFormBaseHandler(BaseHandler):
+class UserFormBaseHandler(BaseHandler, HTMLRenderer):
     """
         Returns a simple HTML form for creating/editing a user.
     """
@@ -139,7 +139,7 @@ class EditUserHandler(UserFormBaseHandler):
                 self.abort(403)
 
 
-class LogoutHandler(BaseHandler):
+class LogoutHandler(BaseHandler, HTMLRenderer):
     """
          Destroy user session and redirect to login
      """

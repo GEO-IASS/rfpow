@@ -4,9 +4,9 @@ import os
 import logging
 import backend.parsers as parsers
 from backend.scheduled import ScheduledParse
-from handlers_base import BaseHandler, user_required
+from handlers_base import BaseHandler, user_required, HTMLRenderer
 
-class AdminParser(BaseHandler):
+class AdminParser(BaseHandler, HTMLRenderer):
     """Controller for the parser section of the admin panel"""
 
     @user_required
