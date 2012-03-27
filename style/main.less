@@ -128,12 +128,13 @@ a:hover {
 }
 
 .button_subscribed {
-    width: 106px;
+    display: none;
+    width: 112px;
     margin: 0 10px 0 0;
-    background: url(../images/buttons_map.png) -141px 0;
+    background: url(../images/buttons_map.png) -146px 0;
 
     &:hover {
-        background: url(../images/buttons_map.png) -141px -30px;
+        background: url(../images/buttons_map.png) -146px -30px;
     }
 }
 
@@ -347,6 +348,40 @@ input[type=text], input[type=password], select {
         color: #0C7004;
         border-radius: 10px;
     }
+}
+
+.alert {
+    display: none;
+    position: fixed;
+    width: 100%;
+    background: white;
+    padding: 15px 15px;
+    opacity: .9;
+
+    h3, div {
+        display: inline;
+        font-size: 11pt;
+        color: black;
+        text-shadow: 1px 1px 0px white;
+    }
+
+    h3 {
+        font-weight: bold;
+    }
+
+    .query {
+        font-weight: bold;
+    }
+
+    &.alert_info {
+        border-radius: 10px;
+        background: #CDF0BA;
+
+        h3, div {
+            color: #040;
+        }
+    }
+
 }
 
 .login_container, .center_form_container  {

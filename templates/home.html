@@ -15,6 +15,7 @@
         <script src="/js/jquery.tablesorter.min.js" type="text/javascript"></script>
         <script src="/js/jquery.history.js"></script>
         <script src="/js/main.js" type="text/javascript"></script>
+        <script src="/js/alert.js" type="text/javascript"></script>
     </head>
 
     <body>
@@ -37,9 +38,12 @@
                 <form action="/rfp/subscribe" method="post">
                     <!-- keywords get filled out by search script -->
                     <input name="keywords" type="hidden" value="">
-                    <input type="submit" value="" class="button button_subscribe" 
+                    <input type="submit" value="" id="search_subscribe" class="button button_subscribe" 
                         title="Subscribe to email updates for this search query"
                         alt="Subscribe to email updates for this search query" >
+                    <input type="submit" value="" id="search_unsubscribe" class="button button_subscribed" 
+                        title="Unsubscribe from this search query"
+                        alt="Unsubscribe from this search query" >
                 </form>
 
                 <a class="button button_settings"  href="/edit-user" title="Your account settings"
@@ -51,6 +55,17 @@
 
         <!-- Occupies space for header since header's position is fixed -->
         <div class="header_placeholder"></div>
+
+        <!-- Status updates -->
+        <div class="alert alert_info" id="alert_container">
+            <h3 class="title">Success!</h3> 
+            <div class="body">
+                <span class="message">
+                    You've subscribed to &ldquo;<span class="query">toronto</span>&rdquo;. 
+                </span>
+                <a href="#" class="action">Undo?</a>
+            </div>
+        </div>
 
         <!-- Ajax loader -->
         <div id="table_loader"><img src="/images/ajax-loader.gif"></div>

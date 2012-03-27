@@ -1,21 +1,23 @@
 $( function() {
         // DOM elements
-    var rfp_table      = $( '.rfp_table' ),
-        table_body     = rfp_table.find('tbody'),
-        search_text    = $( '#search_text' ),
-        search_form    = $( '#search_form' ),
-        loader         = $( '#table_loader' ),
+    var rfp_table            = $( '.rfp_table' ),
+        table_body           = rfp_table.find('tbody'),
+        search_text          = $( '#search_text' ),
+        search_form          = $( '#search_form' ),
+        search_subscribe     = $( '#search_subscribe' ),
+        search_unsubscribe     = $( '#search_unsubscribe' ),
+        loader               = $( '#table_loader' ),
         // useful variables
-        searching      = false,
-        offset         = 10,
-        order          = '',
-        History        = window.History,
-        timer          = false,
+        searching            = false,
+        offset               = 10,
+        order                = '',
+        History              = window.History,
+        timer                = false,
         // URI
         pagination_comet_uri = '/rfp/list.comet',
-        pagination_html_uri = '/',
+        pagination_html_uri  = '/',
         search_comet_uri     = '/rfp/search.comet/',
-        search_html_uri     = '/rfp/search/',
+        search_html_uri      = '/rfp/search/',
 
     // Create modal dialogues for each RFP's details
     map_links = function( rfp_links ) {
@@ -134,6 +136,15 @@ $( function() {
     History.Adapter.bind(window, 'statechange', function(){ 
         var data = History.getState().data; 
         search_handler( data.search_keywords );
+    });
+
+    // Subscription handler
+    search_subscribe.click( function(e){
+        e.preventDefault();
+
+        search_subscribe.hide();
+        search_unsubscribe.show();
+
     });
 
     // Focus on search field on load
