@@ -64,6 +64,7 @@ $( function() {
             action = search_comet_uri + search_keywords;
         }
 
+        subscription_ui( false );
         // now get search results via AJAX/comet
         $.get(  action, { 'offset': offset, 'order' : order },
 
