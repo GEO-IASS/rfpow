@@ -30,11 +30,19 @@ http://stackoverflow.com/questions/7213787/unable-to-center-contents-of-a-fields
 - http://www.javascriptkit.com/ for drop down month/year js code (this was heavily modified however)
 
 # 3rd Party Libs
-- jinja2, webapp2, and other libraries bundled with Google App Engine were utilized for building
-the controllers and views of the application
-- NDB: http://code.google.com/p/appengine-ndb-experiment/
-- lxml (http://lxml.de/) and pyquery (http://pypi.python.org/pypi/pyquery) were used for parsing RFPs
-- auth and sessions was used for user management (part of the webapp2_extras api)
+- Python
+	- jinja2, webapp2, and other libraries bundled with Google App Engine were utilized for building
+	the controllers and views of the application
+	- NDB: http://code.google.com/p/appengine-ndb-experiment/
+	- lxml (http://lxml.de/) and pyquery (http://pypi.python.org/pypi/pyquery) were used for parsing RFPs
+	- auth and sessions was used for user management (part of the webapp2_extras api)
+- Javascript: 
+	- jQuery (http://jquery.com) -- general purpose JS library for DOM traversing, styling etc.
+	- LESS CSS (http://lesscss.org/) -- much more sane CSS
+	- ColorBox (http://jacklmoore.com/colorbox/) -- modal dialogues for RFP details
+	- History.js (https://github.com/balupton/History.js/) -- simplified browser history state manipulation
+	- user_input.js -- registration form validation
+- icons: http://iconfinder.com, creative-commons icons from the FatCow icon set
 
 # Notes:
 - NDB folder is included in application due to a import statement in
