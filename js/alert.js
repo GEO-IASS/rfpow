@@ -12,8 +12,11 @@ $(function(){
 		title = container.find( '.title' ),
 		message = container.find( '.message' ),
 		action = container.find( '.action' ),
+		timer  = false,
 		defaults = { 
 			title: "Success",
+			style: "info",
+			prev_style: "info",
 			message: "You've subscribed",
 			action: { text: "Undo", func: null }
 		};
@@ -26,9 +29,13 @@ $(function(){
 		action.text( o.action.text );
 		action.click( o.action.func );
 
-		container.fadeIn( 500 );
+		container.removeClass( o.prev_style );
+		o.prev_style = o.style;
+		container.addClass( o.style )
+				 .fadeIn( 500 );
 
-		var timer = setTimeout( function(){
+		clearInterval( timer );
+		timer = setTimeout( function(){
 			container.fadeOut(300);
 		}, 1000*3 );
 	};

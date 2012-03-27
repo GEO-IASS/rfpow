@@ -7,12 +7,13 @@ $( function() {
         search_subscribe     = $( '#search_subscribe' ),
         search_unsubscribe     = $( '#search_unsubscribe' ),
         loader               = $( '#table_loader' ),
+        logo                 = $( '#logo_main' ),
         // useful variables
         searching            = false,
         offset               = 10,
         order                = '',
         History              = window.History,
-        timer                = false,
+        search_timer         = false,
         // URI
         pagination_comet_uri = '/rfp/list.comet',
         pagination_html_uri  = '/',
@@ -103,16 +104,19 @@ $( function() {
                     message: "You've subscribed to &ldquo;<span class='query'>"+
                         query + "</span>&rdquo;.",
                     action: {
+                        style: 'info',
                         text: "Undo?",
-                        func: function() {
-                            subscription_handler( query, unsubscribe_uri );
+                        func: function(e) {
+                            e.preventDefault();
+                            subscription_handler( unsubscribe_uri, query );
                         }
                     }
                 });
                 // show subscribed state
             } else if ( data.status === "unsubscribed" ) {
                 Alert( {
-                    title: 'Ok!',
+                    title: 'Done!',
+                    style: 'info',
                     message: "You've unsubscribed from &ldquo;<span class='query'>"+
                         query + "</span>&rdquo;.",
                     action: {
@@ -120,10 +124,25 @@ $( function() {
                         func: null
                     }
                 });
+            } else if ( data.status === 'exists' ){
+                Alert( {
+                    title: 'Wait.',
+                    style: 'warning',
+                    message: "You've already subscribed to &ldquo;<span class='query'>"+
+                        query + "</span>&rdquo;.",
+                    action: {
+                        text: "Unsubscribe?",
+                        func: function(e) {
+                            e.preventDefault();
+                            subscription_handler( unsubscribe_uri, query );
+                        }
+                    }
+                });
             }
 
             // update button state at the top
-            subscription_ui( data.status === 'subscribed' );
+            subscription_ui( data.status === 'subscribed' || 
+                             data.status === 'exists' );
         });
     },
     // Update UI according to state of subscription
@@ -142,10 +161,16 @@ $( function() {
     map_links( rfp_table.find('.rfp_table_link') );
 
     // Map search handler to search form submission
-    search_form .submit( function(e) {
+    search_form.submit( function(e) {
         e.preventDefault();
-        clearInterval( timer );
+        clearInterval( search_timer );
         return search_handler( search_text.val().trim() );
+    });
+
+    logo.click( function() {
+        clearInterval( search_timer );
+        search_text.val( '' );
+        return search_handler( '' );
     });
 
     // Get instant results
@@ -155,12 +180,12 @@ $( function() {
         // show AJAX loader
         loader.show();
         // only search after 1 second after user enters a keyword
-        if ( timer != false ) {
-            clearInterval( timer );
-            timer = false;
+        if ( search_timer != false ) {
+            clearInterval( search_timer );
+            search_timer = false;
         } 
 
-        timer = setTimeout( function(){
+        search_timer = setTimeout( function(){
             loader.hide();
             return search_handler( search_text.val().trim() );
         }, 1000);
