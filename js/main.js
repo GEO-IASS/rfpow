@@ -11,7 +11,7 @@ $( function() {
         // useful variables
         searching            = false,
         offset               = 10,
-        order                = '',
+        order                = 'publish_date',
         History              = window.History,
         search_timer         = false,
         // URI
@@ -50,15 +50,17 @@ $( function() {
                 rfp_table.find('.rfp_table_link').unbind( 'click' );
                 map_links( rfp_table.find('.rfp_table_link') );
 
-                console.log( 'Grabbed next page of results. New offset: ', offset )
+                loader.hide();
             });
     },
 
     // Search ajax handler
-    search_handler = function( search_keywords ) {
+    search_handler = function( search_keywords, order ) {
         // figure out whether to search, or just get a list of RFPs
         if ( search_keywords == '' ) {
             offset = 0;
+            if ( order === undefined )
+                order = 'publish_date';
             action = pagination_comet_uri;
         } else {
             action = search_comet_uri + search_keywords;
@@ -201,10 +203,23 @@ $( function() {
         // don't paginate search results
         if ( searching ) return;
 
-        if ( $( window ).scrollTop() == $(document).height() - $(window).height() )
+        if ( $( window ).scrollTop() == $(document).height() - $(window).height() ) {
+            loader.show();
             next_page();
-    })
+        }
+    });
+    
+    // Sorting of listings behaviour
+    rfp_table.find( '.title, .publish_date, .close_date' ).click( function(e){
+        // don't sort searching results, for now
+        if ( searching ) return;
 
+        loader.show();
+        offset = 0;
+        order = $(this).attr('class');
+        table_body.find('tr').remove();
+        next_page();
+    });
     
     // History and the back button handler
     History.Adapter.bind(window, 'statechange', function(){ 
@@ -225,4 +240,7 @@ $( function() {
 
     // Focus on search field on load
     search_text.focus();
+
+    // Dirtily detect searching
+    searching = ( window.location.href.search('search') !== -1 );
 });
