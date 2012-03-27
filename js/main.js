@@ -97,6 +97,7 @@ $( function() {
     // Map search handler to search form submission
     search_form .submit( function(e) {
         e.preventDefault();
+        clearInterval( timer );
         return search_handler( search_text.val().trim() );
     });
 

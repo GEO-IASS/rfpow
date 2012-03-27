@@ -50,8 +50,6 @@ class EmailSender(HTMLRenderer, JSONWriter):
             If response is None, then json response is not given back to client.
 
         """
-        subscription.create_subscription("john3", "Gaming")
-
         subs = Subscription.all()
         for sub in subs:
 
