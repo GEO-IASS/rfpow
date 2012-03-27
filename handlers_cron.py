@@ -35,5 +35,5 @@ class CronSendEmail(webapp2.RequestHandler):
             response = None
 
         emailSender.send_rfps_to_subscribers(response)
-        logging.info( 'Done RFP email updates...' )
+        logging.info( 'Done RFP email updates' )
 

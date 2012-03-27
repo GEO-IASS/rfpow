@@ -5,7 +5,7 @@
     </head>
     <body style="padding: 20px; color: #444; font-family: Helvetica, Arial,sans-serif; font-size: 11pt">
     <div class="logo_wrapper">
-        <img class="logo" id="logo_main" src="../images/logo.png">
+        <img class="logo" id="logo_main" src="http://rfpow301.appspot.com/images/logo.png">
     </div>
     <div style="padding: 10px">
         Hi there, {{ name }}! We've got new RFPs for your search
@@ -25,7 +25,7 @@
         {% endfor %}
     </table>
     <div>
-        <a href="{{ search_uri + keywords }}" style="color: #D35853">
+        <a href="{{ search_uri + search_text }}" style="color: #D35853">
             See all results for &ldquo;{{ search_text }}&rdquo;
         </a>
     </div>

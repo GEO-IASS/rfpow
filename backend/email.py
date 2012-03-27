@@ -67,12 +67,15 @@ class EmailSender(HTMLRenderer, JSONWriter):
 
                 if (rfp_list and len(rfp_list) > 0):
 
-                    template_values = {"rfps" : rfp_list,
-                                       "name" : first_last_name,
-                                       'search_text' : sub.keyword,
-                                       'is_admin' : False}
+                    template_values = {
+                        "rfps" : rfp_list,
+                        "name" : first_last_name,
+                        'search_text' : sub.keyword,
+                        'is_admin' : False,
+                        'search_uri': 'http://rfpow301.appspot.com/rfp/search/'
+                    }
 
-                    subject = "RFPow! Updates: " + sub.keyword
+                    subject = "New RFPs for \"%s\" : RFPow!" % sub.keyword  
                     self.send(subject, email, template_values)
 
                     # Update the last update time so we know to not send dups on next cron
@@ -103,7 +106,7 @@ class EmailSender(HTMLRenderer, JSONWriter):
             for Google's API.
         """
 
-        html = self.get_rendered_html('templates/rfp_table.html', template_values)
+        html = self.get_rendered_html('templates/email.html', template_values)
 
         message = mail.EmailMessage()
         message.sender = default_sender
