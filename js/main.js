@@ -91,6 +91,9 @@ $( function() {
 
                 // now re-map links to modal dialogues for search results
                 map_links( table_body.find('.rfp_table_link') );
+
+                // hide ajax loader
+                loader.hide();
             });
         return false;
     },
@@ -186,7 +189,6 @@ $( function() {
         } 
 
         search_timer = setTimeout( function(){
-            loader.hide();
             return search_handler( search_text.val().trim() );
         }, 1000);
     });
