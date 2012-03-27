@@ -22,7 +22,7 @@ $(function(){
 		o = $.extend( defaults, o );
 
 		title.text( o.title );
-		message.text( o.message );
+		message.html( o.message );
 		action.text( o.action.text );
 		action.click( o.action.func );
 

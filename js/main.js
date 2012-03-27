@@ -18,6 +18,8 @@ $( function() {
         pagination_html_uri  = '/',
         search_comet_uri     = '/rfp/search.comet/',
         search_html_uri      = '/rfp/search/',
+        subscribe_uri        = '/rfp/subscribe/',
+        unsubscribe_uri      = '/rfp/unsubscribe/',
 
     // Create modal dialogues for each RFP's details
     map_links = function( rfp_links ) {
@@ -90,6 +92,49 @@ $( function() {
                 map_links( table_body.find('.rfp_table_link') );
             });
         return false;
+    },
+    
+    // Subscription/unsubscription handler
+    subscription_handler = function( uri, query ){
+        $.getJSON( uri + query, function( data ){
+            if ( data.status === 'subscribed' ) {
+                Alert( {
+                    title: 'Hooray!',
+                    message: "You've subscribed to &ldquo;<span class='query'>"+
+                        query + "</span>&rdquo;.",
+                    action: {
+                        text: "Undo?",
+                        func: function() {
+                            subscription_handler( query, unsubscribe_uri );
+                        }
+                    }
+                });
+                // show subscribed state
+            } else if ( data.status === "unsubscribed" ) {
+                Alert( {
+                    title: 'Ok!',
+                    message: "You've unsubscribed from &ldquo;<span class='query'>"+
+                        query + "</span>&rdquo;.",
+                    action: {
+                        text: "",
+                        func: null
+                    }
+                });
+            }
+
+            // update button state at the top
+            subscription_ui( data.status === 'subscribed' );
+        });
+    },
+    // Update UI according to state of subscription
+    subscription_ui = function( subscribe ) {
+        if ( subscribe ) {
+            search_subscribe.hide();
+            search_unsubscribe.show();
+        } else {
+            search_subscribe.show();
+            search_unsubscribe.hide();
+        }
     };
 
 
@@ -138,13 +183,15 @@ $( function() {
         search_handler( data.search_keywords );
     });
 
-    // Subscription handler
-    search_subscribe.click( function(e){
+    // Subscription and unsubscription event handling
+    search_subscribe.click( function(e) {
         e.preventDefault();
+        subscription_handler(subscribe_uri, search_text.val().trim() ) 
+    });
 
-        search_subscribe.hide();
-        search_unsubscribe.show();
-
+    search_unsubscribe.click( function(e) {
+        e.preventDefault();
+        subscription_handler(unsubscribe_uri, search_text.val().trim()) 
     });
 
     // Focus on search field on load
