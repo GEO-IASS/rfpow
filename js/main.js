@@ -103,6 +103,22 @@ $( function() {
     
     // Subscription/unsubscription handler
     subscription_handler = function( uri, query ){
+        // let user know there's no keyword
+        if ( query === '' ) {
+            Alert( {
+                title: 'That\'s great but...',
+                message: "you haven't yet searched for anything! "
+                    + "Try the search field.",
+                action: {
+                    style: 'info',
+                    text: "",
+                    func: null
+                }
+            });
+            return;
+        }
+
+        // Otherwise, subscribe
         $.getJSON( uri + query, function( data ){
             if ( data.status === 'subscribed' ) {
                 Alert( {
