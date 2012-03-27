@@ -131,6 +131,7 @@ $( function() {
                 Alert( {
                     title: 'Wait.',
                     style: 'warning',
+                    timeout: 4,
                     message: "You've already subscribed to &ldquo;<span class='query'>"+
                         query + "</span>&rdquo;.",
                     action: {

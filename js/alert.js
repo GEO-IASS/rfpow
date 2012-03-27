@@ -16,6 +16,7 @@ $(function(){
 		defaults = { 
 			title: "Success",
 			style: "info",
+			timeout: 3,
 			prev_style: "info",
 			message: "You've subscribed",
 			action: { text: "Undo", func: null }
@@ -37,7 +38,7 @@ $(function(){
 		clearInterval( timer );
 		timer = setTimeout( function(){
 			container.fadeOut(300);
-		}, 1000*3 );
+		}, 1000* o.timeout );
 	};
 
 	window.Alert = Alert;
