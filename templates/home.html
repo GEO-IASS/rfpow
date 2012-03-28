@@ -47,6 +47,10 @@
 
                 <a class="button button_settings"  href="/edit-user" title="Your account settings"
                    alt="Your account settings"></a>
+               {% if is_admin %}
+                <a class="button button_admin"  href="/admin" title="Administrator settings"
+                   alt="Administrator settings"></a>
+               {% endif %}
                 <a href="/logout/" id="log_out">Log out</a>
                 </span>
             </div>
