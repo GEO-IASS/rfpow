@@ -4,14 +4,14 @@ import os
 import logging
 import backend.parsers as parsers
 from backend.scheduled import ScheduledParse
-from handlers_base import BaseHandler, user_required, HTMLRenderer
+from handlers_base import *
 
 class AdminParser(BaseHandler, HTMLRenderer):
     """Controller for the parser section of the admin panel"""
 
-    @user_required
+    @user_required 
+    @admin_required
     def get(self, status=None):
-        self.response.headers['Content-Type'] = 'text/html'
         # now stash results into a dict and use it in the top_rfps.html template
         template_data = {}
         

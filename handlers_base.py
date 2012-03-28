@@ -34,6 +34,19 @@ def user_required(handler):
     return check_login
 
 
+def admin_required(handler):
+    def check_admin(self, *args, **kwargs):
+        """
+            Return true if current signed in user is an admin, else false. This will return false
+            if no user has signed in the webapp.
+        """
+
+        if self.curr_user() != None and self.curr_user()[0].is_admin:
+            return handler(self, *args, **kwargs)
+        else:
+            self.redirect(self.auth_config['home_url'], abort=True)
+
+    return check_admin
 
 class HTMLRenderer():
     """
@@ -125,6 +138,7 @@ class BaseHandler(webapp2.RequestHandler, HTMLRenderer):
 
         return {
             'login_url': self.uri_for('login'),
+            'home_url': self.uri_for('secure'),
             'logout_url': self.uri_for('logout')
         }
 
