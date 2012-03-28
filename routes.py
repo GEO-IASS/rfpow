@@ -19,16 +19,11 @@ _routes = [
     RedirectRoute('/rfp/email', CronSendEmail, name='email', strict_slash=True),
     RedirectRoute('/create-user/', CreateUserHandler, name='create-user', strict_slash=True),
     RedirectRoute('/edit-user/', EditUserHandler, name='edit-user', strict_slash=True),
-    RedirectRoute('/top-rfps/', TopRFPSHandler, name='top-rfps', strict_slash=True),
-    RedirectRoute('/query/', QueryRFPHandler, name='query', strict_slash=True),
     RedirectRoute('/create-rfp/', CreateRFPHandler, name='create-rfp', strict_slash=True),
-    RedirectRoute('/view-kw-results/', KeywordResultsHandler, name='view-kw-results', strict_slash=True),
-    RedirectRoute('/view-query-results/', QueryResultsHandler, name='view-query-results', strict_slash=True),
     RedirectRoute('/cron/merx', CronMerx, name='cron-merx', strict_slash=True),
     RedirectRoute('/cron/rfpdotca', CronMerx, name='cron-rfpdotca', strict_slash=True),
     RedirectRoute('/cron/email', CronSendEmail, name='cron-send-email', strict_slash=True),
     RedirectRoute('/admin', AdminParser, name='cron-merx', strict_slash=True),
-    RedirectRoute('/list-keywords', ListKeywordsHandler, name='list-keywords', strict_slash=True),
     RedirectRoute('/searchindexing', search.SearchIndexing, name='searchindexing', strict_slash=True)
 
 ]

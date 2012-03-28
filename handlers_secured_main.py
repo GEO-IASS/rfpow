@@ -11,22 +11,6 @@ import backend.models.subscription
 from handlers_base import JSONWriter
 
 
-
-class TopRFPSHandler(BaseHandler, HTMLRenderer):
-    '''This will query and display the top 10 RFPs stored in the database.'''
-
-    @user_required
-    def get(self):
-        logging.getLogger().setLevel(logging.DEBUG)
-
-        self.response.headers['Content-Type'] = 'text/html'
-        rfps = rfp_entry.RFP.all().fetch(limit=20)
-
-        # now stash results into a dict and use it in the top_rfps.html template
-        template_data = {"rfps": rfps,
-                         "title": "Latest {0} RFP's from merx".format(len(rfps))}
-        self.show_rendered_html('templates/home.html', template_data)
-
 class CreateRFPHandler(BaseHandler, HTMLRenderer):
 
     @user_required
@@ -41,65 +25,6 @@ class CreateRFPHandler(BaseHandler, HTMLRenderer):
             datetime.datetime.now().date(),
             datetime.datetime.now().date())
         self.redirect('/admin/')
-
-
-class QueryRFPHandler(BaseHandler, HTMLRenderer):
-    @user_required
-    def get(self):
-        self.response.headers['Content-Type'] = 'text/html; charset=utf-8'
-        self.show_rendered_html('templates/cc_rfp.html', template_values)
-
-
-
-class KeywordResultsHandler(BaseHandler, HTMLRenderer):
-    ''' Once a desired keyword is obtained from the user, a page consisting
-    of every RFPs stored in the database will be displayed with template
-    keyword_results.html'''
-
-    @user_required
-    def get(self):
-        self.response.headers['Content-Type'] = 'text/html; charset=utf-8'
-        query = rfp_entry.query_RFPs_by_keyword(self.request.get('keyword'))
-
-        rfps  = []
-
-        for r in query:
-            rfps.append(db.to_dict(r))
-
-        template_data = {'rfps' : rfps,
-                         'title': "Your query returned {0} RFP's".format(len(rfps))}
-        self.show_rendered_html('templates/keyword_results.html', template_data)
-
-
-
-class QueryResultsHandler(BaseHandler, HTMLRenderer):
-
-    @user_required
-    def post(self):
-        self.response.headers['Content-Type'] = 'text/html; charset=utf-8'
-        query = rfp_entry.query_RFPs(self.request.get('query'))
-
-        rfps  = []
-
-        for r in query:
-            rfps.append(db.to_dict(r))
-
-        template_data = {'rfps' : rfps,
-                         'title': "Your query returned {0} RFP's".format(len(rfps))}
-        self.show_rendered_html('templates/keyword_results.html', template_data)
-
-class ListKeywordsHandler(BaseHandler, HTMLRenderer):
-    ''' List every keyword stored in database for use to select, once selected,
-    a result page consisting of every RFP with this keyword will be displayed.'''
-
-    @user_required
-    def get(self):
-        self.response.headers['Content-Type'] = 'text/html; charset=utf-8'
-        keywords = rfp_entry.query_Keywords(self.request.get('keyword'))
-
-        template_data = {'keywords' : keywords }
-        self.show_rendered_html('templates/list_keywords.html', template_data)
-
 
 class HomePageHandler(BaseHandler, HTMLRenderer):
     """
