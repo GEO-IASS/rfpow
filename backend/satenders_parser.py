@@ -57,7 +57,7 @@ class RFPParser(Parser):
                 'title'     : title,
                 'uri'       : self.domain + uri,
                 'original_id' : ori_id,
-                'origin' : 'sa-tenders.co.za'
+                'origin' : 'sa-tenders'
             }
 
             parsed_list.append(rfp)

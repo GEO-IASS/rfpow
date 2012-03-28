@@ -54,7 +54,7 @@ class RFPParser(Parser):
                 'title'     : link.find('strong').text(),
                 'uri'       : link.attr('href'),
                 'original_id' : id,
-                'origin' : 'rfp.ca'
+                'origin' : 'rfpca'
             }
 
             parsed_list.append(rfp)
