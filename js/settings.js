@@ -1,4 +1,9 @@
+/*
+ * UI javascript for the account settings page.
+ */
+
 $( function() {
+	// Unsubscription behaviour
 	$( '.unsubscribe' ).click( function(e){
 		var that            = $( this ),
 			container       = that.parent('.subscription'),
@@ -6,11 +11,11 @@ $( function() {
 			unsubscribe_uri = '/rfp/unsubscribe/';
 
 		$.getJSON( unsubscribe_uri + keyword, function( data ) {
-            if ( data.status !== "unsubscribed" ) return;
+			if ( data.status !== "unsubscribed" ) return;
 
 			// notify user all went well
 			Alert( {
-				title: 'Done!',
+				title: 'Super!',
 				style: 'info',
 				message: "You've unsubscribed from &ldquo;<span class='query'>"+
 					keyword + "</span>&rdquo;.",
@@ -20,7 +25,7 @@ $( function() {
 				}
 			});
 
-			// remove keyword from table
+			// remove keyword div from table
 			container.fadeOut(500);
 
 		});
