@@ -9,6 +9,7 @@ from webapp2_extras.auth import InvalidPasswordError
 from handlers_base import BaseHandler, HTMLRenderer
 from handlers_base import user_required
 from backend.models.rfpow_user import RFPowUser
+from backend.models.subscription import Subscription
 
 
 class LoginHandler(BaseHandler, HTMLRenderer):
@@ -51,16 +52,24 @@ class UserFormBaseHandler(BaseHandler, HTMLRenderer):
     """
 
     def show_register(self, err_msg="", info_msg=""):
-        if (self.curr_user() is not None):
-            user = self.curr_user()[0]
-            username = user.auth_ids[0]
-        else:
-            user = None
-            username = None
+		user = None
+		username = None
+		subscriptions = None
 
-        template_values = {'action': self.request.url, 'err_msg': err_msg, "user": user,\
-                           "username": username, 'info_msg': info_msg, }
-        self.show_rendered_html('templates/user_info_form.html', template_values)
+		if self.curr_user() is not None:
+			user = self.curr_user()[0]
+			username = user.auth_ids[0]
+			# grab all user's subscriptions
+			subscriptions = Subscription.all().filter( 'username =', username ).fetch(1000)
+
+		template_values = {
+				'action': self.request.url,
+				'err_msg': err_msg, "user": user,
+				"username": username,
+				'info_msg': info_msg,
+				'subscriptions' : subscriptions
+				}
+		self.show_rendered_html('templates/user_info_form.html', template_values)
 
 
 class CreateUserHandler(UserFormBaseHandler):

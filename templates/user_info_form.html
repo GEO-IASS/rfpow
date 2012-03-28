@@ -1,15 +1,30 @@
 <!DOCTYPE hml>
 <html>
 <head>
+	{% if username %}
+	<title>Your account : RFPow!</title>
+	{% else %}
     <title>RFPow!</title>
+	{% endif %}
     <meta charset="UTF-8">
     <link rel="stylesheet/less" type="text/css" href="/style/main.less">
 
     <script src="/js/less-1.3.0.min.js" type="text/javascript"></script>
     <script src="/js/jquery.min.js" type="text/javascript"></script>
+    <script src="/js/alert.js" type="text/javascript"></script>
+    <script src="/js/settings.js" type="text/javascript"></script>
     <script type="text/javascript" src="/js/user_input.js"></script>
 </head>
 <body>
+	<!-- Status updates -->
+	<div class="alert info" id="alert_container">
+		<div class="icon"></div>
+		<h3 class="title">Success!</h3> 
+		<div class="body">
+			<span class="message"></span>
+			<a href="#" class="action"></a>
+		</div>
+	</div>
     <div class="center_form_container">
         <form action="{{action}}" method="post" onsubmit="return debug_ignore_validation ||
             validateString(this.username, 'Please fill all required fields', 1, 255)
@@ -20,18 +35,46 @@
             ;">
 
             <!-- Logo -->
-            <a href="/" alt="Back to the home page"><img src="/images/logo.png" alt="RFPow's logo"></a>
+			<a href="/" alt="Back to the home page">
+				<img src="/images/logo.png" alt="RFPow's logo">
+			</a>
+
 
             {% if username %}
-            <h2>Edit your account</h2>
+            <h2>Your account</h2>
             {% else %}
-            <h2>Register new account</h2>
+            <h2>Register an account</h2>
             <div class="intro">
                 Let's register! Please fill out all the fields below. 
             </div>
             {% endif %}
 
+            {% if username and subscriptions|length != 0 %}
+			<div class="fieldset_submit">
+				<h3>Subscriptions</h3>	
+				<div class="intro">
+					These are the searches to which you've subscribed. You will
+					receive email notifications when we discover new RFPs 
+					matching those search keywords.
+				</div>
+
+				<div class="subscriptions">
+					{% for s in subscriptions %}
+					<div class="subscription clearfix">
+						<div class="title">&ldquo;{{ s.keyword }}&rdquo;</div>	
+						<div class="unsubscribe" 
+							 title="Unsubscribe from '{{ s.keyword }}'"
+							 alt="Unsubscribe from '{{ s.keyword }}'"
+							 data-keyword="{{ s.keyword }}"></div>	
+					</div>	
+					{% endfor %}
+				</div>
+			</div>
+			{% endif %}
+
+			<!-- Personal info -->
             <fieldset class="fieldset_submit">
+				<h3>Personal information</h3>	
                 {% if err_msg != "" %}
                 <div class="status error">{{ err_msg }}</div>
                 {% elif info_msg %}
@@ -50,16 +93,6 @@
                 <label class="clearfix">Email
                     <input type="text" name="email" value="{{ user.email }}" placeholder="No spam, for real!"></label>
 
-
-                <!--
-                <label class="clearfix">Street Address <input type="text" name="password" placeholder="Your password"></label><br>
-                <label class="clearfix">City <input type="text" name="password" placeholder="Your password"></label><br>
-                <label class="clearfix">State/Province <input type="text" name="password" placeholder="Your password"></label><br>
-                <label class="clearfix">Postal/Zip <input type="text" name="password" placeholder="Your password"></label><br>
-                <label class="clearfix">Country <input type="text" name="password" placeholder="Your password"></label><br>
-                <label class="clearfix">Email <input type="text" name="password" placeholder="Your password"></label><br>
-                <label class="clearfix">Keywords <input type="text" name="password" placeholder="Your password"></label><br>
-                -->
 
                 <h3>Credit card information</h3>
                 <div class="intro">

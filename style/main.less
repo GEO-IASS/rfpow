@@ -15,7 +15,7 @@ h1, h2, h3, h4, h5 {
     margin: 25px 0 5px 0;
 }
 a:link, a:active, a:visited, a:hover {
-    color: #D35853
+    color: #D35853;
 }
 a:hover {
     text-decoration: none;
@@ -467,6 +467,34 @@ input[type=text], input[type=password], select {
     .bottom_buttons {
         margin: 15px 0 0;
     }
+
+	.subscriptions {
+		//background: #eee;
+		padding: 7px 0;
+
+		.subscription {
+			text-align: left;
+			width: 400px;
+			border-bottom: 1px solid #ccc;
+
+			.title { 
+				color: #D35853;
+				float: left;
+				width: 200px;
+				font-style: italic;
+				padding: 5px 0;
+			}
+
+			.unsubscribe {
+				margin: 5px 0;
+				width: 20px;
+				height: 20px;
+				background: url(../images/buttons_small_map.png) no-repeat;
+				float: right;
+				cursor: pointer;
+			}
+		}
+	}
 }
 
 
