@@ -9,7 +9,7 @@ from backend.parsers import Parser
 from HTMLParser import HTMLParser
 import htmlentitydefs
 
-class RFPParser(Parser):
+class STParser(Parser):
     domain = 'http://www.sa-tenders.co.za/'
 
     headers = {

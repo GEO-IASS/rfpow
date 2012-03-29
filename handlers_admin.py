@@ -32,6 +32,8 @@ class AdminParser(BaseHandler, HTMLRenderer):
             parser = parsers.MerxParser()
         elif parser_name == 'rfp.ca':
             parser = parsers.RFPParser()
+        elif parser_name == 'satender':
+            parser = parsers.STParser()
         (parsed, new) = ScheduledParse.parse( 
                 parser,
                 ignore_duplicates is not '',
