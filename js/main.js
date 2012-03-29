@@ -52,6 +52,14 @@
 
 				// append HTML of RFP results received from backend
 				function(data) {
+                    data = data.trim();
+
+                    // no data is when we run out of results to show
+                    if ( data === '' ) {
+                        loader.hide();
+                        return;
+                    }
+
 					var rows = $( data );
 					table_body.append( data );
 					offset += rows.filter('tr').length;
