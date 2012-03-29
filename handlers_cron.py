@@ -2,7 +2,6 @@ import webapp2
 import logging
 from backend.scheduled import ScheduledParse
 import backend.parsers as parsers
-import backend.rfpdotca_parser as parser2
 from backend.email import EmailSender
 from handlers_base import HTMLRenderer
 
@@ -19,7 +18,7 @@ class CronRfpdotca(webapp2.RequestHandler):
 
     def get(self):
         logging.info( 'Starting scheduled parse for rfp.ca' )
-        parser = parser2.RFPParser()
+        parser = parsers.RFPParser()
         (parsed, new) = ScheduledParse.parse(parser, stop_on_dupe=True)
 
 class CronSendEmail(webapp2.RequestHandler, HTMLRenderer):

@@ -21,7 +21,7 @@ _routes = [
     RedirectRoute('/edit-user/', EditUserHandler, name='edit-user', strict_slash=True),
     RedirectRoute('/create-rfp/', CreateRFPHandler, name='create-rfp', strict_slash=True),
     RedirectRoute('/cron/merx', CronMerx, name='cron-merx', strict_slash=True),
-    RedirectRoute('/cron/rfpdotca', CronMerx, name='cron-rfpdotca', strict_slash=True),
+    RedirectRoute('/cron/rfpdotca', CronRfpdotca, name='cron-rfpdotca', strict_slash=True),
     RedirectRoute('/admin', AdminParser, name='cron-merx', strict_slash=True),
     RedirectRoute('/searchindexing', search.SearchIndexing, name='searchindexing', strict_slash=True)
 

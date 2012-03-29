@@ -30,10 +30,32 @@
                     Stop parsing on a duplicate
                 </label>
             </div>
+            <input type=hidden  name=parser  value='merx'>
         </form>
     </div>
 </div>
 
+<br>
+<div class="parser section">
+    <h4>rfp.ca parser</h4>
+
+    <div class="parser_controls">
+        <form name="rfp.ca_parser" method="post">
+            Parse
+            <input type="text" name="parse_limit" value="10" size="2">
+            jobs right now.
+            <input type="submit" class="button" value="Go!">
+
+            <div class="subsection">
+                <label title="Stop parsing job as soon as a duplicate is found">
+                    <input type="checkbox" name="stop_on_dupe">
+                    Stop parsing on a duplicate
+                </label>
+            </div>
+            <input type=hidden  name=parser  value='rfp.ca'>
+        </form>
+    </div>
+</div>
 
 <br>
 <div class="parser section">
@@ -42,7 +64,6 @@
         <label>Update all users with new RFPs. <input type="submit" value="Send Emails" class="button"></label>
     </form>
 </div>
-
 
 <br>
 <div class="parser section">

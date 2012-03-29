@@ -22,12 +22,16 @@ class AdminParser(BaseHandler, HTMLRenderer):
     @user_required
     def post(self):
         """Used to set parser settings and trigger parsers"""
+        parser_name = self.request.get('parser')
         ignore_duplicates = self.request.get('ignore_duplicates')
         start_id = self.request.get('start_id')
         stop_on_dupe = self.request.get('stop_on_dupe')
         limit = self.request.get('parse_limit')
 
-        parser = parsers.MerxParser()
+        if parser_name == 'merx':
+            parser = parsers.MerxParser()
+        elif parser_name == 'rfp.ca':
+            parser = parsers.RFPParser()
         (parsed, new) = ScheduledParse.parse( 
                 parser,
                 ignore_duplicates is not '',
