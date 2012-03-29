@@ -450,8 +450,6 @@ class STParser(Parser):
             'Cookie' : ''
               }
     
-    doc = None
-
     def __init__(self):
         self.next_page = "tenderlist.asp?show=all"
         self.has_next_page = True
@@ -471,9 +469,9 @@ class STParser(Parser):
         
         next_page = rows.eq(0).find('td').eq(3)
         self.has_next_page = False
-        self.next_page = None
+        self.next_page = ""
         if next_page.text() == "Next":
-            self.next_page = next_page.attr('href')
+            self.next_page = next_page.find('a').eq(0).attr('href')
             self.has_next_page = True
         pagination = rows.pop(0)
         rows.pop(0)
@@ -587,7 +585,7 @@ class STParser(Parser):
        
         rfp['org'] = data.eq(2).find('td').eq(1).text()
         rfp['parsed_on'] = datetime.date.today()
-        rfp['description'] = repr(strip_tags(data.eq(6).html()))
+        rfp['description'] = strip_tags(data.eq(6).html()).replace('\\n', '\n')
         rfp['location'] = 'none'
         rfp['original_category'] = data.eq(4).find('td').eq(1).text()
         rfp['uri'] = uri;
