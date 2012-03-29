@@ -53,12 +53,10 @@ class UserFormBaseHandler(BaseHandler, HTMLRenderer):
 
     def show_register(self, err_msg="", info_msg=""):
 		user = None
-		username = None
+		username = self.get_username()
 		subscriptions = None
 
-		if self.curr_user() is not None:
-			user = self.curr_user()[0]
-			username = user.auth_ids[0]
+		if username is not None:
 			# grab all user's subscriptions
 			subscriptions = Subscription.all().filter( 'username =', username ).fetch(1000)
 
