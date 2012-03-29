@@ -6,7 +6,6 @@ import urllib2
 import logging
 from lib.pyquery import PyQuery as pq
 import datetime
-from google.appengine.ext import db
 
 class Parser:
     """All parsers should derive from this for a uniform API"""
@@ -365,17 +364,10 @@ class RFPParser(Parser):
         # login
         request = urllib2.Request(self.domain + self.login_url, urllib.urlencode(self.login_parameters), self.headers)
         response = urllib2.urlopen(request)
-
-        abc = GRR()
-        abc.data = "IN"+str(response.info().headers)
-        abc.put()
         
         # get cookie
         for i in range(len(response.info().headers)):
             if response.info().headers[i].startswith('Set-Cookie') or response.info().headers[i].startswith('set-cookie'):
-                abc = GRR()
-                abc.data = "OUT"+str(self.headers)
-                abc.put()
                 self.headers['Cookie'] = response.info().headers[i][12:].replace('; path=/', '')[:-2]
 
 
@@ -447,6 +439,3 @@ class RFPParser(Parser):
             logging.error("Couldn't parse close date: %s" % rfp)
 
         return rfp
-
-class GRR(db.Model):
-    data = db.TextProperty()
