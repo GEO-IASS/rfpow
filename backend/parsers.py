@@ -585,7 +585,7 @@ class STParser(Parser):
        
         rfp['org'] = data.eq(2).find('td').eq(1).text()
         rfp['parsed_on'] = datetime.date.today()
-        rfp['description'] = strip_tags(data.eq(6).html()).replace('\\n', '\n')
+        rfp['description'] = strip_tags(data.eq(6).html()).replace("Description:", "").replace('\\n', '\n')
         rfp['location'] = 'none'
         rfp['original_category'] = data.eq(4).find('td').eq(1).text()
         rfp['uri'] = uri;
