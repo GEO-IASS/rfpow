@@ -1,0 +1,26 @@
+<!doctype html>
+<html>
+    <head>
+        <title>Email Log</title>
+    </head>
+    <body style="padding: 20px; color: #444; font-family: Helvetica, Arial,sans-serif; font-size: 11pt">
+    <div class="logo_wrapper">
+        <img class="logo" id="logo_main" src="/images/email_log.jpg">
+    </div>
+    <div style="padding: 10px">
+       Here's what happened when the server was sending emails:
+    </div>
+
+    <table cellpadding="0" cellspacing="0" border="0" 
+           style="padding: 10px; width: 100%; border: collapse;">
+       {% for r in results %}
+       <tr>
+           <td style="padding: 7px; background: #eee; width: 100%; border: 2px solid white;">
+              {{ r }}
+            </td>
+        </tr> 
+        {% endfor %}
+    </table>
+
+    </body> 
+</html>

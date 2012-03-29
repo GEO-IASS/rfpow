@@ -5,7 +5,6 @@ from backend.models.subscription import Subscription
 from handlers_base import HTMLRenderer
 
 from webapp2_extras.appengine.auth.models import User
-from handlers_base import JSONWriter
 from ndb import query
 from backend.models import subscription
 import datetime
@@ -14,7 +13,7 @@ import datetime
 default_sender = "john.sintal@gmail.com"
 
 
-class EmailSender(HTMLRenderer, JSONWriter):
+class EmailSender(HTMLRenderer):
     """
         EmailSender is responsible for gathering RFP data for each user who has subscribed to
         email updates, then sending that data via email.
@@ -41,15 +40,16 @@ class EmailSender(HTMLRenderer, JSONWriter):
         else:
             return None
 
-    def send_rfps_to_subscribers(self, response=None):
+    def send_rfps_to_subscribers(self):
         """
             As the function name implies, all subscribed users will receive an RFP update to their
             email accounts. By comparing an RFP's parse date to a subscription's last update date,
             we ensure dups aren't being sent out.
 
-            If response is None, then json response is not given back to client.
+            Returns a list of results based on what happened for each subscription.
 
         """
+        results = []
         subs = Subscription.all()
         for sub in subs:
 
@@ -85,17 +85,21 @@ class EmailSender(HTMLRenderer, JSONWriter):
                     msg = "Found %d RFPs for %s with keyword %s for email: %s" % (len(rfp_list), sub.username,
                                                                                  sub.keyword, email)
                     logging.info(msg)
-                    self.write_json_email(self.status_success, msg, response)
+                    results.append('Error:' + ': ' + msg)
+
 
                 else:
                     msg = 'No RFPs found for username: %s and keyword: %s' % (sub.username, sub.keyword)
 
                     logging.info(msg)
-                    self.write_json_email(self.status_error, msg, response)
+                    results.append('Error:' + ': ' + msg)
             else:
                 msg = 'No email found for username: %s  and keyword: %s' % (sub.username, sub.keyword)
+
                 logging.info(msg)
-                self.write_json_email(self.status_error, msg, response)
+                results.append('Error:' + ': ' + msg)
+
+        return results
 
 
 

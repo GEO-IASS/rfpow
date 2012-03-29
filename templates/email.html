@@ -1,33 +1,33 @@
 <!doctype html>
 <html>
-    <head>
-        <title>New RFPs for "{{search_text}}"</title>
-    </head>
-    <body style="padding: 20px; color: #444; font-family: Helvetica, Arial,sans-serif; font-size: 11pt">
-    <div class="logo_wrapper">
-        <img class="logo" id="logo_main" src="http://rfpow301.appspot.com/images/logo.png">
-    </div>
-    <div style="padding: 10px">
-        Hi there, {{ name }}! We've got new RFPs for your search
-        &ldquo;<span style="font-weight: bold">{{ search_text }}</span>&rdquo;:
-    </div>
+<head>
+    <title>New RFPs for "{{search_text}}"</title>
+</head>
+<body style="padding: 20px; color: #444; font-family: Helvetica, Arial,sans-serif; font-size: 11pt">
+<div class="logo_wrapper">
+    <img class="logo" id="logo_main" src="http://rfpow301.appspot.com/images/logo.png">
+</div>
+<div style="padding: 10px">
+    Hi there, {{ name }}! We've got new RFPs for your search
+    &ldquo;<span style="font-weight: bold">{{ search_text }}</span>&rdquo;:
+</div>
 
-    <table cellpadding="0" cellspacing="0" border="0" 
-           style="padding: 10px; width: 100%; border: collapse;">
-       {% for r in rfps %}
-       <tr>
-           <td style="padding: 7px; background: #eee; width: 100%; border: 2px solid white;">
-               <a href="{{ search_uri + search_text }}" style="color: #D35853">
-                   {{r.title}}
-               </a>
+<table cellpadding="0" cellspacing="0" border="0"
+       style="padding: 10px; width: 100%; border: collapse;">
+    {% for r in rfps %}
+        <tr>
+            <td style="padding: 7px; background: #eee; width: 100%; border: 2px solid white;">
+                <a href="{{ search_uri + search_text }}" style="color: #D35853">
+                    {{r.title}}
+                </a>
             </td>
-        </tr> 
-        {% endfor %}
-    </table>
-    <div>
-        <a href="{{ search_uri + search_text }}" style="color: #D35853">
-            See all results for &ldquo;{{ search_text }}&rdquo;
-        </a>
-    </div>
-    </body> 
+        </tr>
+    {% endfor %}
+</table>
+<div>
+    <a href="{{ search_uri + search_text }}" style="color: #D35853">
+        See all results for &ldquo;{{ search_text }}&rdquo;
+    </a>
+</div>
+</body>
 </html>
