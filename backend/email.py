@@ -62,8 +62,8 @@ class EmailSender(HTMLRenderer):
                 first_last_name = self.get_first_last_name(sub.username)
 
                 # Query RFPs based on this subscription's keyword
-                # TODO: Add  where {rfp}.parse_date > sub.last_updated
-                rfp_list = RFP.search(phrase=sub.keyword, limit=10)
+                # TODO: Add  where {rfp}.parse_date > sub.last_updated, test it!
+                rfp_list = RFP.search(phrase=sub.keyword, date=sub.last_updated, limit=10)
 
                 if (rfp_list and len(rfp_list) > 0):
 
