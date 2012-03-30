@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 """
-	All user controls are located here (login, create and logout)
+    All user controls are located here (login, create and logout)
 """
 
 from webapp2_extras.auth import InvalidAuthIdError
@@ -52,22 +52,24 @@ class UserFormBaseHandler(BaseHandler, HTMLRenderer):
     """
 
     def show_register(self, err_msg="", info_msg=""):
-		user = None
-		username = self.get_username()
-		subscriptions = None
+        user = None
+        username = self.get_username()
+        subscriptions = None
 
-		if username is not None:
-			# grab all user's subscriptions
-			subscriptions = Subscription.all().filter( 'username =', username ).fetch(1000)
+        if username is not None:
+            # grab all user's subscriptions
+            subscriptions = Subscription.all().filter( 'username =', username ).fetch(1000)
+            user = self.curr_user()[0]
 
-		template_values = {
-				'action': self.request.url,
-				'err_msg': err_msg, "user": user,
-				"username": username,
-				'info_msg': info_msg,
-				'subscriptions' : subscriptions
-				}
-		self.show_rendered_html('templates/user_info_form.html', template_values)
+        template_values = {
+                'action': self.request.url,
+                'err_msg': err_msg, 
+                "user": user,
+                "username": username,
+                'info_msg': info_msg,
+                'subscriptions' : subscriptions
+                }
+        self.show_rendered_html('templates/user_info_form.html', template_values)
 
 
 class CreateUserHandler(UserFormBaseHandler):
