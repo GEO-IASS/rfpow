@@ -1,113 +1,130 @@
 <!doctype html>
 <html>
-<head>
-    <title>RFPow! Admin Panel</title>
-    <link rel="stylesheet" type="text/css" href="/style/main.css">
-    <link rel="stylesheet" type="text/css" href="/style/admin.css">
-</head>
-<body>
-{% if status %}
-    <div class="status">
-        {{ status }}
-    </div>
-{% endif %}
+    <head>
+        <title>RFPow! Admin Panel</title>
+        <link rel="stylesheet/less" type="text/css" href="/style/main.less">
 
-<h3>Admin Control Panel</h3>
+        <script src="/js/less-1.3.0.min.js" type="text/javascript"></script>
+        <script src="/js/jquery.min.js" type="text/javascript"></script>
+    </head>
+    <body class="admin">
+        {% if status %}
+        <div class="status info">
+            {{ status }}
+        </div>
+        {% endif %}
 
-<div class="parser section">
-    <h4>Merx parser</h4>
+        <!-- Logo -->
+        <a href="/" alt="Back to the home page">
+            <img src="/images/logo.png" alt="RFPow's logo">
+        </a>
 
-    <div class="parser_controls">
-        <form name="merx_parser" method="post">
-            Parse
-            <input type="text" name="parse_limit" value="10" size="2">
-            jobs right now.
-            <input type="submit" class="button" value="Go!">
+        <h2>Admin Control Panel</h2>
 
-            <div class="subsection">
-                <label title="Stop parsing job as soon as a duplicate is found">
-                    <input type="checkbox" name="stop_on_dupe">
-                    Stop parsing on a duplicate
-                </label>
+        <div class="parser section">
+            <h3>Merx parser</h3>
+
+            <div class="parser_controls">
+                <form name="merx_parser" method="post">
+                    Parse
+                    <input type="text" name="parse_limit" value="10" size="2">
+                    jobs right now.
+                    <input type="submit" class="button" value="Go!">
+
+                    <div class="subsection">
+                        <label title="Stop parsing job as soon as a duplicate is found">
+                            <input type="checkbox" name="stop_on_dupe">
+                            Stop parsing on a duplicate
+                        </label>
+                    </div>
+                    <input type="hidden"  name="parser"  value='merx'>
+                    <input type="hidden"  name="action"  value='parse'>
+                </form>
             </div>
-            <input type=hidden  name=parser  value='merx'>
-        </form>
-    </div>
-</div>
+        </div>
 
-<br>
-<div class="parser section">
-    <h4>rfp.ca parser</h4>
+        <div class="parser section">
+            <h3>rfp.ca parser</h3>
 
-    <div class="parser_controls">
-        <form name="rfp.ca_parser" method="post">
-            Parse
-            <input type="text" name="parse_limit" value="10" size="2">
-            jobs right now.
-            <input type="submit" class="button" value="Go!">
+            <div class="parser_controls">
+                <form name="rfp.ca_parser" method="post">
+                    Parse
+                    <input type="text" name="parse_limit" value="10" size="2">
+                    jobs right now.
+                    <input type="submit" class="button" value="Go!">
 
-            <div class="subsection">
-                <label title="Stop parsing job as soon as a duplicate is found">
-                    <input type="checkbox" name="stop_on_dupe">
-                    Stop parsing on a duplicate
-                </label>
+                    <div class="subsection">
+                        <label title="Stop parsing job as soon as a duplicate is found">
+                            <input type="checkbox" name="stop_on_dupe">
+                            Stop parsing on a duplicate
+                        </label>
+                    </div>
+                    <input type='hidden'  name='parser'  value='rfp.ca'>
+                    <input type="hidden"  name="action"  value='parse'>
+                </form>
             </div>
-            <input type=hidden  name=parser  value='rfp.ca'>
-        </form>
-    </div>
-</div>
+        </div>
 
-<br>
-<div class="parser section">
-    <h4>SaTender parser</h4>
+        <div class="parser section">
+            <h3>SaTender parser</h3>
 
-    <div class="parser_controls">
-        <form name="SaTender_parser" method="post">
-            Parse
-            <input type="text" name="parse_limit" value="10" size="2">
-            jobs right now.
-            <input type="submit" class="button" value="Go!">
+            <div class="parser_controls">
+                <form name="SaTender_parser" method="post">
+                    Parse
+                    <input type="text" name="parse_limit" value="10" size="2">
+                    jobs right now.
+                    <input type="submit" class="button" value="Go!">
 
-            <div class="subsection">
-                <label title="Stop parsing job as soon as a duplicate is found">
-                    <input type="checkbox" name="stop_on_dupe">
-                    Stop parsing on a duplicate
-                </label>
+                    <div class="subsection">
+                        <label title="Stop parsing job as soon as a duplicate is found">
+                            <input type="checkbox" name="stop_on_dupe">
+                            Stop parsing on a duplicate
+                        </label>
+                    </div>
+                    <input type="hidden"  name="parser"  value='satender'>
+                    <input type="hidden"  name="action"  value='parse'>
+                </form>
             </div>
-            <input type=hidden  name=parser  value='satender'>
-        </form>
-    </div>
-</div>
-
-<br>
-<div class="parser section">
-    <h4>Emailer</h4>
-    <form action="/rfp/email" method="post" class="fieldset_submit">
-        <label>Update all users with new RFPs. <input type="submit" value="Send Emails" class="button"></label>
-    </form>
-</div>
-
-<br>
-<div class="parser section">
-    <h4>Create and Query RFPs (GQL Syntax)</h4>
-    <form action="/create-rfp/" method="post" class="fieldset_submit">
-        <label>Title: <input type="text" name="title"></label>
-        <label>Description: <input type="text" name="description"></label>
-        <label>Organization: <input type="text" name="organization"></label>
-        <label> Original URI: <input type="text" name="original_uri"> </label>
-        <label> Original ID: <input type="text" name="original_id"> </label>
-        <label> Keywords(comma delimited): <input type="text" name="keywords"> </label>
-        <input type="submit" value="Create RFP" class="button">
-    </form>
-    <form action="/view-query-results/" method="post" class="fieldset_submit">
-        <label> Query: <input type="text" name="query"> </label>
-        <div style="font-style:italic; font-size: 90%">Ex: "WHERE keywords = 'Marine'"</div>
-        <input type="submit" value="Query" class="button"/>
-    </form>
-
-</div>
+        </div>
 
 
+        <div class="section">
+            <h3>Emailer</h3>
+            <form action="/rfp/email" method="post" class="fieldset_submit">
+                <label>Update all users with new RFPs. <input type="submit" value="Send Emails" class="button"></label>
+            </form>
+        </div>
 
-</body>
+        <div class="section">
+            <h3>Manage RFPs</h3>
+            Be gentle! No undo here.
+            <form name="RFPs_delete" method="post">
+                <input type="submit" class="button" value="Delete all RFPs">
+                <input type="hidden" name="action"  value='rfp_delete'>
+            </form>
+        </div>
+
+        <div class="parser section">
+            <h3>Create and Query RFPs (GQL Syntax)</h3>
+            <form action="/create-rfp/" method="post" class="fieldset_submit">
+                <label>Title: <input type="text" name="title"></label>
+                <label>Description: <input type="text" name="description"></label>
+                <label>Organization: <input type="text" name="organization"></label>
+                <label> Original URI: <input type="text" name="original_uri"> </label>
+                <label> Original ID: <input type="text" name="original_id"> </label>
+                <label> Keywords(comma delimited): <input type="text" name="keywords"> </label>
+                <input type="submit" value="Create RFP" class="button">
+            </form>
+            <form action="/view-query-results/" method="post" class="fieldset_submit">
+                <label> Query: <input type="text" name="query"> </label>
+                <div style="font-style:italic; font-size: 90%">Ex: "WHERE keywords = 'Marine'"</div>
+                <input type="submit" value="Query" class="button"/>
+            </form>
+
+        </div>
+
+
+
+
+    </body>
 </html>
