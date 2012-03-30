@@ -39,6 +39,7 @@ import logging
 import re
 import string
 import sys
+import datetime
 
 from google.appengine.api import datastore
 from google.appengine.api import datastore_types
@@ -148,12 +149,14 @@ class SearchIndex(db.Model):
 class LiteralIndex(SearchIndex):
     """Index model for non-inflected search phrases."""
     parent_kind = db.StringProperty(required=True)
+    date= db.DateTimeProperty(auto_now_add=True)
     phrases = db.StringListProperty(required=True)
 
 
 class StemmedIndex(SearchIndex):
     """Index model for stemmed (inflected) search phrases."""
     parent_kind = db.StringProperty(required=True)
+    date= db.DateTimeProperty(auto_now_add=True)
     phrases = db.StringListProperty(required=True)
 
 
@@ -254,7 +257,7 @@ class Searchable(object):
     INDEX_USES_MULTI_ENTITIES = True
 
     @staticmethod
-    def full_text_search(phrase, limit=10, 
+    def full_text_search(phrase, date=None, limit=10, 
                          kind=None, 
                          stemming=INDEX_STEMMING,
                          multi_word_literal=INDEX_MULTI_WORD):
@@ -299,6 +302,9 @@ class Searchable(object):
                 query = query.filter('phrases =', phrase)
             if kind:
                 query = query.filter('parent_kind =', kind)
+            if date != None:            
+                query = query.filter('date >', date)
+            query = query.order("-date")
             index_keys = query.fetch(limit=limit)
 
         if len(index_keys) < limit:
@@ -312,9 +318,13 @@ class Searchable(object):
                 query = query.filter('phrases =', keyword)
             if kind:
                 query = query.filter('parent_kind =', kind)
+            if date != None:            
+                query = query.filter('date >', date)
+            query = query.order("-date")
             single_word_matches = [key for key in query.fetch(limit=new_limit) \
                                    if key not in index_keys]
             index_keys.extend(single_word_matches)
+            
 
         return [(key.parent(), SearchIndex.get_title(key.name())) for key in index_keys]
 
@@ -402,7 +412,7 @@ class Searchable(object):
         return phrases
 
     @classmethod
-    def search(cls, phrase, limit=10, keys_only=False):
+    def search(cls, phrase, date=None, limit=10, keys_only=False):
         """Queries search indices for phrases using a merge-join.
         
         Use of this class method lets you easily restrict searches to a kind
@@ -417,16 +427,16 @@ class Searchable(object):
             A list.  If keys_only is True, the list holds (key, title) tuples.
             If keys_only is False, the list holds Model instances.
         """
+        
         key_list = Searchable.full_text_search(
-                        phrase, limit=limit, kind=cls.kind(),
+                        phrase, date=date, limit=limit, kind=cls.kind(),
                         stemming=cls.INDEX_STEMMING, 
                         multi_word_literal=cls.INDEX_MULTI_WORD)
         if keys_only:
-            logging.debug("key_list: %s", key_list)
             return key_list
         else:
             return [cls.get(key_and_title[0]) for key_and_title in key_list]
-
+        
     def indexed_title_changed(self):
         """Renames index entities for this model to match new title."""
         klass = StemmedIndex if self.INDEX_STEMMING else LiteralIndex
