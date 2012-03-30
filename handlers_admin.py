@@ -7,6 +7,7 @@ from backend.scheduled import ScheduledParse
 from google.appengine.ext import db
 from backend.models.rfp_entry import *
 from handlers_base import *
+from search import *
 
 class AdminParser(BaseHandler, HTMLRenderer):
     """Controller for the parser section of the admin panel"""
@@ -54,5 +55,8 @@ class AdminParser(BaseHandler, HTMLRenderer):
         elif action == 'rfp_delete':
             while len( RFP.all().fetch(1) ) is not 0:
                 db.delete( RFP.all() )
+
+            while len( LiteralIndex.all().fetch(1) ) is not 0:
+                db.delete( LiteralIndex.all() )
 
             self.get( 'All RFPs deleted successfully.')
