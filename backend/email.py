@@ -59,21 +59,22 @@ class EmailSender(HTMLRenderer):
                     sub.last_updated = datetime.datetime.now().date()
                     sub.put()
 
-                    msg = "Found %d RFPs for %s with keyword %s for email: %s" % (len(rfp_list), sub.username,
-                                                                                 sub.keyword, user.email)
+                    msg = "Found %d RFPs for %s with keyword '%s' for email: %s" % \
+                        (len(rfp_list), sub.username, sub.keyword, user.email)
+
                     logging.info(msg)
-                    results.append('Error:' + ': ' + msg)
+                    results.append(msg)
 
                 else:
                     msg = 'No RFPs found for username: %s and keyword: %s' % (sub.username, sub.keyword)
 
                     logging.info(msg)
-                    results.append('Error:' + ': ' + msg)
+                    results.append('Error: ' + msg)
             else:
                 msg = 'No email found for username: %s  and keyword: %s' % (sub.username, sub.keyword)
 
                 logging.info(msg)
-                results.append('Error:' + ': ' + msg)
+                results.append('Error: ' + msg)
 
         return results
 

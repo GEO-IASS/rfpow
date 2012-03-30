@@ -4,6 +4,7 @@ from backend.scheduled import ScheduledParse
 import backend.parsers as parsers
 from backend.email import EmailSender
 from handlers_base import HTMLRenderer
+from handlers_admin import *
 
 class CronMerx(webapp2.RequestHandler):
     """Handler for scheduled parser for Merx"""
@@ -46,13 +47,9 @@ class CronSendEmail(webapp2.RequestHandler, HTMLRenderer):
 
         self.send_rfps()
 
-
     def post(self):
-        """
-            Used by admin panel. Shows results of what sending of email updates after sending the emails.
-        """
+        """Show results of sending email updates to admin console."""
         results = self.send_rfps()
-        template_data = {}
-        if results is not None:
-            template_data['results'] = results
-        self.show_rendered_html('templates/send_email_log.html', template_data)
+
+        # reuse admin panel handler
+        return AdminParser( self.request, self.response ).get( '<br>'.join(results) );
