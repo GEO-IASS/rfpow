@@ -7,6 +7,10 @@ cron:
   url: /cron/rfpdotca
   schedule: every 3 hours from 7:00 to 22:00
 
+- description: scheduled SaTender parser job
+  url: /cron/satender
+  schedule: every 3 hours from 7:00 to 22:00
+
 - description: scheduled emails of RFP updates
   url: /rfp/email
   schedule: every monday 09:00
