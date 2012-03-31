@@ -78,23 +78,6 @@ class RFPList(BaseHandler, HTMLRenderer):
         elif format == '.comet':
             self.show_rendered_html( 'templates/rfp_table.html', template_data)
 
-class RFPDetails(BaseHandler, HTMLRenderer):
-    """Return details for given RFP ID"""
-
-    @user_required
-    def get(self, rfp_id):
-        rfp = rfp_entry.RFP.get_by_id( int(rfp_id) )
-
-        # no such RFP exists
-        if rfp is None:
-            self.response.set_status(400)
-            self.response.out.write( 'No such RFP exists' )
-            return
-
-        # otherwise, return it
-        template_data = { 'rfp': rfp }
-        self.show_rendered_html( 'templates/rfp_details.html', template_data )
-
 
 
 
@@ -147,6 +130,27 @@ class UnsubscribeHandler(BaseHandler, JSONWriter):
             self.status = self.status_error
 
         self.write_json_subscription(self.status, keyword, self.message, self.response)
+
+class RFPDetails(BaseHandler, HTMLRenderer):
+    """Return details for given RFP ID"""
+
+    @user_required
+    def get(self, rfp_id, format ):
+        rfp = rfp_entry.RFP.get_by_id( int(rfp_id) )
+
+        # no such RFP exists
+        if rfp is None:
+            self.response.set_status(400)
+            self.response.out.write( 'No such RFP exists' )
+            return
+
+        # Render either the whole page RFP page, or just the body
+        # depending on whether it's an AJAX call or a regular request
+        template = format and 'templates/rfp_details_body.html' \
+                          or 'templates/rfp_details.html'
+        # otherwise, return it
+        template_data = { 'rfp': rfp }
+        self.show_rendered_html( template, template_data )
 
 class RFPSearch(BaseHandler, HTMLRenderer):
     """Return table of search results for given search query.

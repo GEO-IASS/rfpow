@@ -1,40 +1,25 @@
 <!doctype html>
 <html>
     <head>
-        <title>RFPow!</title>
+        <title>{{ rfp.title }} : RFPow!</title>
+        <link href="/style/main.less" rel="stylesheet/less" type="text/css">
+
+        <script src="/js/less-1.3.0.min.js" type="text/javascript"></script>
+        <script src="/js/jquery.min.js" type="text/javascript"></script>
     </head>
 
     <body class="rfp_details">
-        <h2 class='title'>{{rfp.title}}</h2>
-        <div class="dates">
-            <span class="date">
-                <span class="date_title published">Published on:</span> {{rfp.publish_date}}
-            </span>
-            <span class="date">
-                <span class="date_title expires">Expires:</span> {{rfp.close_date}}
-            </span>
-        </div>
-
-        <div class="description">
-            {{rfp.description|nl2pbr}}
-        </div>
-        <div class="footer">
-            <div class="source {{rfp.origin}}"></div> 
-            <div class="buttons">
-                {% if rfp.contact %}
-                    {% if rfp.contact.find('@') == -1 %}
-                        {% set url = rfp.contact %}
-                    {% else %}
-                        {% set url = "mailto:" + rfp.contact + "?subject=RE:" + rfp.title %}
-                    {% endif %}
-                <a alt="Contact poster about this RFP" class="button button_contact"
-                    href="{{ url }}" target="_blank">
-                </a> 
-                {% endif %}
-                <a alt="See more details about this RFP" class="button button_details"
-                    href="{{rfp.original_uri}}" target="_blank">
-                </a> 
+        <div>
+			<a href="/" alt="Back to the home page">
+				<img src="/images/logo.png" alt="RFPow's logo">
+			</a>
+            <div class="back">
+                <a href="/" class="back">&larr; Back to RFPs</a>
             </div>
+        </div> 
+
+        <div class="rfp_body">
+            {% include 'templates/rfp_details_body.html' %}
         </div>
     </body>
 </html>

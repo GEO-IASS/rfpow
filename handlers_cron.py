@@ -41,9 +41,7 @@ class CronSendEmail(webapp2.RequestHandler, HTMLRenderer):
         return results
 
     def get(self):
-        """
-            Used by cron.
-        """
+        """Used by cron."""
 
         self.send_rfps()
 

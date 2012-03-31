@@ -302,9 +302,17 @@ input[type=text], input[type=password], select {
     width: 640px;
 
     .title {
-        border-bottom: 1px solid #ccc;
         margin: 0 0 10px;    
         padding: 0;
+        text-decoration: none;
+
+        h2:hover {
+            color: #444;
+        }
+
+        h2 {
+            border-bottom: 1px solid #ccc;
+        }
     }
 
     .description {
@@ -366,6 +374,24 @@ input[type=text], input[type=password], select {
             width: 33px;
             background: url(../images/source_logo_map.png) no-repeat -73px 0;
         }
+    }
+}
+
+.rfp_details {
+    width: 90%;
+    padding: 20px;
+    background: white;
+
+    .back {
+        margin: 12px 0 20px 0;
+    }
+
+    .rfp_body {
+    }
+
+    .description {
+        overflow: visible;
+        height: auto;
     }
 }
 

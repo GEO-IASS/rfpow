@@ -1,0 +1,35 @@
+        <a href="/rfp/{{ rfp.key().id() }}" class="title"
+            alt="Permalink link to this RFP"
+            title="Permalink link to this RFP">
+            <h2>{{rfp.title}}</h2>
+        </a>
+        <div class="dates">
+            <span class="date">
+                <span class="date_title published">Published on:</span> {{rfp.publish_date}}
+            </span>
+            <span class="date">
+                <span class="date_title expires">Expires:</span> {{rfp.close_date}}
+            </span>
+        </div>
+
+        <div class="description">
+            {{rfp.description|nl2pbr}}
+        </div>
+        <div class="footer">
+            <div class="source {{rfp.origin}}"></div> 
+            <div class="buttons">
+                {% if rfp.contact %}
+                    {% if rfp.contact.find('@') == -1 %}
+                        {% set url = rfp.contact %}
+                    {% else %}
+                        {% set url = "mailto:" + rfp.contact + "?subject=RE:" + rfp.title %}
+                    {% endif %}
+                <a alt="Contact poster about this RFP" class="button button_contact"
+                    href="{{ url }}" target="_blank">
+                </a> 
+                {% endif %}
+                <a alt="See more details about this RFP" class="button button_details"
+                    href="{{rfp.original_uri}}" target="_blank">
+                </a> 
+            </div>
+        </div>

@@ -39,7 +39,9 @@
 
 				r.click( function(e){
 					e.preventDefault();
-					r.colorbox();
+					r.colorbox({
+                        href: this.href.replace('/rfp', '/rfp.comet')
+                    });
 				});
 			});
 		},

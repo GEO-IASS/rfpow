@@ -13,7 +13,7 @@ _routes = [
     RedirectRoute('/', HomePageHandler, name='secure', strict_slash=True),
     RedirectRoute(r'/rfp/search<format:(\.comet)?>/<search_query:.*>', RFPSearch, name='search', strict_slash=True),
     RedirectRoute(r'/rfp/list<format:(\.comet)?>', RFPList, name='list', strict_slash=True),
-    RedirectRoute(r'/rfp/<rfp_id:\d+>', RFPDetails, name='details', strict_slash=True),
+    RedirectRoute(r'/rfp<format:(\.comet)?>/<rfp_id:\d+>', RFPDetails, name='details', strict_slash=True),
     RedirectRoute(r'/rfp/subscribe/<keyword>', SubscribeHandler, name='subscribe', strict_slash=True),
     RedirectRoute(r'/rfp/unsubscribe/<keyword>', UnsubscribeHandler, name='unsubscribe', strict_slash=True),
     RedirectRoute('/create-user/', CreateUserHandler, name='create-user', strict_slash=True),
