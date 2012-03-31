@@ -21,7 +21,7 @@ class AdminParser(BaseHandler, HTMLRenderer):
         if status is not None: 
             template_data['status'] = status
 
-        self.show_rendered_html('templates/admin_parsers.html', template_data)
+        self.show_rendered_html('templates/admin.html', template_data)
 
     @user_required
     def post(self):
