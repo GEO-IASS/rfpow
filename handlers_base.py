@@ -37,8 +37,8 @@ def user_required(handler):
 def admin_required(handler):
     def check_admin(self, *args, **kwargs):
         """
-            Return true if current signed in user is an admin, else false. This will return false
-            if no user has signed in the webapp.
+            Return handler if user is admin, otherwise this will redirect to homepage
+            if user is not an admin.
         """
 
         if self.curr_user() != None and self.curr_user()[0].is_admin:
