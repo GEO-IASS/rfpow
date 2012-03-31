@@ -16,7 +16,7 @@
 		{% for r in rfps %}
 			<tr>
 				<td style="padding: 7px; background: #eee; width: 100%; border: 2px solid white;">
-					<a href="{{ search_uri + search_text }}" style="color: #D35853">
+                    <a href="{{ permalink_uri + r.key().id()|string }}" style="color: #D35853">
 						{{r.title}}
 					</a>
 				</td>

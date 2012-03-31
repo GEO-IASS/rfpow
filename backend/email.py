@@ -49,7 +49,8 @@ class EmailSender(HTMLRenderer):
                         "name" : user.first_name,
                         'search_text' : sub.keyword,
                         'is_admin' : False,
-                        'search_uri': 'http://rfpow301.appspot.com/rfp/search/'
+                        'search_uri': 'http://rfpow301.appspot.com/rfp/search/',
+                        'permalink_uri': 'http://rfpow301.appspot.com/rfp/'
                     }
 
                     subject = "New RFPs for \"%s\" : RFPow!" % sub.keyword  
