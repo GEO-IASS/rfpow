@@ -48,8 +48,13 @@ class CronSendEmail(webapp2.RequestHandler, HTMLRenderer):
         self.send_rfps()
 
     def post(self):
-        """Show results of sending email updates to admin console."""
+        """
+            Used by admin panel.
+
+            Show results of sending email updates to admin panel.
+        """
+
         results = self.send_rfps()
 
         # reuse admin panel handler
-        return AdminParser( self.request, self.response ).get( '<br>'.join(results) );
+        return AdminPanel( self.request, self.response ).get( '<br>'.join(results) );

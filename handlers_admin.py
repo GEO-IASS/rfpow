@@ -9,7 +9,7 @@ from backend.models.rfp_entry import *
 from handlers_base import *
 from search import *
 
-class AdminParser(BaseHandler, HTMLRenderer):
+class AdminPanel(BaseHandler, HTMLRenderer):
     """Controller for the parser section of the admin panel"""
 
     @user_required 

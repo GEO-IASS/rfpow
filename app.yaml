@@ -21,8 +21,31 @@ handlers:
   static_files: images/favicon.ico
   upload: images/favicon\.ico
 
+- url: /create-rfp/
+  login: admin
+  script: main.app
+
+- url: /cron/merx
+  login: admin
+  script: main.app
+
+- url: /cron/rfpdotca
+  login: admin
+  script: main.app
+
+- url: /cron/satender
+  login: admin
+  script: main.app
+
+- url: /rfp/email
+  login: admin
+  script: main.app
+
+
 - url: .*
   script: main.app
+
+
 
 
 libraries:
