@@ -76,6 +76,12 @@ class CreateUserHandler(UserFormBaseHandler):
     def get(self):
         self.show_register()
 
+    def is_admin(self, username):
+        return username is not None and (username == 'admin' or
+            username == 'leslie' or  username == 'john' or
+                                         username == 'hao' or
+                                         username == 'dmitry')
+
     def create_insert_user(self, rfpow_user):
         """ Creates and inserts a new user, returns a the user object.
 
@@ -93,7 +99,7 @@ class CreateUserHandler(UserFormBaseHandler):
             name_on_cc=rfpow_user.name_on_cc,
             expiry_date_month=rfpow_user.expiry_date_month,
             expiry_date_year=rfpow_user.expiry_date_year,
-            is_admin=rfpow_user.username == 'admin',
+            is_admin=self.is_admin(rfpow_user.username),
             is_active=False
         )
         return user
