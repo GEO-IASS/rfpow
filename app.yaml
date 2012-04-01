@@ -1,4 +1,4 @@
-application: rfpow301
+application: rfpowjohn2
 version: 2
 runtime: python27
 api_version: 1
@@ -21,10 +21,6 @@ handlers:
   static_files: images/favicon.ico
   upload: images/favicon\.ico
 
-- url: /create-rfp/
-  login: admin
-  script: main.app
-
 - url: /cron/merx
   login: admin
   script: main.app
@@ -37,17 +33,18 @@ handlers:
   login: admin
   script: main.app
 
-- url: /rfp/email
+- url: /cron/email
   login: admin
   script: main.app
-
+  
+- url: /test.*
+  login: admin
+  script: gaeunit.application
 
 - url: .*
   script: main.app
 
-
-
-
+  
 libraries:
 - name: jinja2
   version: "2.6"

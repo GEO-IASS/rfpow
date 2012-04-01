@@ -13,4 +13,4 @@ cron:
 
 - description: scheduled emails of RFP updates
   url: /rfp/email
-  schedule: every day 09:00
+  schedule: every 3 hours

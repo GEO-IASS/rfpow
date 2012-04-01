@@ -10,8 +10,8 @@ webapp2_config['webapp2_extras.sessions'] = {
 
 # Putting admin routes here since Webapp2 Extra doesn't provide admin login restrictions
 # Refer to app.yaml for related routes
-admin_routes =  [('/create-rfp/', CreateRFPHandler),
-                ('/rfp/email', CronSendEmail),
+admin_routes =  [
+                ('/cron/email', CronSendEmail),
                 ('/cron/merx', CronMerx),
                 ('/cron/rfpdotca', CronRfpdotca),
                 ('/cron/satender', CronSaTenders)

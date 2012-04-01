@@ -3,14 +3,14 @@ from google.appengine.api import mail
 from backend.models.rfp_entry import RFP
 from backend.models.subscription import Subscription
 from handlers_base import HTMLRenderer
-
 from webapp2_extras.appengine.auth.models import User
-from ndb import query
+from google.appengine.ext.ndb import query
+
+
 from backend.models import subscription
 import datetime
 
-# TODO: probably want a less personal email
-default_sender = "john.sintal@gmail.com"
+default_sender = "rfpow301demo@gmail.com"
 
 
 class EmailSender(HTMLRenderer):

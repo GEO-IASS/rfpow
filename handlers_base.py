@@ -3,6 +3,7 @@ from webapp2_extras import auth
 from webapp2_extras import sessions
 import os
 import jinja2
+import logging
 import lib.jinja_filters as jinja_filters
 import webapp2_extras.json as json
 
@@ -174,3 +175,5 @@ class JSONWriter():
             Write how the email performed
         """
         self.write_json({'status' : status, 'message' : message}, response)
+
+

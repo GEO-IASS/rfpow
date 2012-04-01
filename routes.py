@@ -16,13 +16,14 @@ _routes = [
     RedirectRoute(r'/rfp<format:(\.comet)?>/<rfp_id:\d+>', RFPDetails, name='details', strict_slash=True),
     RedirectRoute(r'/rfp/subscribe/<keyword>', SubscribeHandler, name='subscribe', strict_slash=True),
     RedirectRoute(r'/rfp/unsubscribe/<keyword>', UnsubscribeHandler, name='unsubscribe', strict_slash=True),
+    RedirectRoute('/rfp/email', AdminSendEmailHandler, name='email', strict_slash=True),
     RedirectRoute('/create-user/', CreateUserHandler, name='create-user', strict_slash=True),
     RedirectRoute('/edit-user/', EditUserHandler, name='edit-user', strict_slash=True),
-    #RedirectRoute('/create-rfp/', CreateRFPHandler, name='create-rfp', strict_slash=True),
+    RedirectRoute('/create-rfp/', CreateRFPHandler, name='create-rfp', strict_slash=True),
     #RedirectRoute('/cron/merx', CronMerx, name='cron-merx', strict_slash=True),
     #RedirectRoute('/cron/rfpdotca', CronRfpdotca, name='cron-rfpdotca', strict_slash=True),
     #RedirectRoute('/cron/satender', CronSaTenders, name='cron-satender', strict_slash=True),
-    #RedirectRoute('/rfp/email', CronSendEmail, name='email', strict_slash=True),
+    RedirectRoute('/cron/email', CronSendEmail, name='email', strict_slash=True),
     RedirectRoute('/admin', AdminPanel, name='cron-merx', strict_slash=True),
     RedirectRoute('/searchindexing', search.SearchIndexing, name='searchindexing', strict_slash=True)
 
