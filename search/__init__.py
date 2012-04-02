@@ -138,25 +138,25 @@ class SearchIndex(db.Model):
             return frags[1]
 
     @classmethod
-    def put_index(cls, parent, phrases, index_num=1):
+    def put_index(cls, parent, date, phrases, index_num=1):
         parent_key = parent.key()
         args = {'key_name': cls.get_index_key_name(parent, index_num),
                 'parent': parent_key, 'parent_kind': parent_key.kind(), 
-                'phrases': phrases }
+                'date' = date, 'phrases': phrases }
         return cls(**args).put()
 
 
 class LiteralIndex(SearchIndex):
     """Index model for non-inflected search phrases."""
     parent_kind = db.StringProperty(required=True)
-    date= db.DateTimeProperty(auto_now_add=True)
+    date = db.DateTimeProperty(required=True)
     phrases = db.StringListProperty(required=True)
 
 
 class StemmedIndex(SearchIndex):
     """Index model for stemmed (inflected) search phrases."""
     parent_kind = db.StringProperty(required=True)
-    date= db.DateTimeProperty(auto_now_add=True)
+    date = db.DateTimeProperty(required=True)
     phrases = db.StringListProperty(required=True)
 
 
@@ -449,6 +449,7 @@ class Searchable(object):
             old_index = db.get(old_key)
             index_num = SearchIndex.get_index_num(old_key.name())
             index_key = klass.put_index(parent=self, index_num=index_num,
+                                        date = self.parse_date, 
                                         phrases=old_index.phrases)
             new_keys.append(index_key)
         delete_keys = filter(lambda key: key not in new_keys, old_index_keys)
@@ -522,8 +523,10 @@ class Searchable(object):
             cur_num_phrases = min(num_phrases, MAX_ENTITY_SEARCH_PHRASES)
             end_index = start_index + cur_num_phrases
             num_indices = (num_phrases - 1) / MAX_ENTITY_SEARCH_PHRASES + 1
-            index_key = klass.put_index(parent=self, index_num=entity_num,
-                                        phrases=search_phrases[start_index:end_index])
+            index_key = klass.put_index(parent=self, index_num=entity_num, 
+                                        date=self.parse_date, 
+                                        phrases=search_phrases[start_index:
+                                                               end_index])
             index_keys.append(index_key)
             if self.__class__.INDEX_USES_MULTI_ENTITIES:
                 start_index = end_index
