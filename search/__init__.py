@@ -142,7 +142,8 @@ class SearchIndex(db.Model):
         parent_key = parent.key()
         args = {'key_name': cls.get_index_key_name(parent, index_num),
                 'parent': parent_key, 'parent_kind': parent_key.kind(), 
-                'date' = date, 'phrases': phrases }
+                'date' : datetime.datetime.combine(date, datetime.time()), 
+                'phrases': phrases }
         return cls(**args).put()
 
 
