@@ -40,7 +40,7 @@
 				r.click( function(e){
 					e.preventDefault();
 					r.colorbox({
-                        href: this.href.replace('/rfp', '/rfp.comet')
+                        href: this.href.replace('/rfp/', '/rfp.comet/')
                     });
 				});
 			});
