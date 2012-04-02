@@ -13,8 +13,8 @@ indexes:
 - kind: LiteralIndex
   properties:
   - name: parent_kind
+  - name: phrases
   - name: date
-    direction: desc
 
 - kind: LiteralIndex
   properties:
