@@ -5,8 +5,7 @@ import re
 import datetime
 import lxml
 from lib.pyquery import PyQuery as pq
-from backend.parsers import RFPParser, MerxParser
-
+from backend.parsers import RFPParser, MerxParser, STParser
 
 
 class RFPParserTest(unittest.TestCase):
@@ -147,6 +146,71 @@ class MerxParserTest(unittest.TestCase):
     def testHasNext(self):
         self.assertTrue(self.parser.has_next())
         self.parser.page = -1
+        self.assertFalse(self.parser.has_next())
+
+
+class STParserTest(unittest.TestCase):
+
+    def setUp(self):
+        self.parser = STParser()
+
+    def testSetup(self):
+        self.parser.setup(self.parser.domain + self.parser.next_page)
+
+        # Size should be 18(15 rfps,2 headers, 1 footer)
+        self.assertTrue(18, len(self.parser.doc('#line table tr table tr')))
+
+
+    def testParseList(self):
+        self.parser.setup(self.parser.domain + self.parser.next_page)
+
+        parsed_list = self.parser.parse_list()
+
+        # 15 RFPs should have been parsed
+        self.assertEquals(15, len(parsed_list))
+
+        for rfp in parsed_list:
+            self.assertEquals('sa-tenders', rfp['origin'])
+            self.assertEquals(0, rfp['uri'].find('http://www.sa-tenders.co.za/'))
+            self.assertNotEquals('', rfp['title'])
+            self.assertNotEquals('', rfp['original_id'])
+
+    def testNextWithoutDetails(self):
+        # Parse without details
+        parsed_list = self.parser.next(False)
+
+        # 15 RFPs should have been parsed
+        self.assertEquals(15, len(parsed_list))
+
+        for rfp in parsed_list:
+            self.assertEquals('sa-tenders', rfp['origin'])
+            self.assertEquals(0, rfp['uri'].find('http://www.sa-tenders.co.za/'))
+            self.assertNotEquals('', rfp['title'])
+            self.assertNotEquals('', rfp['original_id'])
+
+    def testNextWithDetails(self):
+        # Parse with details
+        parsed_list = self.parser.next()
+
+        # 15 RFPs should have been parsed
+        self.assertEquals(15, len(parsed_list))
+
+        for rfp in parsed_list:
+            self.assertEquals('sa-tenders', rfp['origin'])
+            self.assertEquals(0, rfp['uri'].find('http://www.sa-tenders.co.za/'))
+            self.assertNotEquals('', rfp['title'])
+            self.assertNotEquals('', rfp['original_id'])
+            self.assertNotEquals('', rfp['org'])
+            self.assertNotEquals('', rfp['original_category'])
+            self.assertNotEquals('', rfp['location'])
+            self.assertNotEquals('', rfp['description'])
+            self.assertTrue(isinstance(rfp['parsed_on'], datetime.date))
+            self.assertTrue(isinstance(rfp['published_on'], datetime.date))
+            self.assertTrue(isinstance(rfp['ends_on'], datetime.date))
+
+    def testHasNext(self):
+        self.assertTrue(self.parser.has_next())
+        self.parser.has_next_page = False
         self.assertFalse(self.parser.has_next())
 
 if __name__ == '__main__':
