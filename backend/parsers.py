@@ -114,7 +114,7 @@ class MerxParser(Parser):
 
     def parse_details(self, l):
         try:
-            self.load( (l['uri'],{}) )
+            self.load( (l['uri'], '') )
             s = self.request.read()
             self.doc = pq( s )
 
@@ -396,10 +396,11 @@ class RFPParser(Parser):
             rfp['title'] = l['title']
             rfp['original_id'] = l['original_id']
             rfp['origin'] = l['origin']
+            rfp['uri'] = l['uri']
 
 
         except lxml.etree.XMLSyntaxError as e:
-            logging.error( 'Could not parse RFP: %s' % l.uri )
+            logging.error( 'Could not parse RFP: %s' % l['uri'] )
             raise e
 
         return rfp
@@ -418,7 +419,6 @@ class RFPParser(Parser):
         rfp['description'] = info.clone().children().remove().end().text()
         rfp['location'] = list.eq(2).text().split(': ')[1] + ', Canada'
         rfp['original_category'] = list.eq(3).text().split(': ')[1]
-        rfp['uri'] = self.doc('.listingInfo a').text()
 
 
         # date and time formats vary wildly on Merx. Use only date, and skip
