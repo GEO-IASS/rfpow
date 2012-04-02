@@ -29,7 +29,7 @@ class DataStoreTestCase(BaseTestCase):
         
         from gaetestbed import DataStoreTestCase
         
-        class MyTestCase(DataStoreTestCase, unittest.TestCase):
+        class EmailSenderTest(DataStoreTestCase, unittest.TestCase):
             def test_empty(self):
                 self.assertLength(models.MyModel.all(), 0)
                 models.MyModel(field="value").put()
@@ -52,11 +52,11 @@ class DataStoreTestCase(BaseTestCase):
         
         from gaetestbed import DataStoreTestCase
         
-        class MyTestCase(DataStoreTestCase, unittest.TestCase):
+        class EmailSenderTest(DataStoreTestCase, unittest.TestCase):
             def setUp(self):
-                # Note that you're calling super on MyTestCase, not
+                # Note that you're calling super on EmailSenderTest, not
                 # on DataStoreTestCase!
-                super(MyTestCase, self).setUp()
+                super(EmailSenderTest, self).setUp()
                 # Do anything else you want here
             
             def test_sample(self):
@@ -90,7 +90,7 @@ class DataStoreTestCase(BaseTestCase):
             
             from gaetestbed import DataStoreTestCase
             
-            class MyTestCase(DataStoreTestCase, unittest.TestCase):
+            class EmailSenderTest(DataStoreTestCase, unittest.TestCase):
                 def test_clear_datastore(self):
                     # Add something to the Data Store
                     models.MyModel(field="value").put()
@@ -115,7 +115,7 @@ class DataStoreTestCase(BaseTestCase):
             
             from gaetestbed import DataStoreTestCase
             
-            class MyTestCase(DataStoreTestCase, unittest.TestCase):
+            class EmailSenderTest(DataStoreTestCase, unittest.TestCase):
                 def test_clear_datastore(self):
                     with self.max_queries(2):
                         models.MyModel(field="value").put()
@@ -168,7 +168,7 @@ class DataStoreTestCase(BaseTestCase):
             
             from gaetestbed import DataStoreTestCase
             
-            class MyTestCase(DataStoreTestCase, unittest.TestCase):
+            class EmailSenderTest(DataStoreTestCase, unittest.TestCase):
                 def test_clear_datastore(self):
                     # No queries have been run yet
                     self.assertEqual(self.query_count, 0)

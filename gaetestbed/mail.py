@@ -29,8 +29,8 @@ class MailTestCase(BaseTestCase):
         
         from google.appengine.api import mail
         
-        class MyTestCase(MailTestCase, unittest.TestCase):
-            def test_email_sent(self):
+        class EmailSenderTest(MailTestCase, unittest.TestCase):
+            def testEmailSent(self):
                 mail.send_mail(
                     to = 'test@example.org',
                     subject = 'Test E-mail',
@@ -53,8 +53,8 @@ class MailTestCase(BaseTestCase):
         
         from google.appengine.api import mail
         
-        class MyTestCase(MailTestCase, unittest.TestCase):
-            def test_email_sent(self):
+        class EmailSenderTest(MailTestCase, unittest.TestCase):
+            def testEmailSent(self):
                 mail.EmailMessage(
                     to = 'test@example.org',
                     subject = 'Test E-mail',
@@ -78,9 +78,9 @@ class MailTestCase(BaseTestCase):
             
             from gaetestbed import MailTestCase
             
-            class MyTestCase(MailTestCase, unittest.TestCase):
+            class EmailSenderTest(MailTestCase, unittest.TestCase):
                 def setUp(self):
-                    super(MyTestCase, self).setUp()
+                    super(EmailSenderTest, self).setUp()
                     # Do anything else you need here
         """
         super(MailTestCase, self).setUp()
@@ -122,8 +122,8 @@ class MailTestCase(BaseTestCase):
             
             from google.appengine.api import mail
             
-            class MyTestCase(MailTestCase, unittest.TestCase):
-                def test_email_sent(self):
+            class EmailSenderTest(MailTestCase, unittest.TestCase):
+                def testEmailSent(self):
                     mail.EmailMessage(
                         to = 'test@example.org',
                         subject = 'Test E-mail',
@@ -163,8 +163,8 @@ class MailTestCase(BaseTestCase):
             
             from google.appengine.api import mail
             
-            class MyTestCase(MailTestCase, unittest.TestCase):
-                def test_email_sent(self):
+            class EmailSenderTest(MailTestCase, unittest.TestCase):
+                def testEmailSent(self):
                     mail.EmailMessage(
                         to = 'test@example.org',
                         subject = 'Test E-mail',
@@ -191,7 +191,7 @@ class MailTestCase(BaseTestCase):
             
             from google.appengine.api import mail
             
-            class MyTestCase(MailTestCase, unittest.TestCase): 
+            class EmailSenderTest(MailTestCase, unittest.TestCase):
                 def test_get_emails(self):
                     mail.EmailMessage(
                         to = 'test@example.org',
@@ -251,8 +251,8 @@ class MailTestCase(BaseTestCase):
             
             from google.appengine.api import mail
             
-            class MyTestCase(MailTestCase, unittest.TestCase):
-                def test_email_sent(self):
+            class EmailSenderTest(MailTestCase, unittest.TestCase):
+                def testEmailSent(self):
                     mail.send_mail(
                         to      = 'correct_recipient@example.org',
                         sender  = 'wrong_sender@example.org',
@@ -282,8 +282,8 @@ class MailTestCase(BaseTestCase):
             
             from google.appengine.api import mail
             
-            class MyTestCase(MailTestCase, unittest.TestCase):
-                def test_email_sent(self):
+            class EmailSenderTest(MailTestCase, unittest.TestCase):
+                def testEmailSent(self):
                     mail.send_mail(
                         to      = 'receiver@example.org',
                         sender  = 'sender@example.org',

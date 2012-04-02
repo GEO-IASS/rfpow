@@ -45,7 +45,7 @@ class WebTestCase(BaseTestCase):
             
             from my_handlers.some_handler import application
             
-            class MyTestCase(WebTestCase, unittest.TestCase):
+            class EmailSenderTest(WebTestCase, unittest.TestCase):
                 APPLICATION = application
                 
                 def test_redirects(self):
@@ -82,7 +82,7 @@ class WebTestCase(BaseTestCase):
             
             from my_handlers.some_handler import application
             
-            class MyTestCase(WebTestCase, unittest.TestCase):
+            class EmailSenderTest(WebTestCase, unittest.TestCase):
                 APPLICATION = application
                 
                 def test_ok(self):

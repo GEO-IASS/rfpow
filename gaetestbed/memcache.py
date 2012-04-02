@@ -35,7 +35,7 @@ class MemcacheTestCase(BaseTestCase):
         
         from google.appengine.api import memcache
         
-        class MyTestCase(MemcacheTestCase, unittest.TestCase):
+        class EmailSenderTest(MemcacheTestCase, unittest.TestCase):
             def test_memcache(self):
                 # Nothing has been put in the cache, or retrieved from the cache
                 self.assertMemcacheItems(0)
@@ -75,9 +75,9 @@ class MemcacheTestCase(BaseTestCase):
             
             from gaetestbed import MemcacheTestCase
             
-            class MyTestCase(MemcacheTestCase, unittest.TestCase):
+            class EmailSenderTest(MemcacheTestCase, unittest.TestCase):
                 def setUp(self):
-                    super(MyTestCase, self).setUp()
+                    super(EmailSenderTest, self).setUp()
                     # Do anything else you need here
         """
         super(MemcacheTestCase, self).setUp()
@@ -97,7 +97,7 @@ class MemcacheTestCase(BaseTestCase):
             
             from google.appengine.api import memcache
             
-            class MyTestCase(MemcacheTestCase, unittest.TestCase):
+            class EmailSenderTest(MemcacheTestCase, unittest.TestCase):
                 def test_memcache(self):
                     # Check that the cache starts empty
                     self.assertMemcacheItems(0)
@@ -128,7 +128,7 @@ class MemcacheTestCase(BaseTestCase):
             
             from google.appengine.api import memcache
             
-            class MyTestCase(MemcacheTestCase, unittest.TestCase):
+            class EmailSenderTest(MemcacheTestCase, unittest.TestCase):
                 def test_memcache(self):
                     # Nothing has retrieved from the cache
                     self.assertMemcacheHits(0)
@@ -168,7 +168,7 @@ class MemcacheTestCase(BaseTestCase):
             
             from google.appengine.api import memcache
             
-            class MyTestCase(MemcacheTestCase, unittest.TestCase):
+            class EmailSenderTest(MemcacheTestCase, unittest.TestCase):
                 def test_memcache(self):
                     # Nothing has been added to the cache
                     self.assertMemcacheItems(0)

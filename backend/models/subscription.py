@@ -23,7 +23,7 @@ def create_subscription(username, keyword):
         False, else True.
     """
 
-    if (does_sub_exist(username, keyword)):
+    if (sub_exists(username, keyword)):
         return False
     else:
         subscription = Subscription()
@@ -41,7 +41,7 @@ def remove_subscription(username, keyword):
         False, else True.
     """
 
-    if (not does_sub_exist(username, keyword)):
+    if (not sub_exists(username, keyword)):
         return 0
     else:
         q = db.GqlQuery("SELECT * FROM Subscription WHERE keyword = :1 AND username = :2", keyword, username)
@@ -58,7 +58,7 @@ def remove_subscription(username, keyword):
         return len(subs)
 
 
-def does_sub_exist(username, keyword):
+def sub_exists(username, keyword):
     """
         Return sub (subscription) if it exists based on username and keyword, otherwise
         return None.
