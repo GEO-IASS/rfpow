@@ -22,7 +22,6 @@ a *nix OS, try using the `dev_appserver.py` script, like so:
 - /js: client side javascript code
 - /routes.py: routing information given here, though some routing exist in the app.yaml
 - /test: local unit testing
-- /gaeunit.py: addon to help with unit test
 
 
 # Source Code/Snippet Credits
@@ -36,16 +35,16 @@ http://stackoverflow.com/questions/7213787/unable-to-center-contents-of-a-fields
 - Python
 	- jinja2, webapp2, and other libraries bundled with Google App Engine were utilized for building
 	the controllers and views of the application
-	- NDB api http://code.google.com/p/appengine-ndb-experiment/
+	- webapp2_extras (NDB, auth, sessions, etc...)
 	- lxml (http://lxml.de/) and pyquery (http://pypi.python.org/pypi/pyquery) were used for parsing RFPs
-	- auth and sessions was used for user management (part of the webapp2_extras api)
 	- /search used for searching RFPs by indexing
 	- /email_server contains a little script to mock a server to receive
+	- gaeunit.py, /webtest and /gaetestbed are interdependent scripts to create the testing framework.
 - Javascript: 
 	- jQuery (http://jquery.com) -- general purpose JS library for DOM traversing, styling etc.
 	- LESS CSS (http://lesscss.org/) -- much more sane CSS
 	- ColorBox (http://jacklmoore.com/colorbox/) -- modal dialogues for RFP details
 	- History.js (https://github.com/balupton/History.js/) -- simplified browser history state manipulation
 	- user_input.js -- registration form validation
-- icons: http://iconfinder.com, creative-commons icons from the FatCow icon set
+- Icons: http://iconfinder.com, creative-commons icons from the FatCow icon set
 
