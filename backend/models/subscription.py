@@ -1,5 +1,4 @@
 from google.appengine.ext import db
-from datetime import datetime
 from datetime import date
 import logging
 
@@ -29,7 +28,7 @@ def create_subscription(username, keyword):
         subscription = Subscription()
         subscription.username = username
         subscription.keyword = keyword
-        subscription.last_updated = date.fromordinal(730920) # some very old date (2002-03-11)
+        subscription.last_updated = date(1989, 11, 10) # some really old date so that all rfps are sent at start
         subscription.put()
         return True
 
