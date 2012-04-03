@@ -46,7 +46,8 @@ http://stackoverflow.com/questions/7213787/unable-to-center-contents-of-a-fields
 	- lxml (http://lxml.de/) and pyquery (http://pypi.python.org/pypi/pyquery) were used for parsing RFPs
 	- /search used for searching RFPs by indexing
 	- /email_server contains a little script to mock a server to receive
-	- gaeunit.py, /webtest and /gaetestbed are interdependent scripts to create the testing framework.
+	- gaeunit.py, owebtest and /gaetestbed are interdependent scripts to create the testing framework.
+	- /backend/parsers.py contains a simple class and a method that strips html tags, taken from online tutorial.
 - Javascript: 
 	- jQuery (http://jquery.com) -- general purpose JS library for DOM traversing, styling etc.
 	- LESS CSS (http://lesscss.org/) -- much more sane CSS
