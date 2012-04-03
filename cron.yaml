@@ -1,16 +1,16 @@
 cron:
 - description: scheduled merx parser job
   url: /cron/merx
-  schedule: every 3 hours from 7:00 to 22:00
+  schedule: every thursday 09:00
 
 - description: scheduled rfp.ca parser job
   url: /cron/rfpdotca
-  schedule: every 3 hours from 7:00 to 22:00
+  schedule: every wednesday 09:00
 
 - description: scheduled SaTender parser job
   url: /cron/satender
-  schedule: every 3 hours from 7:00 to 22:00
+  schedule: every friday 09:00
 
 - description: scheduled emails of RFP updates
   url: /cron/email
-  schedule: every 3 hours
+  schedule: every friday 10:00
