@@ -13,6 +13,13 @@ To run the app, either add its directory in the frontend GUI, or, if you're on
 a *nix OS, try using the `dev_appserver.py` script, like so:
     dev_appserver.py ~/path/to/rfpow301
 	
+# Gmail Account 
+This is not required to know, but in case the app asks you for gmail credentials and you don't want
+to use your real one, play around with this account.
+
+rfpow301demo@gmail.com
+password: rfpow301demo
+	
 # Structure
 - /{root_dir}: controllers/handlers to frontend (communicate with view)
 - /backend: services, more logic
