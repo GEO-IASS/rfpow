@@ -48,7 +48,7 @@ class EmailDatastoreTest(MailTestCase, unittest.TestCase):
             emailer had not seen this rfp and thus must send it. So we deliberately
             have the email send the found RFP.
         """
-        some_publish_date = date(2001, 11, 10) #date.today()
+        some_publish_date = date(2012, 11, 10) #date.today()
 
         create_RFP("aTitle", "aDesc", ["aKeyword1", "aKeyword2"], "aOrg", "aURI", "aOrigID",
             some_publish_date, some_publish_date, some_publish_date)
@@ -72,7 +72,7 @@ class EmailDatastoreTest(MailTestCase, unittest.TestCase):
             likely that the emailer had already sent that old rfp out. So we deliberately
             have the email fail at find RFPs.
         """
-        some_publish_date = date(1966, 11, 10) #date.today()
+        some_publish_date = date(1800, 11, 10) #date.today()
 
         create_RFP("aTitle", "aDesc", ["aKeyword1", "aKeyword2"], "aOrg", "aURI", "aOrigID",
             some_publish_date, some_publish_date, some_publish_date)
@@ -89,3 +89,112 @@ class EmailDatastoreTest(MailTestCase, unittest.TestCase):
 
         self.assertEqual(1, len(res))
         self.assertNotEquals(res[0], msg)
+
+    def testValidEmailSentMultipleRFPS(self):
+        """
+            The tests shows that multiple RFPs with the same keyword for the subscription are sent out.
+            The email would list 2 rfps
+            To add, the keywords are interchanged at different positions on the list.
+        """
+        some_publish_date = date(2012, 11, 10) #date.today()
+
+        create_RFP("aTitle", "aDesc", ["aKeyword1", "aKeyword2"], "aOrg", "aURI", "aOrigID",
+            some_publish_date, some_publish_date, some_publish_date)
+
+        create_RFP("aTitle2", "aDesc2", ["aKeyword2", "aKeyword1"], "aOrg", "aURI", "aOrigID",
+            some_publish_date, some_publish_date, some_publish_date)
+
+
+        create_subscription("aUsername", "aKeyword1")
+
+        sub = Subscription.all().fetch(2)[0]
+
+        res = list()
+
+        emailSender = EmailSender()
+        emailSender._send_rfps_to_subscribers(sub, "aFirstName", str_email, res)
+
+        msg = "Found %d RFPs for %s with keyword '%s' for email: %s" % (2, sub.username, sub.keyword, str_email)
+
+        self.assertEqual(1, len(res))
+        self.assertEquals(res[0], msg)
+
+
+    def testInvalidEmailSentNORfps(self):
+        """
+            No Rfps are presented, thus an email should not be sent out.
+        """
+        some_publish_date = date(1800, 11, 10) #date.today()
+
+#        create_RFP("aTitle", "aDesc", ["aKeyword1", "aKeyword2"], "aOrg", "aURI", "aOrigID",
+#            some_publish_date, some_publish_date, some_publish_date)
+        create_subscription("aUsername", "aKeyword1")
+
+        sub = Subscription.all().fetch(2)[0]
+
+        res = list()
+
+        emailSender = EmailSender()
+        emailSender._send_rfps_to_subscribers(sub, "aFirstName", str_email, res)
+
+        msg = 'No RFPs found for username: %s and keyword: %s' % (sub.username, sub.keyword)
+
+        self.assertEqual(1, len(res))
+        self.assertEquals(res[0], msg)
+
+
+    def testInvalidEmailSentNOSubs(self):
+        """
+            No subscriptions are present, thus an email should not be sent out.
+        """
+        some_publish_date = date(1800, 11, 10) #date.today()
+
+        create_RFP("aTitle", "aDesc", ["aKeyword1", "aKeyword2"], "aOrg", "aURI", "aOrigID",
+                    some_publish_date, some_publish_date, some_publish_date)
+        #create_subscription("aUsername", "aKeyword1")
+
+
+        res = list()
+
+        emailSender = EmailSender()
+        emailSender._send_rfps_to_subscribers(None, "aFirstName", str_email, res)
+
+        msg = 'Problem with sending a sub, probably None object'
+
+        self.assertEqual(1, len(res))
+        self.assertEquals(res[0], msg)
+
+    def testInvalidEmailSentNOSubsAndNORfps(self):
+        """
+            No subscriptions/rfps are present, thus an email should not be sent out.
+        """
+        some_publish_date = date(1800, 11, 10) #date.today()
+        res = list()
+        emailSender = EmailSender()
+        emailSender._send_rfps_to_subscribers(None, "aFirstName", str_email, res)
+        msg = 'Problem with sending a sub, probably None object'
+        self.assertEqual(1, len(res))
+        self.assertEquals(res[0], msg)
+
+    def testInvalidEmailNoMatchKeys(self):
+        """
+            There exists subscriptions and
+        """
+        some_publish_date = date(1800, 11, 10) #date.today()
+        some_publish_date = date(2012, 11, 10) #date.today()
+
+        create_RFP("aTitle", "aDesc", ["aKeyword1", "aKeyword2"], "aOrg", "aURI", "aOrigID",
+            some_publish_date, some_publish_date, some_publish_date)
+
+        create_RFP("aTitle2", "aDesc2", ["aKeyword3", "aKeyword4"], "aOrg", "aURI", "aOrigID",
+            some_publish_date, some_publish_date, some_publish_date)
+
+
+        create_subscription("aUsername", "noMatchKeyword")
+        sub = Subscription.all().fetch(2)[0]
+        res = list()
+        emailSender = EmailSender()
+        emailSender._send_rfps_to_subscribers(sub, "aFirstName", str_email, res)
+        msg = 'No RFPs found for username: %s and keyword: %s' % (sub.username, sub.keyword)
+        self.assertEqual(1, len(res))
+        self.assertEquals(res[0], msg)

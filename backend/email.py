@@ -4,7 +4,7 @@ from backend.models.rfp_entry import RFP
 from backend.models.subscription import Subscription
 from handlers_base import HTMLRenderer
 from webapp2_extras.appengine.auth.models import User
-from google.appengine.ext.ndb import query
+from ndb import query
 
 import datetime
 
@@ -16,8 +16,6 @@ class EmailSender(HTMLRenderer):
         EmailSender is responsible for gathering RFP data for each user who has subscribed to
         email updates, then sending that data via email.
     """
-
-
 
 
     def send_rfps_to_subscribers(self):
@@ -33,6 +31,7 @@ class EmailSender(HTMLRenderer):
         results = []
         subs = Subscription.all()
         for sub in subs:
+
             # Grab what user info, add first, last name later
             user = User.query(query.FilterNode('username', '=', sub.username)).get()
 
@@ -46,6 +45,7 @@ class EmailSender(HTMLRenderer):
                 logging.info(msg)
                 results.append('Error: ' + msg)
 
+
         return results
 
 
@@ -54,36 +54,42 @@ class EmailSender(HTMLRenderer):
             Helper function to assist in testing.
         """
 
-        # Query RFPs based on this subscription's keyword
-        rfp_list = RFP.search(phrase=sub.keyword, date=sub.last_updated, limit=10)
+        try:
+            # Query RFPs based on this subscription's keyword
+            rfp_list = RFP.search(phrase=sub.keyword, date=sub.last_updated, limit=10)
 
-        if rfp_list and len(rfp_list) > 0:
-            template_values = {
-                "rfps": rfp_list,
-                "name": first_name,
-                'search_text': sub.keyword,
-                'is_admin': False,
-                'search_uri': 'http://rfpow301.appspot.com/rfp/search/',
-                'permalink_uri': 'http://rfpow301.appspot.com/rfp/'
-            }
+            if rfp_list and len(rfp_list) > 0:
+                template_values = {
+                    "rfps": rfp_list,
+                    "name": first_name,
+                    'search_text': sub.keyword,
+                    'is_admin': False,
+                    'search_uri': 'http://rfpow301.appspot.com/rfp/search/',
+                    'permalink_uri': 'http://rfpow301.appspot.com/rfp/'
+                }
 
-            subject = "New RFPs for \"%s\" : RFPow!" % sub.keyword
-            self.send(subject, email, template_values)
+                subject = "New RFPs for \"%s\" : RFPow!" % sub.keyword
+                self.send(subject, email, template_values)
 
-            # Update the last update time so we know to not send dups on next cron
-            sub.last_updated = datetime.datetime.now().date()
-            sub.put()
+                # Update the last update time so we know to not send dups on next cron
+                sub.last_updated = datetime.datetime.now().date()
+                sub.put()
 
-            msg = "Found %d RFPs for %s with keyword '%s' for email: %s" %\
-                  (len(rfp_list), sub.username, sub.keyword, email)
+                msg = "Found %d RFPs for %s with keyword '%s' for email: %s" %\
+                      (len(rfp_list), sub.username, sub.keyword, email)
 
+                logging.info(msg)
+                results.append(msg)
+            else:
+                msg = 'No RFPs found for username: %s and keyword: %s' % (sub.username, sub.keyword)
+
+                logging.info(msg)
+                results.append(msg)
+        except:
+            msg = 'Problem with sending a sub, probably None object'
             logging.info(msg)
             results.append(msg)
-        else:
-            msg = 'No RFPs found for username: %s and keyword: %s' % (sub.username, sub.keyword)
 
-            logging.info(msg)
-            results.append('Error: ' + msg)
 
 
     def send(self, subject="RFP Update", to="", template_values=[]):
@@ -91,15 +97,15 @@ class EmailSender(HTMLRenderer):
             Sends an email out based on the args given. Thin wrapper
             for Google's API.
         """
-
-        html = self.get_rendered_html('templates/email.html', template_values)
-
-        message = mail.EmailMessage()
-        message.sender = default_sender
-        message.subject = subject
-        message.to = to
-        message.html = html
         try:
+            html = self.get_rendered_html('templates/email.html', template_values)
+
+            message = mail.EmailMessage()
+            message.sender = default_sender
+            message.subject = subject
+            message.to = to
+            message.html = html
+
             message.send()
             logging.info('Success sending email for ' + to)
         except:

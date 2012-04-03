@@ -1,4 +1,4 @@
-application: rfpow301
+application: rfpow301 #rfpowjohn2
 version: 2
 runtime: python27
 api_version: 1

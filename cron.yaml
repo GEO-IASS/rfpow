@@ -12,5 +12,5 @@ cron:
   schedule: every 3 hours from 7:00 to 22:00
 
 - description: scheduled emails of RFP updates
-  url: /rfp/email
-  schedule: every 3 hours
+  url: /cron/email
+  schedule: every 5 minutes
