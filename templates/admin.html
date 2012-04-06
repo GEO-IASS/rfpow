@@ -27,6 +27,11 @@
             <h2>Admin Control Panel</h2>
         </div>
 
+        <div class="info">
+            Note that, when triggering parsers from this panel, the requests are limited to 
+            <a href="https://developers.google.com/appengine/docs/python/backends/overview#Properties_of_Backends">30 seconds</a>. When
+            parsers are started automatically by cron, the request time is 10 minutes.
+        </div>
         <div class="parser section">
             <h3>Merx parser</h3>
 
