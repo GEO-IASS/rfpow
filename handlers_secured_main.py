@@ -157,7 +157,7 @@ class RFPSearch(BaseHandler, HTMLRenderer):
 
     @user_required
     def get(self, search_query, format ):
-        rfps = rfp_entry.RFP.search(search_query)
+        rfps = rfp_entry.RFP.search(search_query, limit=1000)
         template_data = {
             'rfps': rfps,
             'search_text': search_query,
