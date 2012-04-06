@@ -124,7 +124,7 @@ class EmailDatastoreTest(MailTestCase, unittest.TestCase):
         """
             No Rfps are presented, thus an email should not be sent out.
         """
-        some_publish_date = date(1800, 11, 10) #date.today()
+        some_publish_date = date(2012, 11, 10) #date.today()
 
 #        create_RFP("aTitle", "aDesc", ["aKeyword1", "aKeyword2"], "aOrg", "aURI", "aOrigID",
 #            some_publish_date, some_publish_date, some_publish_date)
@@ -147,7 +147,7 @@ class EmailDatastoreTest(MailTestCase, unittest.TestCase):
         """
             No subscriptions are present, thus an email should not be sent out.
         """
-        some_publish_date = date(1800, 11, 10) #date.today()
+        some_publish_date = date(2012, 11, 10) #date.today()
 
         create_RFP("aTitle", "aDesc", ["aKeyword1", "aKeyword2"], "aOrg", "aURI", "aOrigID",
                     some_publish_date, some_publish_date, some_publish_date)
@@ -168,7 +168,7 @@ class EmailDatastoreTest(MailTestCase, unittest.TestCase):
         """
             No subscriptions/rfps are present, thus an email should not be sent out.
         """
-        some_publish_date = date(1800, 11, 10) #date.today()
+        some_publish_date = date(2012, 11, 10) #date.today()
         res = list()
         emailSender = EmailSender()
         emailSender._send_rfps_to_subscribers(None, "aFirstName", str_email, res)
@@ -178,9 +178,9 @@ class EmailDatastoreTest(MailTestCase, unittest.TestCase):
 
     def testInvalidEmailNoMatchKeys(self):
         """
-            There exists subscriptions and
+            There exists subscriptions and some rfps, but the keywords don't match.
         """
-        some_publish_date = date(1800, 11, 10) #date.today()
+        some_publish_date = date(2012, 11, 10) #date.today()
         some_publish_date = date(2012, 11, 10) #date.today()
 
         create_RFP("aTitle", "aDesc", ["aKeyword1", "aKeyword2"], "aOrg", "aURI", "aOrigID",
@@ -198,3 +198,56 @@ class EmailDatastoreTest(MailTestCase, unittest.TestCase):
         msg = 'No RFPs found for username: %s and keyword: %s' % (sub.username, sub.keyword)
         self.assertEqual(1, len(res))
         self.assertEquals(res[0], msg)
+
+    def testValidEmailWhiteSpace(self):
+        """
+            There exists subscriptions and some rfps, but the keywords have trailing white spaces.
+        """
+        some_publish_date = date(2012, 11, 10) #date.today()
+        some_publish_date = date(2012, 11, 10) #date.today()
+
+        create_RFP("aTitle", "aDesc", ["aKeyword1", "aKeyword2"], "aOrg", "aURI", "aOrigID",
+            some_publish_date, some_publish_date, some_publish_date)
+
+        create_RFP("aTitle2", "aDesc2", ["aKeyword3", "aKeyword4"], "aOrg", "aURI", "aOrigID",
+            some_publish_date, some_publish_date, some_publish_date)
+
+
+        create_subscription("aUsername", "aKeyword1 ")
+        sub = Subscription.all().fetch(2)[0]
+        res = list()
+        emailSender = EmailSender()
+        emailSender._send_rfps_to_subscribers(sub, "aFirstName", str_email, res)
+        #msg = 'No RFPs found for username: %s and keyword: %s' % (sub.username, sub.keyword)
+        msg = "Found %d RFPs for %s with keyword '%s' for email: %s" % (1, sub.username, sub.keyword, str_email)
+
+        self.assertEqual(1, len(res))
+        self.assertEquals(res[0], msg)
+
+
+    def testValidEmailNoMatchKeysCaseInsensitive(self):
+        """
+            There exists subscriptions and some rfps, but the keywords match due matching
+            being case insensitive.
+        """
+        some_publish_date = date(2012, 11, 10) #date.today()
+        some_publish_date = date(2012, 11, 10) #date.today()
+
+        create_RFP("aTitle", "aDesc", ["aKeyword1", "aKeyword2"], "aOrg", "aURI", "aOrigID",
+            some_publish_date, some_publish_date, some_publish_date)
+
+        create_RFP("aTitle2", "aDesc2", ["aKeyword3", "aKeyword4"], "aOrg", "aURI", "aOrigID",
+            some_publish_date, some_publish_date, some_publish_date)
+
+
+        create_subscription("aUsername", "aKEyworD1")
+        sub = Subscription.all().fetch(2)[0]
+        res = list()
+        emailSender = EmailSender()
+        emailSender._send_rfps_to_subscribers(sub, "aFirstName", str_email, res)
+        msg = 'No RFPs found for username: %s and keyword: %s' % (sub.username, sub.keyword)
+        self.assertEqual(1, len(res))
+        self.assertNotEquals(res[0], msg)
+
+        msg = "Found %d RFPs for %s with keyword '%s' for email: %s" % (1, sub.username, sub.keyword, str_email)
+        self.assertEqual(1, len(res))

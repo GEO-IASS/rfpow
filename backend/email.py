@@ -32,16 +32,22 @@ class EmailSender(HTMLRenderer):
         subs = Subscription.all()
         for sub in subs:
 
-            # Grab what user info, add first, last name later
-            user = User.query(query.FilterNode('username', '=', sub.username)).get()
+            try:
 
-            # Ensure the the sub's username is associated with an actual account
-            # by checking if the email exists.
-            if user.email:
-                self._send_rfps_to_subscribers(sub, user.first_name, user.email, results)
-            else:
-                msg = 'No email found for username: %s  and keyword: %s' % (sub.username, sub.keyword)
+                # Grab what user info, add first, last name later
+                user = User.query(query.FilterNode('username', '=', sub.username)).get()
 
+                # Ensure the the sub's username is associated with an actual account
+                # by checking if the email exists.
+                if user.email:
+                    self._send_rfps_to_subscribers(sub, user.first_name, user.email, results)
+                else:
+                    msg = 'No email found for username: %s  and keyword: %s' % (sub.username, sub.keyword)
+
+                    logging.info(msg)
+                    results.append('Error: ' + msg)
+            except:
+                msg = 'Problem with sending RFPs for some subscription, maybe bad user object'
                 logging.info(msg)
                 results.append('Error: ' + msg)
 
