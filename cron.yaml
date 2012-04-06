@@ -1,16 +1,20 @@
 cron:
 - description: scheduled merx parser job
   url: /cron/merx
-  schedule: every thursday 09:00
+  schedule: every mon, wed, fri, saturday 7:00
+  timezone: America/Toronto
 
 - description: scheduled rfp.ca parser job
   url: /cron/rfpdotca
-  schedule: every wednesday 09:00
+  schedule: every mon, wed, fri, sunday 8:00
+  timezone: America/Toronto
 
 - description: scheduled SaTender parser job
   url: /cron/satender
-  schedule: every friday 09:00
+  schedule: every tuesday, thursday 08:00
+  timezone: America/Toronto
 
 - description: scheduled emails of RFP updates
   url: /cron/email
-  schedule: every friday 10:00
+  schedule: every day 9:00
+  timezone: America/Toronto
