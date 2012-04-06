@@ -78,9 +78,6 @@ class RFPList(BaseHandler, HTMLRenderer):
         elif format == '.comet':
             self.show_rendered_html( 'templates/rfp_table.html', template_data)
 
-
-
-
 class SubscribeHandler(BaseHandler, JSONWriter):
     """
         Governs when there is a request on behalf of the user to subscribe to a certain
@@ -100,7 +97,6 @@ class SubscribeHandler(BaseHandler, JSONWriter):
             self.status = self.status_error
 
         self.write_json_subscription(self.status, keyword, self.message, self.response)
-
 
 
 class UnsubscribeHandler(BaseHandler, JSONWriter):
@@ -130,6 +126,7 @@ class UnsubscribeHandler(BaseHandler, JSONWriter):
             self.status = self.status_error
 
         self.write_json_subscription(self.status, keyword, self.message, self.response)
+
 
 class RFPDetails(BaseHandler, HTMLRenderer):
     """Return details for given RFP ID"""

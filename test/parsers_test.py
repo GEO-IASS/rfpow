@@ -137,7 +137,8 @@ class MerxParserTest(unittest.TestCase):
             self.assertNotEquals('', rfp['original_id'])
             self.assertNotEquals('', rfp['org'])
             self.assertNotEquals('', rfp['original_category'])
-            self.assertNotEquals('', rfp['location'])
+            # Location can be blank
+            #self.assertTrue( rfp.has_key('location') )
             self.assertNotEquals('', rfp['description'])
             self.assertTrue(isinstance(rfp['parsed_on'], datetime.date))
             self.assertTrue(isinstance(rfp['published_on'], datetime.date))
