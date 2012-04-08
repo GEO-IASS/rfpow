@@ -18,7 +18,7 @@
 
     <body>
         <!-- HEADER -->
-        <div class="header">
+        <div id="header">
             <div class="logo_wrapper">
                 <img class="logo" id="logo_main" src="/images/logo.png">
             </div> 
@@ -78,9 +78,9 @@
             <table class="rfp_table" id="rfp_table">
                 <thead>
                     <tr>
-                        <th class="title">Title</th>
-                        <th class="publish_date">Published on</th>
-                        <th class="close_date">Expires</th>
+                        <th class="title" data-sort="title">Title</th>
+                        <th class="publish_date" data-sort="-publish_date">Published on</th>
+                        <th class="close_date" data-sort="-close_date">Expires</th>
                     </tr>
                 </thead>
 

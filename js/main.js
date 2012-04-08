@@ -114,6 +114,8 @@
 
 					// now re-map links to modal dialogues for search results
 					map_links( table_body.find('.rfp_table_link') );
+                    // enable JS sorting of search results, if needed
+                    js_sorting( searching );
 
 					// hide ajax loader
 					loader.hide();
@@ -202,7 +204,21 @@
 				search_subscribe.show();
 				search_unsubscribe.hide();
 			}
-		};
+		},
+
+        // Enable/disable JS sorting of results (used for search)
+        js_sorting = function( enable ) {
+            rfp_table.find('th').each( function(){
+                var handlers = $(this).data('events').click;
+
+                for( var i=1; i<handlers.length;i++ ) {
+                    handlers[i].handler = function(){};
+                }
+            });
+
+            if( enable )
+                rfp_table.tablesorter( );
+        }
 
 
 		// Initialize modal dialogues for RFP details
@@ -253,12 +269,20 @@
 		
 		// Sorting behaviour
 		rfp_table.find( '.title, .publish_date, .close_date' ).click( function(e){
+            var that = $(this);
 			// don't sort search results, for now
 			if ( searching ) return;
 
 			loader.show();
 			offset = 0;
-			order = $(this).attr('class');
+			order = that.attr('data-sort');
+
+            // flip order between descending or ascending
+            if ( order.search('-') === -1 )
+                that.attr('data-sort', '-'+order);
+            else
+                that.attr('data-sort', order.substr(1));
+
 			table_body.find('tr').remove();
 			next_page();
 		});
