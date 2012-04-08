@@ -21,7 +21,7 @@
 			// useful variables
 			searching            = false,
 			offset               = 10,
-			order                = 'publish_date',
+			order                = 'parse_date',
 			History              = window.History,
 			search_timer         = false,
 			// URI
@@ -80,7 +80,7 @@
 			if ( search_keywords == '' ) {
 				offset = 0;
 				if ( order === undefined )
-					order = 'publish_date';
+					order = 'parse_date';
 				action = pagination_comet_uri;
 			} else {
 				action = search_comet_uri + search_keywords;

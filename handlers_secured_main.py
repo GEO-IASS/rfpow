@@ -37,7 +37,7 @@ class HomePageHandler(BaseHandler, HTMLRenderer):
 
         # normally, we generate
         if template_data is None:
-            rfps = rfp_entry.RFP.all().order( 'publish_date' ).fetch(25)
+            rfps = rfp_entry.RFP.all().order( 'parse_date' ).fetch(25)
             template_data = {
                 'rfps': rfps,
                 'is_admin': self.is_user_admin()
