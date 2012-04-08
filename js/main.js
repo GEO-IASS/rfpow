@@ -307,7 +307,9 @@
 		// Focus on search field on load
 		search_text.focus();
 
-		// Dirtily detect searching
+		// Dirtily detect searching and enable client-side sorting
 		searching = ( window.location.href.search('search') !== -1 );
+
+        if ( searching ) js_sorting( searching );
 	});
 })(jQuery);
